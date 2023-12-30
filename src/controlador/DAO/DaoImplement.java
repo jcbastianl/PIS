@@ -12,7 +12,8 @@ import java.io.FileWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DaoImplement<T> implements DaoInterface<T>{
+public class DaoImplement<T> implements DaoInterface<T> {
+
     private Class<T> clazz;
     private XStream conection;
     private String URL;
@@ -37,22 +38,34 @@ public class DaoImplement<T> implements DaoInterface<T>{
 
     @Override
     public Boolean merge(T data, Integer index) {
-        
-                try {
-                        DynamicList<T> list = all();
-                        list.merge(data, index);
-                        conection.toXML(list, new FileWriter(URL));
-                        return true;
-                } catch (Exception e) {
+
+        try {
+            DynamicList<T> list = all();
+            list.merge(data, index);
+            conection.toXML(list, new FileWriter(URL));
+            return true;
+        } catch (Exception e) {
             return false;
-                }
+        }
+    }
+
+    @Override
+    public Boolean remove(Integer index) {
+        try {
+            DynamicList<T> list = all();
+            list.remove(index);
+            conection.toXML(list, new FileWriter(URL));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public DynamicList<T> all() {
         DynamicList<T> dl = new DynamicList<>();
         try {
-            dl = (DynamicList<T>)conection.fromXML(new FileReader(URL));
+            dl = (DynamicList<T>) conection.fromXML(new FileReader(URL));
         } catch (Exception e) {
         }
         return dl;
