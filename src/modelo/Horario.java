@@ -15,5 +15,66 @@ public class Horario {
     private String horaInicio;
     private String horaFin;
     private Date Fecha;
-    private Integer idClaseDictada;
+
+
+    public Horario() {
+    }
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the horaInicio
+     */
+    public String getHoraInicio() {
+        return horaInicio;
+    }
+
+    /**
+     * @param horaInicio the horaInicio to set
+     */
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    /**
+     * @return the horaFin
+     */
+    public String getHoraFin() {
+        return horaFin;
+    }
+
+    /**
+     * @param horaFin the horaFin to set
+     */
+    public void setHoraFin(String horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    /**
+     * @return the Fecha
+     */
+    public Date getFecha() {
+        return Fecha;
+    }
+
+    /**
+     * @param Fecha the Fecha to set
+     */
+    public void setFecha(Date Fecha) {
+        this.Fecha = Fecha;
+    }
+    
+    
 }
