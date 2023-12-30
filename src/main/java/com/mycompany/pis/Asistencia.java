@@ -1,0 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.pis;
+
+/**
+ *
+ * @author jsbal
+ */
+public class Asistencia {
+    private Integer id;
+    private Integer idEstudiante;
+    
+}
