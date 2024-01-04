@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import modelo.Docente;
 
 /**
- *
+ *                              
  * @author mrbingus
  */
 public class DocenteControl extends DaoImplement<Docente>{
