@@ -6,6 +6,9 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
+import controlador.TDA.listas.Exception.EmptyException;
+import controlador.utiles.Utiles;
+import java.lang.reflect.Field;
 import modelo.Docente;
 
 /**
@@ -59,5 +62,59 @@ public class DocenteControl extends DaoImplement<Docente>{
         return persist(docente);
     }    
     
-    
+    public DynamicList<Docente> shellsort(DynamicList<Docente> lista, Integer tipo, String field) throws EmptyException, Exception {
+        System.out.println("Estas usando shellsort");
+        if (tipo == 0) {
+            tipo = 1;
+        } else {
+            tipo = 0;
+        }
+
+        int longitudLista = lista.getLenght();
+        Docente[] arrCensadores = lista.toArray();
+
+        int tamanoPedazo = longitudLista / 2;
+
+        while (tamanoPedazo > 0) {
+            for (int i = tamanoPedazo; i < longitudLista; i++) {
+                Docente temp = arrCensadores[i];
+                int j = i;
+
+                while (j >= tamanoPedazo && arrCensadores[j - tamanoPedazo].compare(temp, field, tipo)) {
+                    arrCensadores[j] = arrCensadores[j - tamanoPedazo];
+                    j -= tamanoPedazo;
+                }
+
+                arrCensadores[j] = temp;
+            }
+
+            tamanoPedazo = tamanoPedazo / 2;
+        }
+        return lista.toList(arrCensadores);
+    }
+
+    public DynamicList<Docente> busquedaLineal(String texto, DynamicList<Docente> personas, String criterio) {
+        //System.out.println("Estas usando busqueda lineal");
+        DynamicList<Docente> lista = new DynamicList<>();
+        try {
+            Docente[] aux = shellsort(personas, 0, criterio).toArray();
+                        lista.removerAll();
+
+            for (Docente p : aux) {
+                Field nombreAtributo = Utiles.getField(Docente.class, criterio);
+
+                if (nombreAtributo != null) {
+                    nombreAtributo.setAccessible(true);
+                    Object getter = nombreAtributo.get(p);
+
+                    if (getter.toString().toLowerCase().contains(texto.toLowerCase())) {
+                        lista.add(p);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return lista;
+    }    
 }
