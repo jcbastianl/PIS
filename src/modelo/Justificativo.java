@@ -4,8 +4,6 @@
  */
 package modelo;
 
-import java.util.Date;
-
 /**
  *
  * @author jsbal
@@ -89,6 +87,4 @@ public class Justificativo {
     public void setId_asistencia(Integer id_asistencia) {
         this.id_asistencia = id_asistencia;
     }
-    
-    
 }

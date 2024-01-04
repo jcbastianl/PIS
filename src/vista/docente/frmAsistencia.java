@@ -11,6 +11,36 @@ import javax.swing.JOptionPane;
  * @author Usuario iTC
  */
 public class frmAsistencia extends javax.swing.JFrame {
+
+        private void seleccionarMateria() {
+                String aux = (String) cbxCurso.getSelectedItem();
+                if (aux.equalsIgnoreCase("--Seleccione un Curso--")) {
+                        JOptionPane.showMessageDialog(null, "Selecciona un curso", "ERROR", JOptionPane.ERROR_MESSAGE);
+                } else {
+                        System.out.println(aux);
+                        cbxMateria.setEnabled(true);
+                        cbxCurso.setEnabled(false);
+                }
+        }
+
+        private void Asignar() {
+                int aux = (int) spnNroHoras.getValue();
+                String materia = (String) cbxMateria.getSelectedItem();
+                if (cbxMateria.isEnabled()) {
+                        if (materia.equalsIgnoreCase("--Seleccione una Materia--")) {
+                                JOptionPane.showMessageDialog(null, "Debe seleccionar una Materia", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                                if (aux >= 2 && aux <= 4) {
+                                        new frmTablaAsistencia(aux).setVisible(true);
+                                } else {
+                                        JOptionPane.showMessageDialog(null, "Numero de horas debe estar entre 2 y 4", "ERROR", JOptionPane.ERROR_MESSAGE);
+                                }
+                        }
+                } else {
+                        JOptionPane.showMessageDialog(null, "Debe seleccionar un curso", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+        }
+
         /**
          * Creates new form frmAsistencia
          */
@@ -115,32 +145,11 @@ public class frmAsistencia extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-                String aux = (String) cbxCurso.getSelectedItem();
-                if (aux.equalsIgnoreCase("--Seleccione un Curso--")) {
-                        JOptionPane.showMessageDialog(null, "Selecciona un curso", "ERROR", JOptionPane.ERROR_MESSAGE);
-                } else {
-                        System.out.println(aux);
-                        cbxMateria.setEnabled(true);
-                        cbxCurso.setEnabled(false);
-                }
+                seleccionarMateria();
         }//GEN-LAST:event_btnBuscarActionPerformed
 
         private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
-                int aux = (int) spnNroHoras.getValue();
-                String materia = (String) cbxMateria.getSelectedItem();
-                if (cbxMateria.isEnabled()) {
-                        if (materia.equalsIgnoreCase("--Seleccione una Materia--")) {
-                                JOptionPane.showMessageDialog(null, "Debe seleccionar una Materia", "ERROR", JOptionPane.ERROR_MESSAGE);
-                        } else {
-                                if (aux >= 2 && aux <= 4) {
-                                        new frmTablaAsistencia(aux).setVisible(true);
-                                } else {
-                                        JOptionPane.showMessageDialog(null, "Numero de horas debe estar entre 2 y 4", "ERROR", JOptionPane.ERROR_MESSAGE);
-                                }
-                        }
-                } else {
-                        JOptionPane.showMessageDialog(null, "Debe seleccionar un curso", "ERROR", JOptionPane.ERROR_MESSAGE);
-                }
+                Asignar();
         }//GEN-LAST:event_btnAsignarActionPerformed
 
         /**

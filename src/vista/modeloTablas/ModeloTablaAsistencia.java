@@ -10,7 +10,7 @@ public class ModeloTablaAsistencia extends AbstractTableModel {
 
         private DynamicList<Estudiante> estudiantes;
         private DefaultTableModel modelo = new DefaultTableModel();
-        Integer numeroColumnas;
+        Integer numeroColumnas = 0;
 
         public void agregarColumnas(int numeroColumnas) {
                 this.numeroColumnas = numeroColumnas;
