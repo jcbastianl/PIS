@@ -12,7 +12,6 @@ import java.util.Date;
  */
 public class Justificativo {
     private String motivo;
-    private Date fecha;
     private String descripcion;
     private Integer id;
     private Integer id_estudiante;
@@ -33,20 +32,6 @@ public class Justificativo {
      */
     public void setMotivo(String motivo) {
         this.motivo = motivo;
-    }
-
-    /**
-     * @return the fecha
-     */
-    public Date getFecha() {
-        return fecha;
-    }
-
-    /**
-     * @param fecha the fecha to set
-     */
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
 
     /**

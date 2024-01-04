@@ -2,17 +2,10 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-        <group/>
-=======
         <group>
-            <file>file:/C:/Users/jsbal/Desktop/Proyectos/AsistenciaPIS/src/vista/frmDocente.java</file>
-            <file>file:/C:/Users/jsbal/Desktop/Proyectos/AsistenciaPIS/src/modelo/Asistencia.java</file>
-            <file>file:/C:/Users/jsbal/Desktop/Proyectos/AsistenciaPIS/src/modelo/Asignatura.java</file>
-            <file>file:/C:/Users/jsbal/Desktop/Proyectos/AsistenciaPIS/src/controlador/TDA/listas/DynamicList.java</file>
-            <file>file:/C:/Users/jsbal/Desktop/Proyectos/AsistenciaPIS/src/modelo/ClaseDictada.java</file>
-            <file>file:/C:/Users/jsbal/Desktop/Proyectos/AsistenciaPIS/src/modelo/Cursa.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Justificativo.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/frmDocente.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Asistencia.java</file>
         </group>
->>>>>>> 8f443599aff9fe284003f0057f9d01204ec33a81
     </open-files>
 </project-private>

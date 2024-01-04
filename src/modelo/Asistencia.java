@@ -4,6 +4,8 @@
  */
 package modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author jsbal
@@ -15,6 +17,7 @@ public class Asistencia {
     private Integer id_horario;
     private Integer id_justificativo;
     private String estadoAsistencia;
+    private Date fecha;
     
 
     public Asistencia() {
@@ -89,14 +92,15 @@ public class Asistencia {
     public void setId_justificativo(Integer id_justificativo) {
         this.id_justificativo = id_justificativo;
     }
-
+  
     /**
      * @return the estadoAsistencia
      */
     public String getEstadoAsistencia() {
         return estadoAsistencia;
     }
-
+    
+    
     /**
      * @param estadoAsistencia the estadoAsistencia to set
      */
@@ -104,6 +108,14 @@ public class Asistencia {
         this.estadoAsistencia = estadoAsistencia;
     }
     
-    
-    
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * @return the estadoAsistencia
+     */
+    public Date getFecha() {
+        return fecha;
+    }    
 }
