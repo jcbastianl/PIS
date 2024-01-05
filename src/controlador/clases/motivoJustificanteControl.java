@@ -2,43 +2,43 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
-import modelo.motivoJustificante;
+import modelo.MotivoJustificante;
 
 /**
  *
  * @author Usuario iTC
  */
-public class motivoJustificanteControl extends DaoImplement<motivoJustificante> {
+public class motivoJustificanteControl extends DaoImplement<MotivoJustificante> {
 
-        private DynamicList<motivoJustificante> listMJ = new DynamicList<>();
-        private motivoJustificante motivojustificante;
+        private DynamicList<MotivoJustificante> listMJ = new DynamicList<>();
+        private MotivoJustificante motivojustificante;
 
         public motivoJustificanteControl() {
-                super(motivoJustificante.class);
+                super(MotivoJustificante.class);
         }
 
-        public motivoJustificanteControl(motivoJustificante motivojustificante, Class<motivoJustificante> clazz) {
+        public motivoJustificanteControl(MotivoJustificante motivojustificante, Class<MotivoJustificante> clazz) {
                 super(clazz);
                 this.motivojustificante = motivojustificante;
         }
 
-        public DynamicList<motivoJustificante> getListMJ() {
+        public DynamicList<MotivoJustificante> getListMJ() {
                 listMJ = all();
                 return listMJ;
         }
 
-        public void setListMJ(DynamicList<motivoJustificante> listMJ) {
+        public void setListMJ(DynamicList<MotivoJustificante> listMJ) {
                 this.listMJ = listMJ;
         }
 
-        public motivoJustificante getmotivoJustificante() {
+        public MotivoJustificante getmotivoJustificante() {
                 if (motivojustificante == null) {
-                        motivojustificante = new motivoJustificante();
+                        motivojustificante = new MotivoJustificante();
                 }
                 return motivojustificante;
         }
 
-        public void setEstadoAsistencia(motivoJustificante motivojustificante) {
+        public void setEstadoAsistencia(MotivoJustificante motivojustificante) {
                 this.motivojustificante = motivojustificante;
         }
 

@@ -1,21 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
 /**
  *
  * @author Usuario iTC
  */
-public class estadoAsistencia {
+public class EstadoAsistencia {
         private Integer id;
         private String nombre;
 
-        public estadoAsistencia() {
+        public EstadoAsistencia() {
         }
 
-        public estadoAsistencia(Integer id, String nombre) {
+        public EstadoAsistencia(Integer id, String nombre) {
                 this.id = id;
                 this.nombre = nombre;
         }

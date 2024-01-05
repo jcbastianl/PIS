@@ -2,39 +2,39 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
-import modelo.estadoAsistencia;
+import modelo.EstadoAsistencia;
 
-public class estadoAsistenciaControl extends DaoImplement<estadoAsistencia> {
+public class estadoAsistenciaControl extends DaoImplement<EstadoAsistencia> {
 
-        private DynamicList<estadoAsistencia> listAT = new DynamicList<>();
-        private estadoAsistencia estadoasistencia;
+        private DynamicList<EstadoAsistencia> listAT = new DynamicList<>();
+        private EstadoAsistencia estadoasistencia;
 
         public estadoAsistenciaControl() {
-                super(estadoAsistencia.class);
+                super(EstadoAsistencia.class);
         }
 
-        public estadoAsistenciaControl(estadoAsistencia estadoasistencia, Class<estadoAsistencia> clazz) {
+        public estadoAsistenciaControl(EstadoAsistencia estadoasistencia, Class<EstadoAsistencia> clazz) {
                 super(clazz);
                 this.estadoasistencia = estadoasistencia;
         }
 
-        public DynamicList<estadoAsistencia> getList() {
+        public DynamicList<EstadoAsistencia> getList() {
                 listAT = all();
                 return listAT;
         }
 
-        public void setListAT(DynamicList<estadoAsistencia> listAT) {
+        public void setListAT(DynamicList<EstadoAsistencia> listAT) {
                 this.listAT = listAT;
         }
 
-        public estadoAsistencia getEstadoAsistencia() {
+        public EstadoAsistencia getEstadoAsistencia() {
                 if (estadoasistencia == null) {
-                        estadoasistencia = new estadoAsistencia();
+                        estadoasistencia = new EstadoAsistencia();
                 }
                 return estadoasistencia;
         }
 
-        public void setEstadoAsistencia(estadoAsistencia estadoasistencia) {
+        public void setEstadoAsistencia(EstadoAsistencia estadoasistencia) {
                 this.estadoasistencia = estadoasistencia;
         }
         public Boolean persist() {
