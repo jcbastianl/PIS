@@ -4,7 +4,11 @@
  */
 package controlador.utiles;
 
+import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
+import controlador.clases.EstadoMatriculaControl;
+import controlador.clases.EstudianteControl;
+import controlador.clases.MatriculaControl;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -102,6 +106,35 @@ public class Utiles {
                         }
                     }
                     break;
+                case "matricula":
+                    MatriculaControl cc = new MatriculaControl();
+                    for (int i = 0; i < cc.all().getLenght(); i++) {
+                        if (Objects.equals(cc.all().getInfo(i).getId(), id)) {
+                            return i;
+                        }
+                    }
+                case "estudiante":
+                    EstudianteControl ec = new EstudianteControl();
+                    for (int i = 0; i < ec.all().getLenght(); i++) {
+                        if (Objects.equals(ec.all().getInfo(i).getId(), id)) {
+                            return i;
+                        }
+                    }
+                case "cursa":
+                    CursaControl curc = new CursaControl();
+                    for (int i = 0; i < curc.all().getLenght(); i++) {
+                        if (Objects.equals(curc.all().getInfo(i).getId(), id)) {
+                            return i;
+                        }
+                    }
+                case "estadomatricula":
+                    EstadoMatriculaControl emc = new EstadoMatriculaControl();
+                    for (int i = 0; i < emc.all().getLenght(); i++) {
+                        if (Objects.equals(emc.all().getInfo(i).getId(), id)) {
+                            return i;
+                        }
+                    }
+                    break;
                 default:
                     throw new AssertionError();
             }
@@ -135,4 +168,12 @@ public class Utiles {
             return ""; 
         }
     }
+    
+    public static String formaterarFecha(Date date) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        return sdf.format(date);
+    }
+    
 }

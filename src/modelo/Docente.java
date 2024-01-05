@@ -74,6 +74,13 @@ public class Docente extends Persona {
         return null;
 
         }
-    }  
+    } 
+
+    @Override
+    public String toString() {
+        return getNombre() + " " + getApellido();
+    }
+    
+    
     
 }

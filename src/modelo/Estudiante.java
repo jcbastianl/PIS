@@ -9,6 +9,7 @@ package modelo;
  * @author jsbal
  */
 public class Estudiante extends Persona {
+
     private Double porcentajeAsistencias;
     private Integer id;
     private Integer id_cursa;
@@ -57,33 +58,39 @@ public class Estudiante extends Persona {
     public void setId_cursa(Integer id_cursa) {
         this.id_cursa = id_cursa;
     }
-    
-   public Boolean compare(Estudiante e, String field, Integer type) {
-    switch (type) {
-        case 0: // Ascendente
-            if (field.equalsIgnoreCase("nombre")) {
-                return getNombre().compareTo(e.getNombre()) < 0;
-            } else if (field.equalsIgnoreCase("apellido")) {
-                return getApellido().compareTo(e.getApellido()) < 0;
-            } else if (field.equalsIgnoreCase("dni")) {
-                return getDni().compareTo(e.getDni()) < 0;
-            } else if (field.equalsIgnoreCase("id")) {
-                return getId().compareTo(e.getId()) < 0;
-            }
-            break;
-        case 1: // Descendente
-            if (field.equalsIgnoreCase("nombre")) {
-                return getNombre().compareTo(e.getNombre()) > 0;
-            } else if (field.equalsIgnoreCase("apellido")) {
-                return getApellido().compareTo(e.getApellido()) > 0;
-            } else if (field.equalsIgnoreCase("dni")) {
-                return getDni().compareTo(e.getDni()) > 0;
-            } else if (field.equalsIgnoreCase("id")) {
-                return getId().compareTo(e.getId()) > 0;
-            }
-            break;
-    }
-    return null;
-}
 
+    public Boolean compare(Estudiante e, String field, Integer type) {
+        switch (type) {
+            case 0: // Ascendente
+                if (field.equalsIgnoreCase("nombre")) {
+                    return getNombre().compareTo(e.getNombre()) < 0;
+                } else if (field.equalsIgnoreCase("apellido")) {
+                    return getApellido().compareTo(e.getApellido()) < 0;
+                } else if (field.equalsIgnoreCase("dni")) {
+                    return getDni().compareTo(e.getDni()) < 0;
+                } else if (field.equalsIgnoreCase("id")) {
+                    return getId().compareTo(e.getId()) < 0;
+                }
+                break;
+            case 1: // Descendente
+                if (field.equalsIgnoreCase("nombre")) {
+                    return getNombre().compareTo(e.getNombre()) > 0;
+                } else if (field.equalsIgnoreCase("apellido")) {
+                    return getApellido().compareTo(e.getApellido()) > 0;
+                } else if (field.equalsIgnoreCase("dni")) {
+                    return getDni().compareTo(e.getDni()) > 0;
+                } else if (field.equalsIgnoreCase("id")) {
+                    return getId().compareTo(e.getId()) > 0;
+                }
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return getNombre()+" "+getApellido();
+    }
+
+    
 }
