@@ -6,9 +6,8 @@ package controlador.TDA.listas;
 
 import controlador.TDA.listas.Exception.EmptyException;
 
-public class DynamicList <E> {
- 
-    
+public class DynamicList<E> {
+
     private Node<E> header;
     private Node<E> last;
     private Integer lenght;
@@ -42,7 +41,7 @@ public class DynamicList <E> {
     public void setLenght(Integer lenght) {
         this.lenght = lenght;
     }
-    
+
     public Boolean isEmpty() {
         return header == null || getLenght() == 0;
     }
@@ -53,12 +52,12 @@ public class DynamicList <E> {
             help = new Node<>(info);
             header = help;
             last = help;
-            
+
         } else {
             Node<E> headHelp = header;
             help = new Node<>(info, headHelp);
             header = help;
-            
+
         }
         lenght++;
     }
@@ -89,9 +88,10 @@ public class DynamicList <E> {
             Node<E> search = getNode(index);
             Node<E> help = new Node<>(info, search);
             search_preview.setNext(help);
-            setLenght((Integer) (getLenght()+1));
+            setLenght((Integer) (getLenght() + 1));
         }
     }
+
     public void remove(Integer index) throws IndexOutOfBoundsException, EmptyException {
         if (index.intValue() < 0 || index.intValue() >= lenght) {
             throw new IndexOutOfBoundsException("Índice fuera de rango");
@@ -100,20 +100,41 @@ public class DynamicList <E> {
         if (index.intValue() == 0) {
             removeFirst();
         } else {
-            Node<E> search_preview = getNode(index - 1);
-            Node<E> toRemove = search_preview.getNext();
-            search_preview.setNext(toRemove.getNext());
+
+            Node<E> nodoAnterior = getNode(index - 1);
+
+            Node<E> nodoAEliminar = nodoAnterior.getNext();
+
+            nodoAnterior.setNext(nodoAEliminar.getNext());
+
+            if (index.intValue() == (lenght - 1)) {
+                last = nodoAnterior;
+            }
+
+            nodoAEliminar.setNext(null);
+
             lenght--;
         }
     }
-    
+
+    public void removerAll() {
+        try {
+            for (int i = 0; i < lenght; i++) {
+                remove(i);
+            }
+        } catch (Exception e) {
+            System.out.println("Algo fallo al vaciar la lista");
+        }
+
+    }
+
     private void removeFirst() {
         if (!isEmpty()) {
             header = header.getNext();
             lenght--;
         }
     }
-    
+
     private E getFirst() throws EmptyException, IndexOutOfBoundsException {
         if (isEmpty()) {
             throw new EmptyException("Error. Lista vacia");
@@ -125,14 +146,14 @@ public class DynamicList <E> {
         return getNode(index).getInfo();
     }
 
-    public Node<E> getNode(Integer index) throws EmptyException{
+    public Node<E> getNode(Integer index) throws EmptyException {
         if (isEmpty()) {
             throw new EmptyException("Error. Lista vacia");
         } else if (index < 0 || index >= lenght) {
             throw new IndexOutOfBoundsException("Error. Fuera de rango");
         } else if (index == 0) {
             return header;
-        } else if (index== (lenght - 1)) {
+        } else if (index == (lenght - 1)) {
             return last;
         } else {
             Node<E> search = header;
@@ -145,22 +166,19 @@ public class DynamicList <E> {
         }
     }
 
-    public E merge(E data, Integer pos) throws EmptyException{ 
+    public E merge(E data, Integer pos) throws EmptyException {
         Node<E> provisional = getNode(pos);
         E help = provisional.getInfo();
         provisional.setInfo(data);
         return help;
-        
+
         /*Node<E> original = getNode(pos);
         Node<E> help = new Node<>(data, original.getNext());
         getNode(pos-1).setNext(help);
-        */ 
-        
-        
+         */
     }
-    
-    
-    public E extractFirs() throws EmptyException{
+
+    public E extractFirs() throws EmptyException {
         //extrae de la lista y no devuelve
         if (isEmpty()) {
             throw new EmptyException("Lista vacia");
@@ -169,32 +187,31 @@ public class DynamicList <E> {
             Node<E> help = header.getNext();
             header = null;
             header = help;
-            
+
             if (lenght == 1) {
                 last = null;
-            } 
-  
+            }
+
             lenght--;
             return element;
         }
     }
-    
-    
-    public E extractLast() throws EmptyException{
+
+    public E extractLast() throws EmptyException {
         //extrae de la lista y no devuelve
         if (isEmpty()) {
             throw new EmptyException("Lista vacia");
         } else {
             E element = last.getInfo();
-            Node<E> help = getNode(lenght-2);
+            Node<E> help = getNode(lenght - 2);
             if (help == null) {
                 last = null;
                 if (lenght == 2) {
                     last = header;
-                    
-                }else{
+
+                } else {
                     header = null;
-                
+
                 }
             } else {
                 last = null;
@@ -204,20 +221,19 @@ public class DynamicList <E> {
             lenght--;
             return element;
         }
-    }    
-    
-    
-    public E extract(Integer index) throws EmptyException{
- if (isEmpty()) {
+    }
+
+    public E extract(Integer index) throws EmptyException {
+        if (isEmpty()) {
             throw new EmptyException("Error. Lista vacia");
         } else if (index < 0 || index >= lenght) {
             throw new IndexOutOfBoundsException("Error. Fuera de rango");
         } else if (index == 0) {
             return extractFirs();
-        } else if (index== (lenght - 1)) {
+        } else if (index == (lenght - 1)) {
             return extractLast();
         } else {
-            Node<E> node_preview = getNode(index-1);
+            Node<E> node_preview = getNode(index - 1);
             Node<E> node_actual = getNode(index);
             E info = node_actual.getInfo();
             Node<E> help_next = node_actual.getNext();
@@ -225,39 +241,39 @@ public class DynamicList <E> {
             node_preview.setNext(help_next);
             lenght--;
             return info;
-        }        
-    
+        }
+
     }
-    
-    public E[] toArray(){
-                Class clazz = null;
-                E[] matriz = null;
-                if(lenght > 0){
-                        clazz = header.getInfo().getClass();
-                        matriz = (E[])java.lang.reflect.Array.newInstance(clazz, lenght);
-                        Node<E> aux = header;
-                        for (int i = 0; i < lenght; i++) {
-                                matriz[i] = aux.getInfo();
-                                aux = aux.getNext();
-                        }
-                }
-                return matriz;
+
+    public E[] toArray() {
+        Class clazz = null;
+        E[] matriz = null;
+        if (lenght > 0) {
+            clazz = header.getInfo().getClass();
+            matriz = (E[]) java.lang.reflect.Array.newInstance(clazz, lenght);
+            Node<E> aux = header;
+            for (int i = 0; i < lenght; i++) {
+                matriz[i] = aux.getInfo();
+                aux = aux.getNext();
+            }
         }
-        
-        public DynamicList<E> toList(E[] m){
-                reset();
-                for (int i = 0; i < m.length; i++) {
-                        this.add(m[i]);
-                }
-                return this;
+        return matriz;
+    }
+
+    public DynamicList<E> toList(E[] m) {
+        reset();
+        for (int i = 0; i < m.length; i++) {
+            this.add(m[i]);
         }
-        
-        public void reset(){
-                header = null;
-                last = null;
-                lenght = 0;
-        }    
-    
+        return this;
+    }
+
+    public void reset() {
+        header = null;
+        last = null;
+        lenght = 0;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Lista Data\n");
@@ -271,6 +287,6 @@ public class DynamicList <E> {
             sb.append(e.getMessage());
         }
         return sb.toString();
-    } 
-    
+    }
+
 }
