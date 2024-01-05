@@ -8,16 +8,16 @@ import modelo.MotivoJustificante;
  *
  * @author Usuario iTC
  */
-public class motivoJustificanteControl extends DaoImplement<MotivoJustificante> {
+public class MotivoJustificanteControl extends DaoImplement<MotivoJustificante> {
 
         private DynamicList<MotivoJustificante> listMJ = new DynamicList<>();
         private MotivoJustificante motivojustificante;
 
-        public motivoJustificanteControl() {
+        public MotivoJustificanteControl() {
                 super(MotivoJustificante.class);
         }
 
-        public motivoJustificanteControl(MotivoJustificante motivojustificante, Class<MotivoJustificante> clazz) {
+        public MotivoJustificanteControl(MotivoJustificante motivojustificante, Class<MotivoJustificante> clazz) {
                 super(clazz);
                 this.motivojustificante = motivojustificante;
         }

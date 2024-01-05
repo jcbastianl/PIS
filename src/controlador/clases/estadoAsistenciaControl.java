@@ -4,16 +4,16 @@ import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
 import modelo.EstadoAsistencia;
 
-public class estadoAsistenciaControl extends DaoImplement<EstadoAsistencia> {
+public class EstadoAsistenciaControl extends DaoImplement<EstadoAsistencia> {
 
         private DynamicList<EstadoAsistencia> listAT = new DynamicList<>();
         private EstadoAsistencia estadoasistencia;
 
-        public estadoAsistenciaControl() {
+        public EstadoAsistenciaControl() {
                 super(EstadoAsistencia.class);
         }
 
-        public estadoAsistenciaControl(EstadoAsistencia estadoasistencia, Class<EstadoAsistencia> clazz) {
+        public EstadoAsistenciaControl(EstadoAsistencia estadoasistencia, Class<EstadoAsistencia> clazz) {
                 super(clazz);
                 this.estadoasistencia = estadoasistencia;
         }
