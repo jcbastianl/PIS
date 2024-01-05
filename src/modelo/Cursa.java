@@ -12,9 +12,8 @@ public class Cursa {
     private String letra;
     private String aula;
     private Integer id;
-    private Integer id_Docente;
-    private Integer id_Matricula;
-    private Integer id_claseDictada;
+//    private Integer id_Docente;
+    private Docente docente;
 
     public Cursa() {
     }
@@ -61,47 +60,15 @@ public class Cursa {
         this.id = id;
     }
 
-    /**
-     * @return the id_Docente
-     */
-    public Integer getId_Docente() {
-        return id_Docente;
+    public Docente getDocente() {
+        return docente;
     }
 
-    /**
-     * @param id_Docente the id_Docente to set
-     */
-    public void setId_Docente(Integer id_Docente) {
-        this.id_Docente = id_Docente;
+    public void setDocente(Docente docente) {
+        this.docente = docente;
     }
 
-    /**
-     * @return the id_Matricula
-     */
-    public Integer getId_Matricula() {
-        return id_Matricula;
-    }
 
-    /**
-     * @param id_Matricula the id_Matricula to set
-     */
-    public void setId_Matricula(Integer id_Matricula) {
-        this.id_Matricula = id_Matricula;
-    }
 
-    /**
-     * @return the id_claseDictada
-     */
-    public Integer getId_claseDictada() {
-        return id_claseDictada;
-    }
-
-    /**
-     * @param id_claseDictada the id_claseDictada to set
-     */
-    public void setId_claseDictada(Integer id_claseDictada) {
-        this.id_claseDictada = id_claseDictada;
-    }
-    
-    
+   
 }
