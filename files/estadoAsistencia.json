@@ -1,0 +1,1 @@
+{"controlador.TDA.listas.DynamicList":{"header":{"info":{"@class":"modelo.estadoAsistencia","id":1,"nombre":"Presente"},"next":{"info":{"@class":"modelo.estadoAsistencia","id":2,"nombre":"Ausente"},"next":{"info":{"@class":"modelo.estadoAsistencia","id":3,"nombre":"Justificado"}}}},"last":{"@reference":"..\/header\/next\/next"},"lenght":3}}

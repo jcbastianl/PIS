@@ -8,14 +8,14 @@ package modelo;
  *
  * @author Usuario iTC
  */
-public class Rol {
+public class estadoAsistencia {
         private Integer id;
         private String nombre;
 
-        public Rol() {
+        public estadoAsistencia() {
         }
 
-        public Rol(Integer id, String nombre) {
+        public estadoAsistencia(Integer id, String nombre) {
                 this.id = id;
                 this.nombre = nombre;
         }
