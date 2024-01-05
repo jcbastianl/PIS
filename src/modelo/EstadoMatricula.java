@@ -8,6 +8,31 @@ package modelo;
  *
  * @author jsbal
  */
-public enum EstadoMatricula {
-    MATRICULADA,APROBADA,REPROBADA
+public class EstadoMatricula {
+    private Integer id;
+    private String nombre;
+
+    public EstadoMatricula() {
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

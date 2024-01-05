@@ -11,7 +11,7 @@ import java.util.Date;
  * @author jsbal
  */
 public class Matricula {
-    private Integer ciclo;
+
     private Date fechaRegistro;
     private Integer numero;
     private Integer id;
@@ -24,19 +24,6 @@ public class Matricula {
     public Matricula() {
     }
 
-    /**
-     * @return the ciclo
-     */
-    public Integer getCiclo() {
-        return ciclo;
-    }
-
-    /**
-     * @param ciclo the ciclo to set
-     */
-    public void setCiclo(Integer ciclo) {
-        this.ciclo = ciclo;
-    }
 
     /**
      * @return the fechaRegistro
@@ -121,6 +108,8 @@ public class Matricula {
             return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) < 0;
         }else if(field.equalsIgnoreCase("fecharegistro")){
             return fechaRegistro.compareTo(p.getFechaRegistro()) < 0;
+        }else if(field.equalsIgnoreCase("estadomatricula")){
+            return estadoMatricula.compareTo(p.getEstadoMatricula()) < 0;
         }else if(field.equalsIgnoreCase("id")){
             return (id.intValue() < p.getId().intValue());
         }
@@ -131,6 +120,8 @@ public class Matricula {
             return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) > 0;
         }else if(field.equalsIgnoreCase("fecharegistro")){
             return fechaRegistro.compareTo(p.getFechaRegistro()) > 0;
+        }else if(field.equalsIgnoreCase("estadomatricula")){
+            return estadoMatricula.compareTo(p.getEstadoMatricula()) > 0;
         }else if(field.equalsIgnoreCase("id")){
             return (id.intValue() > p.getId().intValue());
         } 

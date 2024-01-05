@@ -12,6 +12,7 @@ public class Cursa {
     private String letra;
     private String aula;
     private Integer id;
+    private Integer ciclo;
 //    private Integer id_Docente;
     private Docente docente;
 
@@ -66,6 +67,19 @@ public class Cursa {
 
     public void setDocente(Docente docente) {
         this.docente = docente;
+    }
+
+    public Integer getCiclo() {
+        return ciclo;
+    }
+
+    public void setCiclo(Integer ciclo) {
+        this.ciclo = ciclo;
+    }
+
+    @Override
+    public String toString() {
+        return ciclo+""+letra;
     }
 
 

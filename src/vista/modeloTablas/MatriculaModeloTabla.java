@@ -6,6 +6,7 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
 import modelo.Matricula;
 
@@ -35,13 +36,13 @@ public class MatriculaModeloTabla extends AbstractTableModel{
                 case 0:
                     return (d != null) ? d.getEstudiante().getNombre() +" "+d.getEstudiante().getApellido() : " ";
                 case 1:
-                    return (d != null) ? d.getCiclo()  : " ";
+                    return (d != null) ? d.getCursa().getCiclo()+""+d.getCursa().getLetra() : " ";
                 case 2:
-                    return (d != null) ? d.getCursa().getLetra() : " ";
-                case 3:
                     return (d != null) ? d.getNumero() : " ";
-                case 4:
+                case 3:
                     return (d != null) ? d.getEstadoMatricula() : " ";
+                case 4:
+                    return (d != null) ? Utiles.formaterarFecha(d.getFechaRegistro()) : " ";
                 default:
                     return null;
             }
@@ -56,13 +57,13 @@ public class MatriculaModeloTabla extends AbstractTableModel{
             case 0:
                 return "ESTUDIANTE";
             case 1:
-                return "CICLO";
-            case 2:
                 return "CURSO";
-            case 3:
+            case 2:
                 return "Nro MATRICULA";     
-            case 4:
+            case 3:
                 return "ESTADO";   
+            case 4:
+                return "FECHA"; 
             default:
                 return null;
         }

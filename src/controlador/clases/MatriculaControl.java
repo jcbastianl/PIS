@@ -9,15 +9,16 @@ import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
+import java.util.Date;
 import modelo.Matricula;
 
 /**
  *
  * @author mrbingus
  */
-public class MatriculaControl extends DaoImplement<Matricula>{
-    
-    private DynamicList<Matricula>listaMatriculas;
+public class MatriculaControl extends DaoImplement<Matricula> {
+
+    private DynamicList<Matricula> listaMatriculas;
     private Matricula matricula;
 
     public MatriculaControl() {
@@ -34,7 +35,7 @@ public class MatriculaControl extends DaoImplement<Matricula>{
     }
 
     public Matricula getMatricula() {
-        if(matricula == null){
+        if (matricula == null) {
             matricula = new Matricula();
         }
         return matricula;
@@ -43,12 +44,12 @@ public class MatriculaControl extends DaoImplement<Matricula>{
     public void setMatricula(Matricula matricula) {
         this.matricula = matricula;
     }
-    
+
     public Boolean persist() {
         matricula.setId(all().getLenght() + 1);
         return persist(matricula);
-    }    
-    
+    }
+
     public DynamicList<Matricula> shellsort(DynamicList<Matricula> lista, Integer tipo, String field) throws EmptyException, Exception {
         System.out.println("Estas usando shellsort");
         if (tipo == 0) {
@@ -85,7 +86,7 @@ public class MatriculaControl extends DaoImplement<Matricula>{
         DynamicList<Matricula> lista = new DynamicList<>();
         try {
             Matricula[] aux = shellsort(personas, 0, criterio).toArray();
-                        lista.removerAll();
+            lista.removerAll();
 
             for (Matricula p : aux) {
                 Field nombreAtributo = Utiles.getField(Matricula.class, criterio);
@@ -93,6 +94,12 @@ public class MatriculaControl extends DaoImplement<Matricula>{
                 if (nombreAtributo != null) {
                     nombreAtributo.setAccessible(true);
                     Object getter = nombreAtributo.get(p);
+
+                    if (criterio == "fecharegistro") {
+                        if (Utiles.formaterarFecha((Date)getter).contains(texto.toLowerCase())) {
+                            lista.add(p);
+                        }
+                    }
 
                     if (getter.toString().toLowerCase().contains(texto.toLowerCase())) {
                         lista.add(p);
@@ -103,5 +110,5 @@ public class MatriculaControl extends DaoImplement<Matricula>{
             System.out.println(e.getMessage());
         }
         return lista;
-    }        
+    }
 }

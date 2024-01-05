@@ -35,7 +35,7 @@ public class CursaModeloTabla extends AbstractTableModel{
                 case 0:
                     return (d != null) ? d.getDocente().getNombre() +" "+d.getDocente().getApellido() : " ";
                 case 1:
-                    return (d != null) ? d.getLetra()  : " ";
+                    return (d != null) ? d.getCiclo()+""+d.getLetra()  : " ";
                 case 2:
                     return (d != null) ? d.getAula() : " ";
                 default:
@@ -52,7 +52,7 @@ public class CursaModeloTabla extends AbstractTableModel{
             case 0:
                 return "DOCENTE";
             case 1:
-                return "LETRA";
+                return "PARALELO";
             case 2:
                 return "AULA"; 
             default:

@@ -6,6 +6,7 @@ package vista.admin;
 
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
+import controlador.clases.MatriculaControl;
 import javax.swing.JOptionPane;
 import vista.modeloTablas.CursaModeloTabla;
 import vista.utiles.UtilVista;
@@ -53,6 +54,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         if(verificar()){
             cursaControl.getCursa().setAula(txtAula.getText());
             cursaControl.getCursa().setLetra(txtLetra.getText());
+            cursaControl.getCursa().setCiclo(Integer.parseInt(txtCiclo.getText()));
             try {
             cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));                
             } catch (Exception e) {
@@ -73,6 +75,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         if(verificar()){
             cursaControl.getCursa().setAula(txtAula.getText());
             cursaControl.getCursa().setLetra(txtLetra.getText());
+            cursaControl.getCursa().setCiclo(Integer.parseInt(txtCiclo.getText()));
             try {
             cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));                
             } catch (Exception e) {
@@ -142,6 +145,8 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         btnBorrar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        txtCiclo = new javax.swing.JTextField();
 
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel6.setText("Nombres:");
@@ -165,9 +170,14 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblCursa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCursaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCursa);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 420, 190));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 420, 170));
 
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel7.setText("Letra (Identificativo):");
@@ -180,14 +190,14 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         jPanel1.add(txtLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 180, -1));
 
         cbxDocente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbxDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 180, -1));
+        jPanel1.add(cbxDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 180, -1));
 
         jLabel9.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel9.setText("Aula:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 20));
 
         jLabel10.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jLabel10.setText("Docente asignado:");
+        jLabel10.setText("Ciclo:");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, 20));
 
         btnGuardar.setText("GUARDAR");
@@ -196,7 +206,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
 
         btnModificar.setText("MODIFICAR");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
@@ -204,7 +214,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 btnModificarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, -1, -1));
 
         btnBorrar.setText("DAR DE BAJA");
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
@@ -212,7 +222,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 btnBorrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, -1, -1));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, -1, -1));
 
         btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -220,7 +230,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, -1, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 200, -1, -1));
 
         btnSalir.setText("SALIR");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -228,7 +238,12 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 200, 90, -1));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, 90, -1));
+
+        jLabel11.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel11.setText("Docente asignado:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, 20));
+        jPanel1.add(txtCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 180, -1));
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -271,6 +286,20 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void tblCursaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCursaMouseClicked
+        // TODO add your handling code here:
+        try {
+        
+        txtAula.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getAula());
+        txtCiclo.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getCiclo().toString());
+        txtLetra.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getLetra());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        
+    }//GEN-LAST:event_tblCursaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -316,6 +345,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbxDocente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -324,6 +354,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblCursa;
     private javax.swing.JTextField txtAula;
+    private javax.swing.JTextField txtCiclo;
     private javax.swing.JTextField txtLetra;
     // End of variables declaration//GEN-END:variables
 }
