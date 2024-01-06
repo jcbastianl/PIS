@@ -76,6 +76,36 @@ public class Cursa {
     public void setCiclo(Integer ciclo) {
         this.ciclo = ciclo;
     }
+    
+    public Boolean compare(Cursa p, String field, Integer type){
+        switch (type) {
+            case 0:
+        if(field.equalsIgnoreCase("letra")){
+            return getLetra().compareTo(p.getLetra()) < 0;
+        }else if(field.equalsIgnoreCase("aula")){
+            return getAula().compareTo(p.getAula()) < 0;
+        }else if(field.equalsIgnoreCase("ciclo")){
+            return getCiclo().compareTo(p.getCiclo()) < 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() < p.getId().intValue());
+        }
+            case 1:
+        if(field.equalsIgnoreCase("letra")){
+            return getLetra().compareTo(p.getLetra()) > 0;
+        }else if(field.equalsIgnoreCase("aula")){
+            return getAula().compareTo(p.getAula()) > 0;
+        }else if(field.equalsIgnoreCase("ciclo")){
+            return getCiclo().compareTo(p.getCiclo()) > 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() < p.getId().intValue());
+        }
+        
+        default:
+        return null;
+
+        }
+    } 
+    
 
     @Override
     public String toString() {

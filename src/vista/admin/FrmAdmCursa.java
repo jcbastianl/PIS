@@ -6,7 +6,6 @@ package vista.admin;
 
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
-import controlador.clases.MatriculaControl;
 import javax.swing.JOptionPane;
 import vista.modeloTablas.CursaModeloTabla;
 import vista.utiles.UtilVista;
@@ -53,7 +52,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     public void guardar(){
         if(verificar()){
             cursaControl.getCursa().setAula(txtAula.getText());
-            cursaControl.getCursa().setLetra(txtLetra.getText());
+            cursaControl.getCursa().setLetra(txtLetra.getText().toUpperCase());
             cursaControl.getCursa().setCiclo(Integer.parseInt(txtCiclo.getText()));
             try {
             cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));                
@@ -74,7 +73,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     public void modificar(){
         if(verificar()){
             cursaControl.getCursa().setAula(txtAula.getText());
-            cursaControl.getCursa().setLetra(txtLetra.getText());
+            cursaControl.getCursa().setLetra(txtLetra.getText().toUpperCase());
             cursaControl.getCursa().setCiclo(Integer.parseInt(txtCiclo.getText()));
             try {
             cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));                
@@ -110,6 +109,29 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     
     }
     
+    public void buscar(){
+        try {
+            modelo.setListaCursos(cursaControl.busquedaLineal(txtBuscar.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
+        } catch (Exception e) {
+            System.out.println("Error al buscar " + e.getMessage() + "");
+        }
+        tblCursa.setModel(modelo);
+        tblCursa.updateUI();    
+    }
+    
+    private void ordenar() {
+        int t = 0;
+        if (btnTipoOrden.isSelected()) {
+            t = 1;
+        }
+        try {
+            modelo.setListaCursos(cursaControl.shellsort(t, cbxCriterioOrdenar.getSelectedItem().toString().toLowerCase()));
+        } catch (Exception e) {
+            System.out.println("Error al ordenar " + e.getMessage() + "");
+        }
+        tblCursa.setModel(modelo);
+        tblCursa.updateUI();
+    }    
 
     /**
      * Creates new form FrmAdmCursa
@@ -130,7 +152,6 @@ public class FrmAdmCursa extends javax.swing.JFrame {
 
         jLabel6 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCursa = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
@@ -147,18 +168,27 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         txtCiclo = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        HEADER = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        txtBuscar = new javax.swing.JTextField();
+        cbxCriterioBusqueda = new javax.swing.JComboBox<>();
+        cbxCriterioOrdenar = new javax.swing.JComboBox<>();
+        btnOrdenar = new javax.swing.JButton();
+        btnTipoOrden = new javax.swing.JRadioButton();
 
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel6.setText("Nombres:");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLabel1.setText("ADMINISTRAR CURSO");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, -1, -1));
-
+        tblCursa.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tblCursa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -177,75 +207,160 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblCursa);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 420, 170));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 460, 200));
 
-        jLabel7.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Letra (Identificativo):");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, 20));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, 20));
 
-        jLabel8.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jLabel8.setText("Cursos registrados en el sistema:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, 20));
-        jPanel1.add(txtAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 180, -1));
-        jPanel1.add(txtLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 180, -1));
+        jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel8.setText("CURSOS REGISTRADOS EN EL SISTEMA:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
+        jPanel1.add(txtAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, 180, -1));
+        jPanel1.add(txtLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 180, -1));
 
         cbxDocente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbxDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 180, -1));
+        jPanel1.add(cbxDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 310, 180, -1));
 
-        jLabel9.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setText("Aula:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, 20));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, -1, 20));
 
-        jLabel10.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel10.setText("Ciclo:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, 20));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, 20));
 
-        btnGuardar.setText("GUARDAR");
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
+        btnGuardar.setText("    GUARDAR");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 140, -1));
 
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
         btnModificar.setText("MODIFICAR");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, -1, -1));
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 140, -1));
 
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
         btnBorrar.setText("DAR DE BAJA");
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 200, -1, -1));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 140, -1));
 
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
         btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 200, -1, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 190, 130, -1));
 
-        btnSalir.setText("SALIR");
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
+        btnSalir.setText("       SALIR");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 240, 90, -1));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 250, 130, -1));
 
-        jLabel11.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel11.setText("Docente asignado:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, 20));
-        jPanel1.add(txtCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 180, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, 20));
+        jPanel1.add(txtCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 180, -1));
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 800, 10));
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("ADMINISTRAR");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 40, -1, -1));
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("CURSOS");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, -1, -1));
+
+        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/HEADER.jpg"))); // NOI18N
+        HEADER.setText("jLabel7");
+        HEADER.setAutoscrolls(true);
+        HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
+
+        jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel13.setText("INGRESO DE DATOS:");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
+
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
+
+        cbxCriterioBusqueda.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cbxCriterioBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Letra", "Aula", "Ciclo" }));
+        jPanel1.add(cbxCriterioBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, 220, -1));
+
+        cbxCriterioOrdenar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cbxCriterioOrdenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Letra", "Aula", "Ciclo" }));
+        jPanel1.add(cbxCriterioOrdenar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 450, 120, -1));
+
+        btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconOrdenar.png"))); // NOI18N
+        btnOrdenar.setText("ORDENAR");
+        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdenarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnOrdenar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 490, -1, -1));
+
+        btnTipoOrden.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnTipoOrden.setText("Descendente");
+        btnTipoOrden.setContentAreaFilled(false);
+        jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 100, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -301,6 +416,26 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         
     }//GEN-LAST:event_tblCursaMouseClicked
 
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
+
+    private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
+        try {
+            buscar();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_txtBuscarKeyTyped
+
+    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
+        try {
+            ordenar();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnOrdenarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -337,23 +472,32 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel HEADER;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
+    private javax.swing.JButton btnOrdenar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JRadioButton btnTipoOrden;
+    private javax.swing.JComboBox<String> cbxCriterioBusqueda;
+    private javax.swing.JComboBox<String> cbxCriterioOrdenar;
     private javax.swing.JComboBox<String> cbxDocente;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblCursa;
     private javax.swing.JTextField txtAula;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCiclo;
     private javax.swing.JTextField txtLetra;
     // End of variables declaration//GEN-END:variables
