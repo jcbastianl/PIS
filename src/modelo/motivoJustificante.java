@@ -8,14 +8,14 @@ package modelo;
  *
  * @author Usuario iTC
  */
-public class Rol {
+public class MotivoJustificante {
         private Integer id;
         private String nombre;
 
-        public Rol() {
+        public MotivoJustificante() {
         }
 
-        public Rol(Integer id, String nombre) {
+        public MotivoJustificante(Integer id, String nombre) {
                 this.id = id;
                 this.nombre = nombre;
         }
