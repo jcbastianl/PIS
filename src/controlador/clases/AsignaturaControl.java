@@ -55,16 +55,16 @@ public class AsignaturaControl extends DaoImplement<Asignatura> {
     // puedes adaptar los métodos proporcionados para manejar datos de tipo Asignatura.
 
     // ...
- public DynamicList<Asignatura> shellsortAsignatura(DynamicList<Asignatura> lista, Integer tipo, String field) throws EmptyException, Exception {
-    System.out.println("Estás usando shellsort para Asignaturas");
+ public DynamicList<Asignatura> shellsortAsignatura(Integer tipo, String field) throws EmptyException, Exception {
+
     if (tipo == 0) {
         tipo = 1;
     } else {
         tipo = 0;
     }
 
-    int longitudLista = lista.getLenght();
-    Asignatura[] arrAsignaturas = lista.toArray();
+    int longitudLista = getListaAsignaturas().getLenght();
+    Asignatura[] arrAsignaturas = getListaAsignaturas().toArray();
 
     int tamanoPedazo = longitudLista / 2;
 
@@ -83,12 +83,12 @@ public class AsignaturaControl extends DaoImplement<Asignatura> {
 
         tamanoPedazo = tamanoPedazo / 2;
     }
-    return lista.toList(arrAsignaturas);
+    return getListaAsignaturas().toList(arrAsignaturas);
 }
-public DynamicList<Asignatura> busquedaLineal(String texto, DynamicList<Asignatura> asignaturas, String criterio) {
+public DynamicList<Asignatura> busquedaLineal(String texto, String criterio) {
     DynamicList<Asignatura> lista = new DynamicList<>();
     try {
-        Asignatura[] aux = shellsortAsignatura(asignaturas, 0, criterio).toArray();
+        Asignatura[] aux = shellsortAsignatura( 0, criterio).toArray();
         lista.removerAll();
 
         for (Asignatura a : aux) {

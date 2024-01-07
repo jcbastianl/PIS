@@ -48,16 +48,16 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
         return persist(estudiante);
     }
 
-    public DynamicList<Estudiante> shellsort(DynamicList<Estudiante> lista, Integer tipo, String field) throws EmptyException, Exception {
-        System.out.println("Estás usando shellsort");
+    public DynamicList<Estudiante> shellsort( Integer tipo, String field) throws EmptyException, Exception {
+
         if (tipo == 0) {
             tipo = 1;
         } else {
             tipo = 0;
         }
 
-        int longitudLista = lista.getLenght();
-        Estudiante[] arrEstudiantes = lista.toArray();
+        int longitudLista = getListaEstudiantes().getLenght();
+        Estudiante[] arrEstudiantes = getListaEstudiantes().toArray();
 
         int tamanoPedazo = longitudLista / 2;
 
@@ -76,13 +76,13 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
 
             tamanoPedazo = tamanoPedazo / 2;
         }
-        return lista.toList(arrEstudiantes);
+        return getListaEstudiantes().toList(arrEstudiantes);
     }
 
-    public DynamicList<Estudiante> busquedaLineal(String texto, DynamicList<Estudiante> estudiantes, String criterio) {
+    public DynamicList<Estudiante> busquedaLineal(String texto, String criterio) {
         DynamicList<Estudiante> lista = new DynamicList<>();
         try {
-            Estudiante[] aux = shellsort(estudiantes, 0, criterio).toArray();
+            Estudiante[] aux = shellsort(0, criterio).toArray();
             lista.removerAll();
 
             for (Estudiante e : aux) {
