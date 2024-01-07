@@ -12,7 +12,7 @@ public class frmTablaAsistencia extends javax.swing.JFrame {
 
         public frmTablaAsistencia(Integer numeroColumnas) {
                 initComponents();
-                mta.agregarColumnas(numeroColumnas);
+                //mta.agregarColumnas(numeroColumnas);
                 tblLista.setModel(mta);
                 tblLista.updateUI();
         }

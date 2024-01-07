@@ -1,0 +1,32 @@
+{
+    "controlador.TDA.listas.DynamicList": {
+        "header": {
+            "info": {
+                "@class": "modelo.Asistencia",
+                "id": 1,
+                "idEstudiante": 1,
+                "estadoAsistencia": "Presente"
+            },
+            "next": {
+                "info": {
+                    "@class": "modelo.Asistencia",
+                    "id": 2,
+                    "idEstudiante": 2,
+                    "estadoAsistencia": "Presente"
+                },
+                "next": {
+                    "info": {
+                        "@class": "modelo.Asistencia",
+                        "id": 3,
+                        "idEstudiante": 3,
+                        "estadoAsistencia": "Presente"
+                    }
+                }
+            }
+        },
+        "last": {
+            "@reference": "..\/header\/next\/next"
+        },
+        "lenght": 3
+    }
+}

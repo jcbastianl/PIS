@@ -31,12 +31,8 @@ public class EstadoAsistencia {
         this.id = id;
     }
 
-    
-    
     @Override
     public String toString() {
         return nombre;
     }
-    
-    
 }

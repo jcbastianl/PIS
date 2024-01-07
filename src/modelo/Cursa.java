@@ -99,20 +99,13 @@ public class Cursa {
         }else if(field.equalsIgnoreCase("id")){
             return (id.intValue() < p.getId().intValue());
         }
-        
         default:
         return null;
-
         }
     } 
-    
 
     @Override
     public String toString() {
-        return ciclo+""+letra;
+        return ciclo+" "+letra;
     }
-
-
-
-   
 }

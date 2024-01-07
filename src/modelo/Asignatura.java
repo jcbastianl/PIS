@@ -102,5 +102,9 @@ public class Asignatura {
     }
     return null;
 }
-
+    @Override
+    public String toString() {
+        return nombre;
+    }
+    
 }
