@@ -6,13 +6,12 @@ package vista.docente;
 
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.AsistenciaControl;
-import controlador.clases.EstadoAsistenciaControl;
 import controlador.clases.EstudianteControl;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Estudiante;
+import modelo.Horario;
 import vista.modeloTablas.ModeloTablaAsistencia;
 import vista.utiles.UtilVista;
 
@@ -21,51 +20,55 @@ import vista.utiles.UtilVista;
  * @author Usuario iTC
  */
 public class frmAsistencia extends javax.swing.JFrame {
-
+        
         private ModeloTablaAsistencia mta = new ModeloTablaAsistencia();
         private EstudianteControl controlE = new EstudianteControl();
         private AsistenciaControl controlAsis = new AsistenciaControl();
-
-        private void cargarComboCursa() {
+        
+        private void cargarCombo() {
                 try {
                         UtilVista.cargarcomboBoxCursa(cbxCurso);
+                        UtilVista.cargarcomboBoxEstadoAsistencia(cbxEstadoAsistencia);
+                        UtilVista.cargarcomboBoxHorario(cbxHorario);
+                        cbxEstadoAsistencia.setEnabled(false);
+                        cbxHorario.setEnabled(false);
                 } catch (Exception e) {
                 }
         }
-
+        
         private void cargarTabla() {
                 tblLista.setModel(mta);
                 tblLista.updateUI();
                 tblLista.setEnabled(false);
         }
-
+        
         private void seleccionarMateria() {
+                cbxHorario.setEnabled(true);
                 cbxMateria.setEnabled(true);
                 cbxCurso.setEnabled(false);
+                cbxEstadoAsistencia.setEnabled(true);
                 try {
                         UtilVista.cargarcomboBoxAsignatura(cbxMateria);
                 } catch (Exception e) {
                 }
         }
-
+        
         private void Asignar() {
-                int aux = (int) spnNroHoras.getValue();
-                if (cbxMateria.isEnabled()) {
-                        if (aux >= 2 && aux <= 4) {
-                                mta.setEstudiantes(controlE.getListaEstudiantes());
-                                tblLista.setModel(mta);
-                                tblLista.updateUI();
-                        } else {
-                                JOptionPane.showMessageDialog(null, "Numero de horas debe estar entre 2 y 4", "ERROR", JOptionPane.ERROR_MESSAGE);
-                        }
-                }
+                mta.setEstudiantes(controlE.getListaEstudiantes());
+                tblLista.setModel(mta);
+                tblLista.updateUI();
         }
-
+        
         private void guardar() throws EmptyException {
                 for (int i = 0; i < tblLista.getSelectedRowCount(); i++) {
                         Estudiante aux = controlE.getListaEstudiantes().getInfo(i);
-                        controlAsis.getAsistencia().setIdEstudiante(aux.getId());
-                        controlAsis.getAsistencia().setEstadoAsistencia("Presente");
+                        controlAsis.getAsistencia().setEstudiante(aux);
+                        String texto = String.valueOf(cbxEstadoAsistencia.getSelectedItem());
+                        controlAsis.getAsistencia().getEstadoAsistencia().setNombre(texto);
+                        controlAsis.getAsistencia().getClaseDictada().setTema(txtTema.getText().trim());
+                        controlAsis.getAsistencia().setHorario((Horario) cbxHorario.getSelectedItem());
+                        controlAsis.getAsistencia().setFecha(txtFecha.getDate());
+                        controlAsis.getAsistencia().getHorario().setFecha(txtFecha.getDate());
                         if (controlAsis.persist()) {
                                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                         } else {
@@ -94,7 +97,7 @@ public class frmAsistencia extends javax.swing.JFrame {
          */
         public frmAsistencia() throws EmptyException {
                 initComponents();
-                cargarComboCursa();
+                cargarCombo();
         }
 
         /**
@@ -111,7 +114,6 @@ public class frmAsistencia extends javax.swing.JFrame {
                 cbxCurso = new javax.swing.JComboBox<>();
                 btnBuscar = new javax.swing.JButton();
                 jLabel1 = new javax.swing.JLabel();
-                spnNroHoras = new javax.swing.JSpinner();
                 btnGuardar = new javax.swing.JButton();
                 jLabel3 = new javax.swing.JLabel();
                 jLabel4 = new javax.swing.JLabel();
@@ -124,6 +126,11 @@ public class frmAsistencia extends javax.swing.JFrame {
                 jScrollPane1 = new javax.swing.JScrollPane();
                 tblLista = new javax.swing.JTable();
                 btnAsignar = new javax.swing.JButton();
+                jLabel7 = new javax.swing.JLabel();
+                txtTema = new javax.swing.JTextField();
+                cbxHorario = new javax.swing.JComboBox<>();
+                jLabel8 = new javax.swing.JLabel();
+                cbxEstadoAsistencia = new javax.swing.JComboBox<>();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,11 +159,8 @@ public class frmAsistencia extends javax.swing.JFrame {
 
                 jLabel1.setBackground(new java.awt.Color(0, 0, 0));
                 jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-                jLabel1.setText("Nro horas:");
-                jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
-
-                spnNroHoras.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-                jPanel1.add(spnNroHoras, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 46, -1));
+                jLabel1.setText("Horario:");
+                jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
 
                 btnGuardar.setBackground(new java.awt.Color(255, 255, 255));
                 btnGuardar.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -169,8 +173,8 @@ public class frmAsistencia extends javax.swing.JFrame {
                 jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 550, 73, -1));
 
                 jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-                jLabel3.setText("Fecha:");
-                jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, -1));
+                jLabel3.setText("Estado:");
+                jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, -1, -1));
 
                 jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
                 jLabel4.setText("Curso:");
@@ -210,9 +214,9 @@ public class frmAsistencia extends javax.swing.JFrame {
                 jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
 
                 jLabel6.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-                jLabel6.setText("Materia:");
-                jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
-                jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, -1));
+                jLabel6.setText("Tema:");
+                jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
+                jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, 100, -1));
 
                 tblLista.setModel(new javax.swing.table.DefaultTableModel(
                         new Object [][] {
@@ -247,7 +251,22 @@ public class frmAsistencia extends javax.swing.JFrame {
                                 btnAsignarActionPerformed(evt);
                         }
                 });
-                jPanel1.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 73, -1));
+                jPanel1.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 73, -1));
+
+                jLabel7.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+                jLabel7.setText("Materia:");
+                jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
+                jPanel1.add(txtTema, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 240, -1));
+
+                cbxHorario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                jPanel1.add(cbxHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 100, -1));
+
+                jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+                jLabel8.setText("Fecha:");
+                jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
+
+                cbxEstadoAsistencia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                jPanel1.add(cbxEstadoAsistencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 460, 100, -1));
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
@@ -270,8 +289,10 @@ public class frmAsistencia extends javax.swing.JFrame {
         private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
                 try {
                         guardar();
+                        
                 } catch (EmptyException ex) {
-                        Logger.getLogger(frmAsistencia.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(frmAsistencia.class
+                                .getName()).log(Level.SEVERE, null, ex);
                 }
         }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -297,16 +318,24 @@ public class frmAsistencia extends javax.swing.JFrame {
                                 if ("Nimbus".equals(info.getName())) {
                                         javax.swing.UIManager.setLookAndFeel(info.getClassName());
                                         break;
+                                        
                                 }
                         }
                 } catch (ClassNotFoundException ex) {
-                        java.util.logging.Logger.getLogger(frmAsistencia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        java.util.logging.Logger.getLogger(frmAsistencia.class
+                                .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        
                 } catch (InstantiationException ex) {
-                        java.util.logging.Logger.getLogger(frmAsistencia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        java.util.logging.Logger.getLogger(frmAsistencia.class
+                                .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        
                 } catch (IllegalAccessException ex) {
-                        java.util.logging.Logger.getLogger(frmAsistencia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        java.util.logging.Logger.getLogger(frmAsistencia.class
+                                .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        
                 } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-                        java.util.logging.Logger.getLogger(frmAsistencia.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                        java.util.logging.Logger.getLogger(frmAsistencia.class
+                                .getName()).log(java.util.logging.Level.SEVERE, null, ex);
                 }
                 //</editor-fold>
 
@@ -315,8 +344,10 @@ public class frmAsistencia extends javax.swing.JFrame {
                         public void run() {
                                 try {
                                         new frmAsistencia().setVisible(true);
+                                        
                                 } catch (EmptyException ex) {
-                                        Logger.getLogger(frmAsistencia.class.getName()).log(Level.SEVERE, null, ex);
+                                        Logger.getLogger(frmAsistencia.class
+                                                .getName()).log(Level.SEVERE, null, ex);
                                 }
                         }
                 });
@@ -328,6 +359,8 @@ public class frmAsistencia extends javax.swing.JFrame {
         private javax.swing.JButton btnBuscar;
         private javax.swing.JButton btnGuardar;
         private javax.swing.JComboBox<String> cbxCurso;
+        private javax.swing.JComboBox<String> cbxEstadoAsistencia;
+        private javax.swing.JComboBox<String> cbxHorario;
         private javax.swing.JComboBox<String> cbxMateria;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel2;
@@ -335,11 +368,13 @@ public class frmAsistencia extends javax.swing.JFrame {
         private javax.swing.JLabel jLabel4;
         private javax.swing.JLabel jLabel5;
         private javax.swing.JLabel jLabel6;
+        private javax.swing.JLabel jLabel7;
+        private javax.swing.JLabel jLabel8;
         private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel2;
         private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JSpinner spnNroHoras;
         private javax.swing.JTable tblLista;
         private com.toedter.calendar.JDateChooser txtFecha;
+        private javax.swing.JTextField txtTema;
         // End of variables declaration//GEN-END:variables
 }

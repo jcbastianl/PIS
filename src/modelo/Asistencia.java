@@ -4,17 +4,21 @@
  */
 package modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author jsbal
  */
 public class Asistencia {
     private Integer id;
-    private Integer idEstudiante;
-    private Integer id_claseDictada;
+    private Estudiante estudiante;
+    private ClaseDictada claseDictada;
+    private Date fecha;
     private Integer id_horario;
     private Integer id_justificativo;
-    private String estadoAsistencia;
+    private EstadoAsistencia estadoAsistencia;
+    private Horario horario;
     
 
     public Asistencia() {
@@ -35,31 +39,34 @@ public class Asistencia {
     }
 
     /**
-     * @return the idEstudiante
+     * @return the estudiante
      */
-    public Integer getIdEstudiante() {
-        return idEstudiante;
+    public Estudiante getEstudiante() {
+        return estudiante;
     }
 
     /**
-     * @param idEstudiante the idEstudiante to set
+     * @param estudiante the estudiante to set
      */
-    public void setIdEstudiante(Integer idEstudiante) {
-        this.idEstudiante = idEstudiante;
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 
     /**
      * @return the id_claseDictada
      */
-    public Integer getId_claseDictada() {
-        return id_claseDictada;
+    public ClaseDictada getClaseDictada() {
+            if (claseDictada == null) {
+                    claseDictada = new ClaseDictada();
+            }
+            return claseDictada;
     }
 
     /**
-     * @param id_claseDictada the id_claseDictada to set
+     * @param claseDictada the claseDictada to set
      */
-    public void setId_claseDictada(Integer id_claseDictada) {
-        this.id_claseDictada = id_claseDictada;
+    public void setClaseDictada(ClaseDictada claseDictada) {
+        this.claseDictada = claseDictada;
     }
 
     /**
@@ -93,17 +100,38 @@ public class Asistencia {
     /**
      * @return the estadoAsistencia
      */
-    public String getEstadoAsistencia() {
-        return estadoAsistencia;
+    public EstadoAsistencia getEstadoAsistencia() {
+            if (estadoAsistencia == null) {
+                    estadoAsistencia = new EstadoAsistencia();
+            }
+            return estadoAsistencia;
     }
 
     /**
      * @param estadoAsistencia the estadoAsistencia to set
      */
-    public void setEstadoAsistencia(String estadoAsistencia) {
+    public void setEstadoAsistencia(EstadoAsistencia estadoAsistencia) {
         this.estadoAsistencia = estadoAsistencia;
     }
-    
-    
-    
+
+        public Date getFecha() {
+                return fecha;
+        }
+
+        public void setFecha(Date fecha) {
+                this.fecha = fecha;
+        }
+
+        public Horario getHorario() {
+                if (horario == null) {
+                        horario = new Horario();
+                }
+                return horario;
+        }
+
+        public void setHorario(Horario horario) {
+                this.horario = horario;
+        }
+        
+        
 }
