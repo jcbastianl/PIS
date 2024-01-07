@@ -19,3 +19,6 @@ lib/
 
 # Archivo privado con configuraciones sensibles
 private.xml
+
+#Archivo de propiedads igual del private
+private.properties
