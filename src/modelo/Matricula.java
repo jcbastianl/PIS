@@ -11,30 +11,19 @@ import java.util.Date;
  * @author jsbal
  */
 public class Matricula {
-    private Integer ciclo;
+
     private Date fechaRegistro;
     private Integer numero;
     private Integer id;
-    
-    private Integer id_estudiante;
+//    private Integer id_cursa;
+    private Cursa cursa;
+    //private Integer id_estudiante;
+    private Estudiante estudiante;
     private String estadoMatricula;
 
     public Matricula() {
     }
 
-    /**
-     * @return the ciclo
-     */
-    public Integer getCiclo() {
-        return ciclo;
-    }
-
-    /**
-     * @param ciclo the ciclo to set
-     */
-    public void setCiclo(Integer ciclo) {
-        this.ciclo = ciclo;
-    }
 
     /**
      * @return the fechaRegistro
@@ -78,20 +67,15 @@ public class Matricula {
         this.id = id;
     }
 
-    /**
-     * @return the id_estudiante
-     */
-    public Integer getId_estudiante() {
-        return id_estudiante;
+    public Estudiante getEstudiante() {
+        return estudiante;
     }
 
-    /**
-     * @param id_estudiante the id_estudiante to set
-     */
-    public void setId_estudiante(Integer id_estudiante) {
-        this.id_estudiante = id_estudiante;
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 
+    
     /**
      * @return the estadoMatricula
      */
@@ -105,6 +89,46 @@ public class Matricula {
     public void setEstadoMatricula(String estadoMatricula) {
         this.estadoMatricula = estadoMatricula;
     }
-    
-    
+
+    public Cursa getCursa() {
+        return cursa;
+    }
+
+    public void setCursa(Cursa cursa) {
+        this.cursa = cursa;
+    }
+
+
+    public Boolean compare(Matricula p, String field, Integer type){
+        switch (type) {
+            case 0:
+        if(field.equalsIgnoreCase("apellido")){
+            return estudiante.getApellido().compareTo(p.getEstudiante().getApellido()) < 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) < 0;
+        }else if(field.equalsIgnoreCase("fecharegistro")){
+            return fechaRegistro.compareTo(p.getFechaRegistro()) < 0;
+        }else if(field.equalsIgnoreCase("estadomatricula")){
+            return estadoMatricula.compareTo(p.getEstadoMatricula()) < 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() < p.getId().intValue());
+        }
+            case 1:
+        if(field.equalsIgnoreCase("apellido")){
+            return estudiante.getApellido().compareTo(p.getEstudiante().getApellido()) > 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) > 0;
+        }else if(field.equalsIgnoreCase("fecharegistro")){
+            return fechaRegistro.compareTo(p.getFechaRegistro()) > 0;
+        }else if(field.equalsIgnoreCase("estadomatricula")){
+            return estadoMatricula.compareTo(p.getEstadoMatricula()) > 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() > p.getId().intValue());
+        } 
+        
+        default:
+        return null;
+
+        }
+    }      
 }

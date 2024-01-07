@@ -43,5 +43,44 @@ public class Docente extends Persona {
         this.id = id;
     }
     
+    public Boolean compare(Docente p, String field, Integer type){
+        switch (type) {
+            case 0:
+        if(field.equalsIgnoreCase("apellido")){
+            return getApellido().compareTo(p.getApellido()) < 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return getNombre().compareTo(p.getNombre()) < 0;
+        }else if(field.equalsIgnoreCase("titulo")){
+            return getTitulo().compareTo(p.getTitulo()) < 0;
+        }else if(field.equalsIgnoreCase("dni")){
+            return getDni().compareTo(p.getDni()) < 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() < p.getId().intValue());
+        }
+            case 1:
+        if(field.equalsIgnoreCase("apellido")){
+            return getApellido().compareTo(p.getApellido()) > 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return getNombre().compareTo(p.getNombre()) > 0;
+        }else if(field.equalsIgnoreCase("titulo")){
+            return getTitulo().compareTo(p.getTitulo()) > 0;
+        }else if(field.equalsIgnoreCase("dni")){
+            return getDni().compareTo(p.getDni()) > 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() > p.getId().intValue());
+        }   
+        
+        default:
+        return null;
+
+        }
+    } 
+
+    @Override
+    public String toString() {
+        return getNombre() + " " + getApellido();
+    }
+    
+    
     
 }

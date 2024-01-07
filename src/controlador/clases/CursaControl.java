@@ -9,75 +9,61 @@ import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
-import modelo.Docente;
+import modelo.Cursa;
 
 /**
  *
  * @author mrbingus
  */
-public class DocenteControl extends DaoImplement<Docente>{
+public class CursaControl extends DaoImplement<Cursa>{
     
-    private DynamicList<Docente>listaDocentes;
-    private Docente docente;
+    private DynamicList<Cursa>listaCursas;
+    private Cursa cursa;
     
-    
-    public DocenteControl() {
-        super(Docente.class);
+    public CursaControl() {
+        super(Cursa.class);
     }
 
-    /**
-     * @return the listaDocentes
-     */
-    public DynamicList<Docente> getListaDocentes() {
-        listaDocentes = all();
-        return listaDocentes;
+    public DynamicList<Cursa> getListaCursas() {
+        listaCursas = all();
+        return listaCursas;
     }
 
-    /**
-     * @param listaDocentes the listaDocentes to set
-     */
-    public void setListaDocentes(DynamicList<Docente> listaDocentes) {
-        this.listaDocentes = listaDocentes;
+    public void setListaCursas(DynamicList<Cursa> listaCursas) {
+        this.listaCursas = listaCursas;
     }
 
-    /**
-     * @return the Docente
-     */
-    public Docente getDocente() {
-        if(docente == null){
-            docente = new Docente();
+    public Cursa getCursa() {
+        if (cursa == null) {
+            cursa = new Cursa();
         }
-        return docente;
+        return cursa;
     }
 
-    /**
-     * @param Docente the Docente to set
-     */
-    public void setDocente(Docente Docente) {
-        this.docente = Docente;
+    public void setCursa(Cursa cursa) {
+        this.cursa = cursa;
     }
     
     public Boolean persist() {
-        docente.setId(all().getLenght() + 1);
-        return persist(docente);
+        cursa.setId(all().getLenght() + 1);
+        return persist(cursa);
     }    
     
-    public DynamicList<Docente> shellsort( Integer tipo, String field) throws EmptyException, Exception {
-        
+    public DynamicList<Cursa> shellsort(Integer tipo, String field) throws EmptyException, Exception {
         if (tipo == 0) {
             tipo = 1;
         } else {
             tipo = 0;
         }
 
-        int longitudLista = getListaDocentes().getLenght();
-        Docente[] arrCensadores = getListaDocentes().toArray();
+        int longitudLista = getListaCursas().getLenght();
+        Cursa[] arrCensadores = getListaCursas().toArray();
 
         int tamanoPedazo = longitudLista / 2;
 
         while (tamanoPedazo > 0) {
             for (int i = tamanoPedazo; i < longitudLista; i++) {
-                Docente temp = arrCensadores[i];
+                Cursa temp = arrCensadores[i];
                 int j = i;
 
                 while (j >= tamanoPedazo && arrCensadores[j - tamanoPedazo].compare(temp, field, tipo)) {
@@ -90,18 +76,18 @@ public class DocenteControl extends DaoImplement<Docente>{
 
             tamanoPedazo = tamanoPedazo / 2;
         }
-        return getListaDocentes().toList(arrCensadores);
+        return getListaCursas().toList(arrCensadores);
     }
 
-    public DynamicList<Docente> busquedaLineal(String texto, String criterio) {
+    public DynamicList<Cursa> busquedaLineal(String texto, String criterio) {
         //System.out.println("Estas usando busqueda lineal");
-        DynamicList<Docente> lista = new DynamicList<>();
+        DynamicList<Cursa> lista = new DynamicList<>();
         try {
-            Docente[] aux = shellsort( 0, criterio).toArray();
+            Cursa[] aux = shellsort(0, criterio).toArray();
                         lista.removerAll();
 
-            for (Docente p : aux) {
-                Field nombreAtributo = Utiles.getField(Docente.class, criterio);
+            for (Cursa p : aux) {
+                Field nombreAtributo = Utiles.getField(Cursa.class, criterio);
 
                 if (nombreAtributo != null) {
                     nombreAtributo.setAccessible(true);
@@ -116,5 +102,5 @@ public class DocenteControl extends DaoImplement<Docente>{
             System.out.println(e.getMessage());
         }
         return lista;
-    }    
+    }        
 }
