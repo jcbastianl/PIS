@@ -75,6 +75,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         HEADER = new javax.swing.JLabel();
+        btnEstudent = new javax.swing.JButton();
+        btnDocente = new javax.swing.JButton();
+        btnAdmin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,6 +150,15 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
 
+        btnEstudent.setText("Estudiante");
+        jPanel1.add(btnEstudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 250, -1, -1));
+
+        btnDocente.setText("Docente");
+        jPanel1.add(btnDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 280, -1, -1));
+
+        btnAdmin.setText("ADMIN");
+        jPanel1.add(btnAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -206,6 +218,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel HEADER;
+    private javax.swing.JButton btnAdmin;
+    private javax.swing.JButton btnDocente;
+    private javax.swing.JButton btnEstudent;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
