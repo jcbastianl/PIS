@@ -15,12 +15,11 @@ import modelo.Docente;
  *
  * @author mrbingus
  */
-public class DocenteControl extends DaoImplement<Docente>{
-    
-    private DynamicList<Docente>listaDocentes;
+public class DocenteControl extends DaoImplement<Docente> {
+
+    private DynamicList<Docente> listaDocentes;
     private Docente docente;
-    
-    
+
     public DocenteControl() {
         super(Docente.class);
     }
@@ -44,7 +43,7 @@ public class DocenteControl extends DaoImplement<Docente>{
      * @return the Docente
      */
     public Docente getDocente() {
-        if(docente == null){
+        if (docente == null) {
             docente = new Docente();
         }
         return docente;
@@ -56,14 +55,14 @@ public class DocenteControl extends DaoImplement<Docente>{
     public void setDocente(Docente Docente) {
         this.docente = Docente;
     }
-    
+
     public Boolean persist() {
         docente.setId(all().getLenght() + 1);
         return persist(docente);
-    }    
-    
-    public DynamicList<Docente> shellsort( Integer tipo, String field) throws EmptyException, Exception {
-        
+    }
+
+    public DynamicList<Docente> shellsort(Integer tipo, String field) throws EmptyException, Exception {
+
         if (tipo == 0) {
             tipo = 1;
         } else {
@@ -97,8 +96,8 @@ public class DocenteControl extends DaoImplement<Docente>{
         //System.out.println("Estas usando busqueda lineal");
         DynamicList<Docente> lista = new DynamicList<>();
         try {
-            Docente[] aux = shellsort( 0, criterio).toArray();
-                        lista.removerAll();
+            Docente[] aux = shellsort(0, criterio).toArray();
+            lista.removerAll();
 
             for (Docente p : aux) {
                 Field nombreAtributo = Utiles.getField(Docente.class, criterio);
@@ -116,5 +115,37 @@ public class DocenteControl extends DaoImplement<Docente>{
             System.out.println(e.getMessage());
         }
         return lista;
-    }    
+    }
+
+    public DynamicList<Docente> busquedaBinaria(String texto, String criterio) {
+        DynamicList<Docente> lista = new DynamicList<>();
+        int fin = getListaDocentes().getLenght() - 1;
+        int mitad = fin / 2;
+        Field nombreAtributo = Utiles.getField(Docente.class, criterio);
+        nombreAtributo.setAccessible(true);
+        try {
+            Docente[] aux = shellsort(0, criterio).toArray();
+            Object getterAtributo = nombreAtributo.get(aux[mitad]);
+            lista.removerAll();
+            if (getterAtributo != null) {
+                if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
+                    for (int i = 0; i <= mitad; i++) {
+                        if (nombreAtributo.get(aux[i]).toString().toLowerCase().contains(texto.toLowerCase())) {
+                            lista.add(aux[i]);
+                        }
+                    }
+                } else {
+                    for (int j = mitad + 1; j <= fin; j++) {
+                        if (nombreAtributo.get(aux[j]).toString().toLowerCase().contains(texto.toLowerCase())) {
+                            lista.add(aux[j]);
+                        }
+                    }
+                }
+            }
+            return lista;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

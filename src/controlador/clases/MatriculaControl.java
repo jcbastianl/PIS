@@ -110,4 +110,36 @@ public class MatriculaControl extends DaoImplement<Matricula> {
         }
         return lista;
     }
+    
+//    public DynamicList<Matricula> busquedaBinaria(String texto, String criterio) {
+//        DynamicList<Matricula> lista = new DynamicList<>();
+//        int fin = getListaMatriculas().getLenght() - 1;
+//        int mitad = fin / 2;
+//        Field nombreAtributo = Utiles.getField(Matricula.class, criterio);
+//        nombreAtributo.setAccessible(true);
+//        try {
+//            Matricula[] aux = shellsort(0, criterio).toArray();
+//            Object getterAtributo = nombreAtributo.get(aux[mitad]);
+//            lista.removerAll();
+//            if (getterAtributo != null) {
+//                if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
+//                    for (int i = 0; i <= mitad; i++) {
+//                        if (nombreAtributo.get(aux[i]).toString().toLowerCase().contains(texto.toLowerCase())) {
+//                            lista.add(aux[i]);
+//                        }
+//                    }
+//                } else {
+//                    for (int j = mitad + 1; j <= fin; j++) {
+//                        if (nombreAtributo.get(aux[j]).toString().toLowerCase().contains(texto.toLowerCase())) {
+//                            lista.add(aux[j]);
+//                        }
+//                    }
+//                }
+//            }
+//            return lista;
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return null;
+//        }
+//    }   
 }
