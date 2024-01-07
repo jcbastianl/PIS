@@ -30,12 +30,29 @@
                         "rol": "ESTUDIANTE",
                         "id": 4
                     }
+                },
+                "next": {
+                    "info": {
+                        "@class": "modelo.Cuenta",
+                        "id": 3,
+                        "correo": "admin",
+                        "contraseña": "admin",
+                        "persona": {
+                            "@class": "modelo.Docente",
+                            "nombre": "Admin",
+                            "apellido": "Arminsin",
+                            "dni": 999999999,
+                            "rol": "ADMINISTRADOR",
+                            "titulo": "Admin",
+                            "id": 6
+                        }
+                    }
                 }
             }
         },
         "last": {
-            "@reference": "..\/header\/next"
+            "@reference": "..\/header\/next\/next"
         },
-        "lenght": 2
+        "lenght": 3
     }
 }

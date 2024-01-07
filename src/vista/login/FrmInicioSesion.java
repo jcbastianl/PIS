@@ -6,6 +6,9 @@ package vista.login;
 
 import controlador.clases.CuentaControl;
 import javax.swing.JOptionPane;
+import vista.admin.FrmAdmPrincipal;
+import vista.docente.frmAsistencia;
+import vista.estudiante.frmVistaAsistencia;
 
 /**
  *
@@ -75,6 +78,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         HEADER = new javax.swing.JLabel();
+        btnEstudent = new javax.swing.JButton();
+        btnDocente = new javax.swing.JButton();
+        btnAdmin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,6 +153,30 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
 
+        btnEstudent.setText("Estudiante");
+        btnEstudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstudentActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEstudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 250, -1, -1));
+
+        btnDocente.setText("Docente");
+        btnDocente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDocenteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 280, -1, -1));
+
+        btnAdmin.setText("ADMIN");
+        btnAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,6 +198,25 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
+        // TODO add your handling code here:
+        new FrmAdmPrincipal().setVisible(true);
+    }//GEN-LAST:event_btnAdminActionPerformed
+
+    private void btnDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocenteActionPerformed
+        // TODO add your handling code here:
+        try {
+         new frmAsistencia().setVisible(true);   
+        } catch (Exception e) {
+        }
+        
+    }//GEN-LAST:event_btnDocenteActionPerformed
+
+    private void btnEstudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudentActionPerformed
+        // TODO add your handling code here:
+        new frmVistaAsistencia().setVisible(true);
+    }//GEN-LAST:event_btnEstudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,6 +255,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel HEADER;
+    private javax.swing.JButton btnAdmin;
+    private javax.swing.JButton btnDocente;
+    private javax.swing.JButton btnEstudent;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
