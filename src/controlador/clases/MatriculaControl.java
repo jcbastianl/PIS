@@ -50,16 +50,15 @@ public class MatriculaControl extends DaoImplement<Matricula> {
         return persist(matricula);
     }
 
-    public DynamicList<Matricula> shellsort(DynamicList<Matricula> lista, Integer tipo, String field) throws EmptyException, Exception {
-        System.out.println("Estas usando shellsort");
+    public DynamicList<Matricula> shellsort(Integer tipo, String field) throws EmptyException, Exception {
         if (tipo == 0) {
             tipo = 1;
         } else {
             tipo = 0;
         }
 
-        int longitudLista = lista.getLenght();
-        Matricula[] arrCensadores = lista.toArray();
+        int longitudLista = getListaMatriculas().getLenght();
+        Matricula[] arrCensadores = getListaMatriculas().toArray();
 
         int tamanoPedazo = longitudLista / 2;
 
@@ -78,14 +77,14 @@ public class MatriculaControl extends DaoImplement<Matricula> {
 
             tamanoPedazo = tamanoPedazo / 2;
         }
-        return lista.toList(arrCensadores);
+        return getListaMatriculas().toList(arrCensadores);
     }
 
-    public DynamicList<Matricula> busquedaLineal(String texto, DynamicList<Matricula> personas, String criterio) {
+    public DynamicList<Matricula> busquedaLineal(String texto, String criterio) {
         //System.out.println("Estas usando busqueda lineal");
         DynamicList<Matricula> lista = new DynamicList<>();
         try {
-            Matricula[] aux = shellsort(personas, 0, criterio).toArray();
+            Matricula[] aux = shellsort(0, criterio).toArray();
             lista.removerAll();
 
             for (Matricula p : aux) {
