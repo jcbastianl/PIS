@@ -2,76 +2,75 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package vista;
+package vista.admin;
 
+import controlador.clases.AsignaturaControl;
 
-import controlador.clases.EstudianteControl;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
-import vista.utiles.UtilVista;
+import vista.modeloTablas.AsignaturaModeloTabla;
 
-import vista.modeloTablas.EstudianteModeloTabla;
 
 /**
  *
  * @author mrbingus
  */
-public class frmEstudiante extends javax.swing.JFrame {
+public class FrmAdmAsignatura extends javax.swing.JFrame {
 
-    private EstudianteControl estudianteControl = new EstudianteControl();
-    private EstudianteModeloTabla modelo = new EstudianteModeloTabla();
-   
+    private AsignaturaControl asignaturaControl = new AsignaturaControl();
+    private AsignaturaModeloTabla modelo = new AsignaturaModeloTabla();
 
-    private Boolean verificar() {
-        return (!(txtApellido.getText().trim().isEmpty())
-                && !(txtNombre.getText().trim().isEmpty())
-                && !(txtDni.getText().trim().isEmpty()));
-    }
+  private Boolean verificar() {
+    
+    return (txtFechaInicio.getDate() != null && txtFechaFin.getDate() != null 
+            && txtNombre != null && !txtNombre.getText().trim().isEmpty());
+}
+
 
     public void cargarTabla() {
-        modelo.setEstudiantes(estudianteControl.getListaEstudiantes());
-        tblEstudiante.setModel(modelo);
-        tblEstudiante.updateUI();
+        modelo.setAsignaturas(asignaturaControl.getListaAsignaturas());
+        tblAsignatura.setModel(modelo);
+        tblAsignatura.updateUI();
     }
 
     private void limpiar() {
-        txtApellido.setText("");
+        
         txtBusqueda.setText("");
-        txtDni.setText("");
+        
         txtNombre.setText("");
-
-        tblEstudiante.clearSelection();
+        
+        tblAsignatura.clearSelection();
         cargarTabla();
     }
 
     private void guardar() {
         if (verificar()) {
-            estudianteControl.getEstudiante().setNombre(txtNombre.getText());
-            estudianteControl.getEstudiante().setApellido(txtApellido.getText());
-            estudianteControl.getEstudiante().setDni(txtDni.getText());
-            
+            asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
+            asignaturaControl.getAsignatura().setFechaInicio(txtFechaInicio.getDate());
+            asignaturaControl.getAsignatura().setFechaFin(txtFechaFin.getDate());
+           
 
-            if (estudianteControl.persist()) {
+            if (asignaturaControl.persist()) {
                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
             } else {
                 JOptionPane.showMessageDialog(null, "No se pudo guardar");
             }
-            estudianteControl.setEstudiante(null);
+            asignaturaControl.setAsignatura(null);
             limpiar();
         }
     }
 
     private void modificar() {
         if (verificar()) {
-            estudianteControl.getEstudiante().setNombre(txtNombre.getText());
-            estudianteControl.getEstudiante().setApellido(txtApellido.getText());
-            estudianteControl.getEstudiante().setDni(txtDni.getText());
+            asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
+            asignaturaControl.getAsignatura().setFechaInicio(txtFechaInicio.getDate());
+            asignaturaControl.getAsignatura().setFechaFin(txtFechaFin.getDate());
             
 
             try {
-                Integer indiceEstudiante = Utiles.encontrarPosicion("docente", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
+                Integer indiceAsignatura = Utiles.encontrarPosicion("asignatura", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
 
-                if (estudianteControl.merge(estudianteControl.getEstudiante(), indiceEstudiante)) {
+                if (asignaturaControl.merge(asignaturaControl.getAsignatura(), indiceAsignatura)) {
                     JOptionPane.showMessageDialog(null, "Modificacion Exitosa");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo modificar");
@@ -80,17 +79,17 @@ public class frmEstudiante extends javax.swing.JFrame {
                 System.out.println(e.getMessage());
             }
 
-            estudianteControl.setEstudiante(null);
+            asignaturaControl.setAsignatura(null);
             limpiar();
         }
     }
 
     private void borrar() {
         try {
-            Integer indiceDocente = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
+            Integer indiceAsignatura = Utiles.encontrarPosicion("docente", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
 
-            if (tblEstudiante.getSelectedRow() > -1) {
-                if (estudianteControl.remove(indiceDocente)) {
+            if (tblAsignatura.getSelectedRow() > -1) {
+                if (asignaturaControl.remove(indiceAsignatura)) {
                     JOptionPane.showMessageDialog(null, "Se borro el elemento");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
@@ -109,29 +108,28 @@ public class frmEstudiante extends javax.swing.JFrame {
             t = 1;
         }
         try {
-            modelo.setEstudiantes(estudianteControl.shellsort( t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
+            modelo.setAsignaturas(asignaturaControl.shellsortAsignatura( t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al ordenar " + e.getMessage() + "");
         }
-        tblEstudiante.setModel(modelo);
-        tblEstudiante.updateUI();
+        tblAsignatura.setModel(modelo);
+        tblAsignatura.updateUI();
     }
 
     private void buscar() {
         try {
-            modelo.setEstudiantes(estudianteControl.busquedaLineal(txtBusqueda.getText(),  cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
+            modelo.setAsignaturas(asignaturaControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al buscar " + e.getMessage() + "");
         }
-        tblEstudiante.setModel(modelo);
-        tblEstudiante.updateUI();
+        tblAsignatura.setModel(modelo);
+        tblAsignatura.updateUI();
     }
 
-  
     /**
      * Creates new form frmDocente
      */
-    public frmEstudiante() {
+    public FrmAdmAsignatura() {
         initComponents();
         limpiar();
     }
@@ -149,27 +147,26 @@ public class frmEstudiante extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        txtApellido = new javax.swing.JTextField();
-        txtDni = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblEstudiante = new javax.swing.JTable();
+        tblAsignatura = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         cbxCriterioBusqueda = new javax.swing.JComboBox<>();
         cbxCriterioOrden = new javax.swing.JComboBox<>();
         txtBusqueda = new javax.swing.JTextField();
+        txtFechaInicio = new com.toedter.calendar.JDateChooser();
+        txtFechaFin = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         HEADER = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        btnBorrar = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnTipoOrden = new javax.swing.JRadioButton();
         btnOrdenar = new javax.swing.JButton();
+        btnTipoOrden = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -182,21 +179,19 @@ public class frmEstudiante extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Apellido:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 60, 20));
+        jLabel3.setText("Fecha Inicio:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, -1, 20));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("DNI:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, 40, 20));
+        jLabel4.setText("Fecha Fin:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, 20));
 
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreKeyTyped(evt);
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 280, -1));
-        jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 280, -1));
-        jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 280, -1));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 220, -1));
 
         jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -204,7 +199,7 @@ public class frmEstudiante extends javax.swing.JFrame {
             }
         });
 
-        tblEstudiante.setModel(new javax.swing.table.DefaultTableModel(
+        tblAsignatura.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -215,28 +210,23 @@ public class frmEstudiante extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblEstudiante.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblAsignatura.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblEstudianteMouseClicked(evt);
+                tblAsignaturaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblEstudiante);
+        jScrollPane1.setViewportView(tblAsignatura);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 460, 200));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText("Nombres:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, 70, 20));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, 20));
 
-        cbxCriterioBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "DNI", "ID" }));
-        cbxCriterioBusqueda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxCriterioBusquedaActionPerformed(evt);
-            }
-        });
+        cbxCriterioBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "FechaInicio", "FechaFin" }));
         jPanel1.add(cbxCriterioBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, 220, -1));
 
-        cbxCriterioOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "DNI", "ID" }));
+        cbxCriterioOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "FechaInicio", "FechaFin" }));
         jPanel1.add(cbxCriterioOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 450, 120, -1));
 
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -245,6 +235,8 @@ public class frmEstudiante extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
+        jPanel1.add(txtFechaInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 220, -1));
+        jPanel1.add(txtFechaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 220, -1));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -264,7 +256,7 @@ public class frmEstudiante extends javax.swing.JFrame {
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("ESTUDIANTES");
+        jLabel8.setText("ASIGNATURAS");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, -1, -1));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -283,18 +275,14 @@ public class frmEstudiante extends javax.swing.JFrame {
         jLabel13.setText("INGRESO DE DATOS:");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
 
-        jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel14.setText("INGRESO DE DATOS:");
-        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
-
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
-        btnBorrar.setText("DAR DE BAJA");
-        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
+        btnGuardar.setText("    GUARDAR");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 140, -1));
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
         btnModificar.setText("MODIFICAR");
@@ -305,14 +293,14 @@ public class frmEstudiante extends javax.swing.JFrame {
         });
         jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 140, -1));
 
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
-        btnGuardar.setText("    GUARDAR");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
+        btnBorrar.setText("DAR DE BAJA");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnBorrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 140, -1));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 140, -1));
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
         btnSalir.setText("       SALIR");
@@ -332,11 +320,6 @@ public class frmEstudiante extends javax.swing.JFrame {
         });
         jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 130, -1));
 
-        btnTipoOrden.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnTipoOrden.setText("Descendente");
-        btnTipoOrden.setContentAreaFilled(false);
-        jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 100, -1));
-
         btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconOrdenar.png"))); // NOI18N
         btnOrdenar.setText("ORDENAR");
         btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
@@ -346,19 +329,24 @@ public class frmEstudiante extends javax.swing.JFrame {
         });
         jPanel1.add(btnOrdenar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 490, -1, -1));
 
+        btnTipoOrden.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnTipoOrden.setText("Descendente");
+        btnTipoOrden.setContentAreaFilled(false);
+        jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 100, -1));
+
         jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel9.setText("CURSOS REGISTRADOS EN EL SISTEMA:");
+        jLabel9.setText("ASIGNATURAS REGISTRADOS EN EL SISTEMA:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -369,19 +357,19 @@ public class frmEstudiante extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
-    private void tblEstudianteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEstudianteMouseClicked
+    private void tblAsignaturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAsignaturaMouseClicked
         // TODO add your handling code here:
         try {
-            Integer indiceEstudiante = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
-            estudianteControl.setEstudiante(estudianteControl.getListaEstudiantes().getInfo(indiceEstudiante));
+            Integer indiceDocente = Utiles.encontrarPosicion("asignatura", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
+            asignaturaControl.setAsignatura(asignaturaControl.getListaAsignaturas().getInfo(indiceDocente));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        txtApellido.setText(estudianteControl.getEstudiante().getApellido());
-        txtNombre.setText(estudianteControl.getEstudiante().getNombre());
-        txtDni.setText(estudianteControl.getEstudiante().getDni());
         
-    }//GEN-LAST:event_tblEstudianteMouseClicked
+        txtNombre.setText(asignaturaControl.getAsignatura().getNombre());
+        txtFechaInicio.setDate(asignaturaControl.getAsignatura().getFechaInicio());
+        txtFechaFin.setDate(asignaturaControl.getAsignatura().getFechaFin());
+    }//GEN-LAST:event_tblAsignaturaMouseClicked
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
         // TODO add your handling code here:
@@ -391,13 +379,13 @@ public class frmEstudiante extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtBusquedaKeyPressed
 
-    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         try {
-            borrar();
+            guardar();
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_btnBorrarActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
@@ -407,13 +395,13 @@ public class frmEstudiante extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         // TODO add your handling code here:
         try {
-            guardar();
+            borrar();
         } catch (Exception e) {
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
@@ -436,13 +424,9 @@ public class frmEstudiante extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnOrdenarActionPerformed
 
-    private void cbxCriterioBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCriterioBusquedaActionPerformed
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbxCriterioBusquedaActionPerformed
-
-    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-       UtilVista.soloLetras(txtNombre);
-    }//GEN-LAST:event_txtNombreKeyTyped
+    }//GEN-LAST:event_txtNombreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -461,21 +445,23 @@ public class frmEstudiante extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmAdmAsignatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmAdmAsignatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmAdmAsignatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmEstudiante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrmAdmAsignatura.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmEstudiante().setVisible(true);
+                new FrmAdmAsignatura().setVisible(true);
             }
         });
     }
@@ -492,7 +478,6 @@ public class frmEstudiante extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbxCriterioBusqueda;
     private javax.swing.JComboBox<String> cbxCriterioOrden;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -502,10 +487,10 @@ public class frmEstudiante extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblEstudiante;
-    private javax.swing.JTextField txtApellido;
+    private javax.swing.JTable tblAsignatura;
     private javax.swing.JTextField txtBusqueda;
-    private javax.swing.JTextField txtDni;
+    private com.toedter.calendar.JDateChooser txtFechaFin;
+    private com.toedter.calendar.JDateChooser txtFechaInicio;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
