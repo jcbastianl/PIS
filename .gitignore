@@ -1,1 +1,90 @@
-/build/
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs (usable para analisis de memoria y procesador)
+hs_err_pid*
+
+# Build output folders
+build
+bin/
+out/
+target/
+
+# Ignorar archivos generados por IDEs
+*.form
+*.java
+
+# Eclipse 
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# Java annotation processor (APT)
+.factorypath
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+
+# IDE metadata
+*/.metadata
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Ignorar directorio para archivos temporales
+.temp/
+
+# Maven ignore
+log/
+target/
+
+# Archivo privado con configuraciones sensibles
+private.xml
+
+#Archivo de propiedads igual del private
+private.properties
+
+#Otro
+build.properties

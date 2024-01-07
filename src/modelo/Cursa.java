@@ -4,24 +4,30 @@
  */
 package modelo;
 
+import controlador.TDA.listas.DynamicList;
+import controlador.TDA.listas.Node;
+
 /**
  *
  * @author jsbal
  */
 public class Cursa {
+
     private String letra;
     private String aula;
     private Integer id;
     private Integer ciclo;
 //    private Integer id_Docente;
     private Docente docente;
-
-    public Cursa() {
-    }
+    private DynamicList<Matricula> matriculas;
 
     /**
      * @return the letra
      */
+    public Cursa() {
+        matriculas = new DynamicList<>();
+    }
+
     public String getLetra() {
         return letra;
     }
@@ -31,6 +37,18 @@ public class Cursa {
      */
     public void setLetra(String letra) {
         this.letra = letra;
+    }
+
+    public DynamicList<Estudiante> obtenerEstudiantesMatriculados() {
+        DynamicList<Estudiante> estudiantesMatriculados = new DynamicList<>();
+        Node<Matricula> current = matriculas.getHeader();
+
+        while (current != null) {
+            estudiantesMatriculados.add(current.getInfo().getEstudiante());
+            current = current.getNext();
+        }
+
+        return estudiantesMatriculados;
     }
 
     /**
@@ -76,36 +94,36 @@ public class Cursa {
     public void setCiclo(Integer ciclo) {
         this.ciclo = ciclo;
     }
-    
-    public Boolean compare(Cursa p, String field, Integer type){
+
+    public Boolean compare(Cursa p, String field, Integer type) {
         switch (type) {
             case 0:
-        if(field.equalsIgnoreCase("letra")){
-            return getLetra().compareTo(p.getLetra()) < 0;
-        }else if(field.equalsIgnoreCase("aula")){
-            return getAula().compareTo(p.getAula()) < 0;
-        }else if(field.equalsIgnoreCase("ciclo")){
-            return getCiclo().compareTo(p.getCiclo()) < 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
-        }
+                if (field.equalsIgnoreCase("letra")) {
+                    return getLetra().compareTo(p.getLetra()) < 0;
+                } else if (field.equalsIgnoreCase("aula")) {
+                    return getAula().compareTo(p.getAula()) < 0;
+                } else if (field.equalsIgnoreCase("ciclo")) {
+                    return getCiclo().compareTo(p.getCiclo()) < 0;
+                } else if (field.equalsIgnoreCase("id")) {
+                    return (id.intValue() < p.getId().intValue());
+                }
             case 1:
-        if(field.equalsIgnoreCase("letra")){
-            return getLetra().compareTo(p.getLetra()) > 0;
-        }else if(field.equalsIgnoreCase("aula")){
-            return getAula().compareTo(p.getAula()) > 0;
-        }else if(field.equalsIgnoreCase("ciclo")){
-            return getCiclo().compareTo(p.getCiclo()) > 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
+                if (field.equalsIgnoreCase("letra")) {
+                    return getLetra().compareTo(p.getLetra()) > 0;
+                } else if (field.equalsIgnoreCase("aula")) {
+                    return getAula().compareTo(p.getAula()) > 0;
+                } else if (field.equalsIgnoreCase("ciclo")) {
+                    return getCiclo().compareTo(p.getCiclo()) > 0;
+                } else if (field.equalsIgnoreCase("id")) {
+                    return (id.intValue() < p.getId().intValue());
+                }
+            default:
+                return null;
         }
-        default:
-        return null;
-        }
-    } 
+    }
 
     @Override
     public String toString() {
-        return ciclo+" "+letra;
+        return ciclo + " " + letra;
     }
 }
