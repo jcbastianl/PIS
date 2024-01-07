@@ -12,7 +12,7 @@ public class Cuenta {
     private Integer id;
     private String correo;
     private String contraseña;
-    private Integer id_persona;
+    private Persona persona;
 
     public Cuenta() {
     }
@@ -59,19 +59,38 @@ public class Cuenta {
         this.contraseña = contraseña;
     }
 
-    /**
-     * @return the id_persona
-     */
-    public Integer getId_persona() {
-        return id_persona;
+    public Persona getPersona() {
+        return persona;
     }
 
-    /**
-     * @param id_persona the id_persona to set
-     */
-    public void setId_persona(Integer id_persona) {
-        this.id_persona = id_persona;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
+
+    public Boolean compare(Cuenta p, String field, Integer type){
+        switch (type) {
+            case 0:
+        if(field.equalsIgnoreCase("apellido")){
+            return getPersona().getApellido().compareTo(p.getPersona().getApellido()) < 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return getPersona().getNombre().compareTo(p.getPersona().getNombre()) < 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() < p.getId().intValue());
+        }
+            case 1:
+        if(field.equalsIgnoreCase("apellido")){
+            return getPersona().getApellido().compareTo(p.getPersona().getApellido()) > 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return getPersona().getNombre().compareTo(p.getPersona().getNombre()) > 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (id.intValue() < p.getId().intValue());
+        }  
+        
+        default:
+        return null;
+
+        }
+    } 
     
     
 }

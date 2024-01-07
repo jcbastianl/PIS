@@ -4,6 +4,7 @@
  */
 package vista.admin;
 
+import controlador.clases.CuentaControl;
 import controlador.clases.DocenteControl;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
@@ -18,11 +19,16 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     private DocenteControl docenteControl = new DocenteControl();
     private DocenteModeloTabla modelo = new DocenteModeloTabla();
 
+    private CuentaControl cuentaControl = new CuentaControl();
+
     private Boolean verificar() {
         return (!(txtApellido.getText().trim().isEmpty())
                 && !(txtNombre.getText().trim().isEmpty())
                 && !(txtDni.getText().trim().isEmpty())
-                && !(txtTitulo.getText().trim().isEmpty()));
+                && !(txtTitulo.getText().trim().isEmpty())
+                && !(txtCorreo.getText().trim().isEmpty())
+                && !(txtClaveUno.getText().trim().isEmpty())
+                && !(txtClaveDos.getText().trim().isEmpty()));
     }
 
     public void cargarTabla() {
@@ -37,6 +43,9 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         txtDni.setText("");
         txtNombre.setText("");
         txtTitulo.setText("");
+        txtClaveDos.setText("");
+        txtClaveUno.setText("");
+        txtCorreo.setText("");
         tblDocente.clearSelection();
         cargarTabla();
     }
@@ -47,9 +56,23 @@ public class FrmAdmDocente extends javax.swing.JFrame {
             docenteControl.getDocente().setApellido(txtApellido.getText());
             docenteControl.getDocente().setDni(txtDni.getText());
             docenteControl.getDocente().setTitulo(txtTitulo.getText());
+            docenteControl.getDocente().setRol("DOCENTE");
+            cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
+            if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
+                cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
+            } else {
+                JOptionPane.showMessageDialog(null, "Las claves no coinciden");
+            }
+
+            cuentaControl.getCuenta().setPersona(docenteControl.getDocente());
 
             if (docenteControl.persist()) {
                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                if (cuentaControl.persist()) {
+                    JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al registrarse");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "No se pudo guardar");
             }
@@ -168,6 +191,12 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         btnOrdenar = new javax.swing.JButton();
         btnTipoOrden = new javax.swing.JRadioButton();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
+        txtClaveUno = new javax.swing.JTextField();
+        txtClaveDos = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(465, 570));
@@ -243,49 +272,44 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
 
         btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
-        btnBorrar.setText("DAR DE BAJA");
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 140, -1));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 50, -1));
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
-        btnModificar.setText("MODIFICAR");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 140, -1));
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 250, 50, -1));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
-        btnGuardar.setText("    GUARDAR");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 200, 50, -1));
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
-        btnCancelar.setText("CANCELAR");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 130, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 200, 40, -1));
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
-        btnSalir.setText("       SALIR");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 130, -1));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 250, 40, -1));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -325,8 +349,8 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel13.setText("INGRESO DE DATOS:");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
+        jLabel13.setText("CUENTA:");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 180, -1, 20));
 
         btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconOrdenar.png"))); // NOI18N
         btnOrdenar.setText("ORDENAR");
@@ -341,6 +365,33 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         btnTipoOrden.setText("Descendente");
         btnTipoOrden.setContentAreaFilled(false);
         jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 100, -1));
+
+        jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel14.setText("INGRESO DE DATOS:");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel10.setText("Nombre de usuario:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 210, -1, 20));
+
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel11.setText("Contraseña (Repetir):");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 260, -1, 20));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 230, 230, -1));
+
+        txtClaveUno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClaveUnoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtClaveUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 280, 230, -1));
+
+        txtClaveDos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClaveDosActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtClaveDos, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 310, 230, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -432,6 +483,14 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnOrdenarActionPerformed
 
+    private void txtClaveUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveUnoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveUnoActionPerformed
+
+    private void txtClaveDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveDosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveDosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -479,7 +538,10 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     private javax.swing.JRadioButton btnTipoOrden;
     private javax.swing.JComboBox<String> cbxCriterioBusqueda;
     private javax.swing.JComboBox<String> cbxCriterioOrden;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -493,6 +555,9 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     private javax.swing.JTable tblDocente;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtBusqueda;
+    private javax.swing.JTextField txtClaveDos;
+    private javax.swing.JTextField txtClaveUno;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDni;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtTitulo;

@@ -15,7 +15,7 @@ public class Persona {
     private String apellido;
     private String dni;
     private Integer num_let;
-    private Integer id_cuenta;
+    private String rol;
 
     public Persona() {
     }
@@ -76,19 +76,6 @@ public class Persona {
         this.num_let = num_let;
     }
 
-    /**
-     * @return the id_cuenta
-     */
-    public Integer getId_cuenta() {
-        return id_cuenta;
-    }
-
-    /**
-     * @param id_cuenta the id_cuenta to set
-     */
-    public void setId_cuenta(Integer id_cuenta) {
-        this.id_cuenta = id_cuenta;
-    }
 
     public Integer getId() {
         return id;
@@ -96,5 +83,19 @@ public class Persona {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * @return the rol
+     */
+    public String getRol() {
+        return rol;
+    }
+
+    /**
+     * @param rol the rol to set
+     */
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

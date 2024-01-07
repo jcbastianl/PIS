@@ -1,0 +1,41 @@
+{
+    "controlador.TDA.listas.DynamicList": {
+        "header": {
+            "info": {
+                "@class": "modelo.Cuenta",
+                "id": 1,
+                "correo": "chiquilin@gmail.com",
+                "contraseña": "miclave123",
+                "persona": {
+                    "@class": "modelo.Docente",
+                    "nombre": "Chiquilin",
+                    "apellido": "Rodriguez",
+                    "dni": 114005123,
+                    "rol": "DOCENTE",
+                    "titulo": "Ingeniero en vacas",
+                    "id": 5
+                }
+            },
+            "next": {
+                "info": {
+                    "@class": "modelo.Cuenta",
+                    "id": 2,
+                    "correo": "juanito@gmail.com",
+                    "contraseña": "soyjuanito",
+                    "persona": {
+                        "@class": "modelo.Estudiante",
+                        "nombre": "Juan",
+                        "apellido": "Medrano",
+                        "dni": 12312421,
+                        "rol": "ESTUDIANTE",
+                        "id": 4
+                    }
+                }
+            }
+        },
+        "last": {
+            "@reference": "..\/header\/next"
+        },
+        "lenght": 2
+    }
+}

@@ -3,15 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/motivoJustificante.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/modelo/Matricula.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/docente/frmAsistencia.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/modeloTablas/MatriculaModeloTabla.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/controlador/utiles/Utiles.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/admin/FrmAdmMatricula.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/Frane.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/controlador/clases/MatriculaControl.java</file>
-            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/admin/FrmAdmDocente.java</file>
+            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/login/FrmInicioSesion.java</file>
+            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/controlador/clases/CursaControl.java</file>
+            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/controlador/clases/CuentaControl.java</file>
             <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/admin/FrmAdmCursa.java</file>
         </group>
     </open-files>

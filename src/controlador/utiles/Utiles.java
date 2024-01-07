@@ -176,4 +176,9 @@ public class Utiles {
         return sdf.format(date);
     }
     
+    public static boolean compararTextoss(String text1, String text2){
+        return (text1.equals(text2));
+    
+    }
+    
 }
