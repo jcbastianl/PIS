@@ -8,6 +8,7 @@ package vista;
 import controlador.clases.EstudianteControl;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import vista.utiles.UtilVista;
 
 import vista.modeloTablas.EstudianteModeloTabla;
 
@@ -19,6 +20,7 @@ public class frmEstudiante extends javax.swing.JFrame {
 
     private EstudianteControl estudianteControl = new EstudianteControl();
     private EstudianteModeloTabla modelo = new EstudianteModeloTabla();
+   
 
     private Boolean verificar() {
         return (!(txtApellido.getText().trim().isEmpty())
@@ -125,6 +127,7 @@ public class frmEstudiante extends javax.swing.JFrame {
         tblEstudiante.updateUI();
     }
 
+  
     /**
      * Creates new form frmDocente
      */
@@ -185,6 +188,12 @@ public class frmEstudiante extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText("DNI:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, 40, 20));
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 280, -1));
         jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 280, -1));
         jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 280, -1));
@@ -430,6 +439,10 @@ public class frmEstudiante extends javax.swing.JFrame {
     private void cbxCriterioBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCriterioBusquedaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxCriterioBusquedaActionPerformed
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+       UtilVista.soloLetras(txtNombre);
+    }//GEN-LAST:event_txtNombreKeyTyped
 
     /**
      * @param args the command line arguments
