@@ -18,7 +18,7 @@ public class EstadoAsistenciaControl extends DaoImplement<EstadoAsistencia> {
                 this.estadoasistencia = estadoasistencia;
         }
 
-        public DynamicList<EstadoAsistencia> getList() {
+        public DynamicList<EstadoAsistencia> getListaEstadoAsistencia() {
                 listAT = all();
                 return listAT;
         }
@@ -37,22 +37,9 @@ public class EstadoAsistenciaControl extends DaoImplement<EstadoAsistencia> {
         public void setEstadoAsistencia(EstadoAsistencia estadoasistencia) {
                 this.estadoasistencia = estadoasistencia;
         }
+
         public Boolean persist() {
                 estadoasistencia.setId(all().getLenght() + 1);
                 return persist(estadoasistencia);
         }
-
-        /*public static void main(String[] args) {
-                estadoAsistenciaControl ac = new estadoAsistenciaControl();
-                System.out.println(ac.all().toString());
-                ac.getEstadoAsistencia().setNombre("Presente");
-                ac.persist();
-                ac.setEstadoAsistencia(null);    
-        ac.getEstadoAsistencia().setNombre("Ausente");
-                ac.persist();
-                ac.setEstadoAsistencia(null);      
-        ac.getEstadoAsistencia().setNombre("Justificado");
-                ac.persist();
-                ac.setEstadoAsistencia(null);      
-        }*/
 }

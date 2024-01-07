@@ -45,7 +45,7 @@ public class EstadoMatriculaControl extends DaoImplement<EstadoMatricula>{
         return persist(estadoMatricula);
     }    
     
-        public static void main(String[] args) {
+        /*public static void main(String[] args) {
         EstadoMatriculaControl c = new EstadoMatriculaControl();
             System.out.println(c.getListaEstados());
         c.getEstadoMatricula().setNombre("PENDIENTE");
@@ -58,5 +58,5 @@ public class EstadoMatriculaControl extends DaoImplement<EstadoMatricula>{
         c.persist();
         c.setEstadoMatricula(null);
                     System.out.println(c.getListaEstados());
-    }
+    }*/
 }

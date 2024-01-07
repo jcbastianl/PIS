@@ -8,6 +8,7 @@ import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import controlador.clases.EstadoMatriculaControl;
+import controlador.clases.AsignaturaControl;
 import controlador.clases.EstudianteControl;
 import javax.swing.JComboBox;
 
@@ -47,6 +48,14 @@ public class UtilVista {
         cbx.removeAllItems();
         for (Integer i = 0; i < curc.getListaEstados().getLenght(); i++) {
             cbx.addItem(curc.getListaEstados().getInfo(i));
+        }
+    }
+    
+    public static void cargarcomboBoxAsignatura(JComboBox cbx) throws EmptyException{
+        AsignaturaControl curc = new AsignaturaControl();
+        cbx.removeAllItems();
+        for (Integer i = 0; i < curc.getListaAsignaturas().getLenght(); i++) {
+            cbx.addItem(curc.getListaAsignaturas().getInfo(i));
         }
     }
 }
