@@ -6,6 +6,9 @@ package vista.login;
 
 import controlador.clases.CuentaControl;
 import javax.swing.JOptionPane;
+import vista.admin.FrmAdmPrincipal;
+import vista.docente.frmAsistencia;
+import vista.estudiante.frmVistaAsistencia;
 
 /**
  *
@@ -151,12 +154,27 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
 
         btnEstudent.setText("Estudiante");
+        btnEstudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstudentActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEstudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 250, -1, -1));
 
         btnDocente.setText("Docente");
+        btnDocente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDocenteActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 280, -1, -1));
 
         btnAdmin.setText("ADMIN");
+        btnAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -180,6 +198,25 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             System.out.println(e.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
+        // TODO add your handling code here:
+        new FrmAdmPrincipal().setVisible(true);
+    }//GEN-LAST:event_btnAdminActionPerformed
+
+    private void btnDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocenteActionPerformed
+        // TODO add your handling code here:
+        try {
+         new frmAsistencia().setVisible(true);   
+        } catch (Exception e) {
+        }
+        
+    }//GEN-LAST:event_btnDocenteActionPerformed
+
+    private void btnEstudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudentActionPerformed
+        // TODO add your handling code here:
+        new frmVistaAsistencia().setVisible(true);
+    }//GEN-LAST:event_btnEstudentActionPerformed
 
     /**
      * @param args the command line arguments
