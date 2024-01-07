@@ -6,6 +6,7 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
 import modelo.Asignatura;
 
@@ -35,9 +36,9 @@ public class AsignaturaModeloTabla extends AbstractTableModel {
                 case 0:
                     return (a != null) ? a.getNombre() : " ";
                 case 1:
-                    return (a != null) ? a.getFechaInicio() : " ";
+                    return (a != null) ? Utiles.formaterarFecha(a.getFechaInicio()) : " ";
                 case 2:
-                    return (a != null) ? a.getFechaFin() : " ";
+                    return (a != null) ? Utiles.formaterarFecha(a.getFechaFin() ): " ";
                 case 3:
                     return (a != null) ? a.getId() : " ";
                 default:
