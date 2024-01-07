@@ -28,9 +28,7 @@ bin/
 out/
 target/
 
-# Ignorar archivos generados por IDEs
-*.form
-*.java
+
 
 # Eclipse 
 .metadata
