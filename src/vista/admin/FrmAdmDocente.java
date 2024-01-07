@@ -139,7 +139,7 @@ public class FrmAdmDocente extends javax.swing.JFrame {
 
     private void buscar() {
         try {
-            modelo.setDocentes(docenteControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
+            modelo.setDocentes(docenteControl.busquedaBinaria(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al buscar " + e.getMessage() + "");
         }
@@ -267,6 +267,9 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtBusquedaKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyTyped(evt);
             }
         });
         jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
@@ -428,10 +431,6 @@ public class FrmAdmDocente extends javax.swing.JFrame {
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
         // TODO add your handling code here:
-        try {
-            buscar();
-        } catch (Exception e) {
-        }
     }//GEN-LAST:event_txtBusquedaKeyPressed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
@@ -490,6 +489,13 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     private void txtClaveDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveDosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtClaveDosActionPerformed
+
+    private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        try {
+            buscar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_txtBusquedaKeyTyped
 
     /**
      * @param args the command line arguments
