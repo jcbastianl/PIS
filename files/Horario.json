@@ -1,0 +1,1 @@
+{"controlador.TDA.listas.DynamicList":{"header":{"info":{"@class":"modelo.Horario","id":1,"hora":"7:30-9:30"},"next":{"info":{"@class":"modelo.Horario","id":2,"hora":"9:30-11:30"},"next":{"info":{"@class":"modelo.Horario","id":3,"hora":"11:30-13:30"}}}},"last":{"@reference":"..\/header\/next\/next"},"lenght":3}}

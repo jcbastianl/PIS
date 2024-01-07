@@ -12,8 +12,7 @@ import java.util.Date;
  */
 public class Horario {
     private Integer id;
-    private String horaInicio;
-    private String horaFin;
+    private String hora;
     private Date Fecha;
 
 
@@ -35,31 +34,17 @@ public class Horario {
     }
 
     /**
-     * @return the horaInicio
+     * @return the hora
      */
-    public String getHoraInicio() {
-        return horaInicio;
+    public String getHora() {
+        return hora;
     }
 
     /**
-     * @param horaInicio the horaInicio to set
+     * @param hora the hora to set
      */
-    public void setHoraInicio(String horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
-    /**
-     * @return the horaFin
-     */
-    public String getHoraFin() {
-        return horaFin;
-    }
-
-    /**
-     * @param horaFin the horaFin to set
-     */
-    public void setHoraFin(String horaFin) {
-        this.horaFin = horaFin;
+    public void setHora(String hora) {
+        this.hora = hora;
     }
 
     /**
@@ -75,6 +60,9 @@ public class Horario {
     public void setFecha(Date Fecha) {
         this.Fecha = Fecha;
     }
-    
-    
+
+        @Override
+        public String toString() {
+                return hora;
+        }
 }
