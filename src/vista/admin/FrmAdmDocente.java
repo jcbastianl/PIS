@@ -106,7 +106,7 @@ public class FrmAdmDocente extends javax.swing.JFrame {
             t = 1;
         }
         try {
-            modelo.setDocentes(docenteControl.shellsort(docenteControl.getListaDocentes(), t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
+            modelo.setDocentes(docenteControl.shellsort(t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al ordenar " + e.getMessage() + "");
         }
@@ -116,7 +116,7 @@ public class FrmAdmDocente extends javax.swing.JFrame {
 
     private void buscar() {
         try {
-            modelo.setDocentes(docenteControl.busquedaLineal(txtBusqueda.getText(), docenteControl.getListaDocentes(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
+            modelo.setDocentes(docenteControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al buscar " + e.getMessage() + "");
         }
