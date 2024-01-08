@@ -4,7 +4,6 @@
  */
 package vista.estudiante;
 
-import vista.docente.*;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.AsistenciaControl;
 import controlador.clases.EstudianteControl;

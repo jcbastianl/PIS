@@ -21,7 +21,7 @@ public class ModeloTablaVerAsistencia extends AbstractTableModel {
 
         @Override
         public int getRowCount() {
-                return getAsistencias().getLenght();
+                return getEstudiantes().getLenght();
         }
 
         @Override
