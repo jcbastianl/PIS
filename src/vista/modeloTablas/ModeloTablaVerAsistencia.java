@@ -6,6 +6,7 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
 import modelo.Asistencia;
 import modelo.Estudiante;
@@ -42,7 +43,7 @@ public class ModeloTablaVerAsistencia extends AbstractTableModel {
                                 case 2:
                                         return (a != null) ? a.getClaseDictada().getTema(): " ";
                                 case 3:
-                                        return (a != null) ? a.getFecha(): " ";
+                                        return (a != null) ? Utiles.DateALocal(a.getFecha()): " ";
                                 default:
                                         return null;
                         }
