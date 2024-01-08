@@ -4,6 +4,7 @@
  */
 package controlador.utiles;
 
+import controlador.clases.AsignaturaControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import controlador.clases.EstadoMatriculaControl;
@@ -131,6 +132,14 @@ public class Utiles {
                     EstadoMatriculaControl emc = new EstadoMatriculaControl();
                     for (int i = 0; i < emc.all().getLenght(); i++) {
                         if (Objects.equals(emc.all().getInfo(i).getId(), id)) {
+                            return i;
+                        }
+                    }
+                    break;
+                case "asignatura":
+                    AsignaturaControl ac = new AsignaturaControl();
+                    for (int i = 0; i < ac.all().getLenght(); i++) {
+                        if (Objects.equals(ac.all().getInfo(i).getId(), id)) {
                             return i;
                         }
                     }
