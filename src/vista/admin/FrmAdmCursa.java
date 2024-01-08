@@ -4,6 +4,7 @@
  */
 package vista.admin;
 
+import controlador.clases.AsignaturaControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import javax.swing.JOptionPane;
@@ -18,29 +19,29 @@ public class FrmAdmCursa extends javax.swing.JFrame {
 
     private CursaControl cursaControl = new CursaControl();
     private CursaModeloTabla modelo = new CursaModeloTabla();
-    
-    
-    public Boolean verificar(){
-        return (
-                !(txtAula.getText().trim().isEmpty())   &&
-                !(txtLetra.getText().trim().isEmpty())  &&
-                !(cbxDocente.getSelectedIndex() == -1));
+
+    public Boolean verificar() {
+        return (!(txtAula.getText().trim().isEmpty())
+                && !(txtLetra.getText().trim().isEmpty())
+                && !(cbxDocente.getSelectedIndex() == -1));
     }
-    
-    public void cargarTabla(){
+
+    public void cargarTabla() {
         modelo.setListaCursos(cursaControl.getListaCursas());
         tblCursa.setModel(modelo);
         tblCursa.updateUI();
     }
-    public void cargarCombo(){
+
+    public void cargarCombo() {
         try {
-        UtilVista.cargarcomboBoxDocente(cbxDocente);            
+            UtilVista.cargarcomboBoxDocente(cbxDocente);
+            UtilVista.cargarcomboBoxAsignatura(cbxAsignatura);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         txtAula.setText("");
         txtLetra.setText("");
         cbxDocente.setSelectedIndex(-1);
@@ -48,77 +49,75 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         cargarCombo();
         tblCursa.clearSelection();
     }
-    
-    public void guardar(){
-        if(verificar()){
+
+    public void guardar() {
+        if (verificar()) {
             cursaControl.getCursa().setAula(txtAula.getText());
             cursaControl.getCursa().setLetra(txtLetra.getText().toUpperCase());
             cursaControl.getCursa().setCiclo(Integer.parseInt(txtCiclo.getText()));
             try {
-            cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));                
+                cursaControl.getCursa().setId_asignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()).getId());
+                cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));
             } catch (Exception e) {
             }
-            if(cursaControl.persist()){
+            if (cursaControl.persist()) {
                 JOptionPane.showMessageDialog(null, "Se guardo todo");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "No se guardo");
             }
             cursaControl.setCursa(null);
             limpiar();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Campos vacios");
         }
     }
-    
-    public void modificar(){
-        if(verificar()){
+
+    public void modificar() {
+        if (verificar()) {
             cursaControl.getCursa().setAula(txtAula.getText());
             cursaControl.getCursa().setLetra(txtLetra.getText().toUpperCase());
             cursaControl.getCursa().setCiclo(Integer.parseInt(txtCiclo.getText()));
             try {
-            cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));                
+                cursaControl.getCursa().setId_asignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()).getId());
+                cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));
             } catch (Exception e) {
             }
-            if(cursaControl.merge(cursaControl.getCursa(), tblCursa.getSelectedRow())){
+            if (cursaControl.merge(cursaControl.getCursa(), tblCursa.getSelectedRow())) {
                 JOptionPane.showMessageDialog(null, "Se modifico");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "No se modifico");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Campos vacios");
         }
         cursaControl.setCursa(null);
         limpiar();
-    }    
-    
-    
-    public void borrar(){
-        if(tblCursa.getSelectedRow()> -1){
+    }
+
+    public void borrar() {
+        if (tblCursa.getSelectedRow() > -1) {
             if (cursaControl.remove(tblCursa.getSelectedRow())) {
                 JOptionPane.showConfirmDialog(null, "Se borro el elemento");
             } else {
-                JOptionPane.showConfirmDialog(null, "No se borro el elemento");                
+                JOptionPane.showConfirmDialog(null, "No se borro el elemento");
             }
-        
-        }else{
-            JOptionPane.showConfirmDialog(null, "Selecciona un elemento a borrar");        
+
+        } else {
+            JOptionPane.showConfirmDialog(null, "Selecciona un elemento a borrar");
         }
-        
-        
-    
-    
+
     }
-    
-    public void buscar(){
+
+    public void buscar() {
         try {
             modelo.setListaCursos(cursaControl.busquedaLineal(txtBuscar.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al buscar " + e.getMessage() + "");
         }
         tblCursa.setModel(modelo);
-        tblCursa.updateUI();    
+        tblCursa.updateUI();
     }
-    
+
     private void ordenar() {
         int t = 0;
         if (btnTipoOrden.isSelected()) {
@@ -131,7 +130,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         }
         tblCursa.setModel(modelo);
         tblCursa.updateUI();
-    }    
+    }
 
     /**
      * Creates new form FrmAdmCursa
@@ -178,6 +177,8 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         cbxCriterioOrdenar = new javax.swing.JComboBox<>();
         btnOrdenar = new javax.swing.JButton();
         btnTipoOrden = new javax.swing.JRadioButton();
+        cbxAsignatura = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
 
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel6.setText("Nombres:");
@@ -207,7 +208,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblCursa);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 460, 200));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, 460, 160));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Letra (Identificativo):");
@@ -215,7 +216,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setText("CURSOS REGISTRADOS EN EL SISTEMA:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, -1, 20));
         jPanel1.add(txtAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, 180, -1));
         jPanel1.add(txtLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 220, 180, -1));
 
@@ -276,8 +277,8 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 130, -1));
 
         jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel11.setText("Docente asignado:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, 20));
+        jLabel11.setText("Asignatura:");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, 20));
         jPanel1.add(txtCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 180, -1));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
@@ -350,6 +351,13 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         btnTipoOrden.setContentAreaFilled(false);
         jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 100, -1));
 
+        cbxAsignatura.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbxAsignatura, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 340, 180, -1));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel12.setText("Docente asignado:");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -404,15 +412,15 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     private void tblCursaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCursaMouseClicked
         // TODO add your handling code here:
         try {
-        
-        txtAula.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getAula());
-        txtCiclo.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getCiclo().toString());
-        txtLetra.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getLetra());
+
+            txtAula.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getAula());
+            txtCiclo.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getCiclo().toString());
+            txtLetra.setText(cursaControl.getListaCursas().getInfo(tblCursa.getSelectedRow()).getLetra());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-        
+
     }//GEN-LAST:event_tblCursaMouseClicked
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -479,11 +487,13 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     private javax.swing.JButton btnOrdenar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JRadioButton btnTipoOrden;
+    private javax.swing.JComboBox<String> cbxAsignatura;
     private javax.swing.JComboBox<String> cbxCriterioBusqueda;
     private javax.swing.JComboBox<String> cbxCriterioOrdenar;
     private javax.swing.JComboBox<String> cbxDocente;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;

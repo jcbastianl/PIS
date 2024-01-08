@@ -135,7 +135,7 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
     private void buscar() {
         try {
-            modelo.setEstudiantes(estudianteControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
+            modelo.setEstudiantes(estudianteControl.busquedaBinaria(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al buscar " + e.getMessage() + "");
         }
@@ -264,6 +264,9 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtBusquedaKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBusquedaKeyTyped(evt);
             }
         });
         jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
@@ -429,10 +432,6 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
         // TODO add your handling code here:
-        try {
-            buscar();
-        } catch (Exception e) {
-        }
     }//GEN-LAST:event_txtBusquedaKeyPressed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
@@ -496,6 +495,13 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
 
     }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        try {
+            buscar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_txtBusquedaKeyTyped
 
 
     /**
