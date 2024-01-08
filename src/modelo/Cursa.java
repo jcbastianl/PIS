@@ -19,6 +19,7 @@ public class Cursa {
     private Integer ciclo;
 //    private Integer id_Docente;
     private Docente docente;
+    private Integer id_asignatura;
     private DynamicList<Matricula> matriculas;
 
     /**
@@ -94,6 +95,16 @@ public class Cursa {
     public void setCiclo(Integer ciclo) {
         this.ciclo = ciclo;
     }
+
+    public Integer getId_asignatura() {
+        return id_asignatura;
+    }
+
+    public void setId_asignatura(Integer id_asignatura) {
+        this.id_asignatura = id_asignatura;
+    }
+    
+    
 
     public Boolean compare(Cursa p, String field, Integer type) {
         switch (type) {

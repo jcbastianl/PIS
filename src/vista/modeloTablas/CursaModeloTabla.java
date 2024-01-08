@@ -24,7 +24,7 @@ public class CursaModeloTabla extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -38,6 +38,8 @@ public class CursaModeloTabla extends AbstractTableModel{
                     return (d != null) ? d.getCiclo()+""+d.getLetra()  : " ";
                 case 2:
                     return (d != null) ? d.getAula() : " ";
+                case 3:
+                    return (d != null) ? d.getId_asignatura() : " ";
                 default:
                     return null;
             }
@@ -55,6 +57,8 @@ public class CursaModeloTabla extends AbstractTableModel{
                 return "PARALELO";
             case 2:
                 return "AULA"; 
+            case 3:
+                return "ID ASIGNATURA"; 
             default:
                 return null;
         }
