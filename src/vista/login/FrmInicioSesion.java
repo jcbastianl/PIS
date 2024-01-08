@@ -4,11 +4,14 @@
  */
 package vista.login;
 
+import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.CuentaControl;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import vista.admin.FrmAdmPrincipal;
 import vista.docente.frmAsistencia;
-import vista.estudiante.frmVistaAsistencia;
+import vista.estudiante.frmEstudiante;
 
 /**
  *
@@ -214,8 +217,12 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDocenteActionPerformed
 
     private void btnEstudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudentActionPerformed
-        // TODO add your handling code here:
-        new frmVistaAsistencia().setVisible(true);
+            try {
+                    // TODO add your handling code here:
+                    new frmEstudiante().setVisible(true);
+            } catch (EmptyException ex) {
+                    Logger.getLogger(FrmInicioSesion.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_btnEstudentActionPerformed
 
     /**
