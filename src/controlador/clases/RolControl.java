@@ -42,17 +42,20 @@ public class RolControl extends DaoImplement<Rol>{
                 return persist(rol);
         }
         
-        /*public static void main(String[] args) {
+        public static void main(String[] args) {
                 RolControl rc = new RolControl();
                 System.out.println(rc.all().toString());
-                rc.getRol().setNombre("Docente");
-                rc.persit();
-                rc.setRol(null);
-                rc.getRol().setNombre("Estudiante");
-                rc.persit();
-                rc.setRol(null);
-                rc.getRol().setNombre("Admin");
-                rc.persit();
-                rc.setRol(null);        
-        }*/
+//                rc.getRol().setNombre("Docente");
+//                rc.getRol().setDescripcion("Una persona con un rol de docente");
+//                rc.persit();
+//                rc.setRol(null);
+//                rc.getRol().setNombre("Estudiante");
+//                rc.getRol().setDescripcion("persona con rol de estudiante, que recibe clases");
+//                rc.persit();
+//                rc.setRol(null);
+//                rc.getRol().setNombre("Admin");
+//                rc.getRol().setDescripcion("Usuario con acceso de manipulacion de los datos guardados");
+//                rc.persit();
+//                rc.setRol(null);        
+        }
 }

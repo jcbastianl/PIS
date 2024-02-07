@@ -6,39 +6,34 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
-import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
-import modelo.Asignatura;
+import modelo.Ciclo;
 
 /**
  *
- * @author jsbal
+ * @author mrbingus
  */
-public class AsignaturaModeloTabla extends AbstractTableModel {
-
-    private DynamicList<Asignatura> asignaturas;
-
+public class CicloModeloTabla extends AbstractTableModel{
+    
+    private DynamicList<Ciclo>listaCiclos;
+    
     @Override
     public int getRowCount() {
-        return asignaturas.getLenght();
+        return getListaCiclos().getLenght();
     }
 
     @Override
     public int getColumnCount() {
-        return 3; // Cuatro columnas: nombre, fechaInicio, fechaFin, id
+        return 1;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            Asignatura a = asignaturas.getInfo(rowIndex);
+            Ciclo d = getListaCiclos().getInfo(rowIndex);
             switch (columnIndex) {
                 case 0:
-                    return (a != null) ? a.getNombre() : " ";
-                case 1:
-                    return (a != null) ? a.getCodigo() : " ";
-                case 2:
-                    return (a != null) ? a.getId() : " ";
+                    return (d != null) ? d.getCiclo() +" "+ d.getParalelo(): " ";               
                 default:
                     return null;
             }
@@ -51,23 +46,23 @@ public class AsignaturaModeloTabla extends AbstractTableModel {
     public String getColumnName(int column) {
         switch (column) {
             case 0:
-                return "NOMBRE";
-            case 1:
-                return "CODIGO";
-            case 2:
-                return "ID";
+                return "CICLO";                
             default:
                 return null;
         }
+    }    
+
+    /**
+     * @return the listaCiclos
+     */
+    public DynamicList<Ciclo> getListaCiclos() {
+        return listaCiclos;
     }
 
-    // Getters y Setters para asignaturas
-
-    public DynamicList<Asignatura> getAsignaturas() {
-        return asignaturas;
-    }
-
-    public void setAsignaturas(DynamicList<Asignatura> asignaturas) {
-        this.asignaturas = asignaturas;
+    /**
+     * @param listaCiclos the listaCiclos to set
+     */
+    public void setListaCiclos(DynamicList<Ciclo> listaCiclos) {
+        this.listaCiclos = listaCiclos;
     }
 }

@@ -36,9 +36,9 @@ public class MatriculaModeloTabla extends AbstractTableModel{
                 case 0:
                     return (d != null) ? d.getEstudiante().getNombre() +" "+d.getEstudiante().getApellido() : " ";
                 case 1:
-                    return (d != null) ? d.getCursa().getCiclo()+""+d.getCursa().getLetra() : " ";
+                    return (d != null) ? d.getCursa().getCiclo().toString() : " ";
                 case 2:
-                    return (d != null) ? d.getNumero() : " ";
+                    return (d != null) ? d.getCodigo(): " ";
                 case 3:
                     return (d != null) ? d.getEstadoMatricula() : " ";
                 case 4:
@@ -59,7 +59,7 @@ public class MatriculaModeloTabla extends AbstractTableModel{
             case 1:
                 return "CURSO";
             case 2:
-                return "Nro MATRICULA";     
+                return "CODIGO";     
             case 3:
                 return "ESTADO";   
             case 4:

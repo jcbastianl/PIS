@@ -36,14 +36,12 @@ public class ModeloTablaVerAsistencia extends AbstractTableModel {
                         Asistencia a = getAsistencias().getInfo(rowIndex);
                         Estudiante e = getEstudiantes().getInfo(rowIndex);
                         switch (columnIndex) {
-                                case 0:
-                                        return (a != null) ? e.getNombre() + " " + e.getApellido() : " ";
-                                case 1:
-                                        return (a != null) ? a.getEstadoAsistencia().getNombre() : " ";
-                                case 2:
-                                        return (a != null) ? a.getClaseDictada().getTema(): " ";
-                                case 3:
-                                        return (a != null) ? Utiles.DateALocal(a.getFecha()): " ";
+//                                case 0:
+//                                        return (a != null) ? e.getNombre() + " " + e.getApellido() : " ";
+//                                case 1:
+//                                        return (a != null) ? a.getEstadoAsistencia().getNombre() : " ";
+//                                case 2:
+//                                        return (a != null) ? Utiles.DateALocal(a.get): " ";
                                 default:
                                         return null;
                         }

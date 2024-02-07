@@ -10,6 +10,7 @@ import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
 import modelo.Cursa;
+import modelo.Matricula;
 
 /**
  *
@@ -103,6 +104,7 @@ public class CursaControl extends DaoImplement<Cursa>{
         }
         return lista;
     }       
+
 //    
 //    public DynamicList<Cursa> busquedaBinaria(String texto, String criterio) {
 //        DynamicList<Cursa> lista = new DynamicList<>();
@@ -134,5 +136,9 @@ public class CursaControl extends DaoImplement<Cursa>{
 //            System.out.println(e.getMessage());
 //            return null;
 //        }
-//    }    
+//    }  
+    
+    public DynamicList<Matricula> recuperarListaMatriculas(int id) throws Exception {
+        return all().getInfo(id).getMatriculas();
+    }    
 }

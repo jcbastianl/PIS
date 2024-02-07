@@ -9,9 +9,11 @@ import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import controlador.clases.EstadoMatriculaControl;
 import controlador.clases.AsignaturaControl;
+import controlador.clases.CicloControl;
 import controlador.clases.EstadoAsistenciaControl;
 import controlador.clases.EstudianteControl;
 import controlador.clases.HorarioControl;
+import controlador.clases.PeriodoAcademicoControl;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
@@ -24,6 +26,22 @@ import javax.swing.JTextField;
  */
 public class UtilVista {
 
+    public static void cargarcomboBoxPeriodos(JComboBox cbx) throws EmptyException {
+        PeriodoAcademicoControl cc = new PeriodoAcademicoControl();
+        cbx.removeAllItems();
+        for (Integer i = 0; i < cc.getListaPeriodos().getLenght(); i++) {
+            cbx.addItem(cc.getListaPeriodos().getInfo(i));
+        }
+    }        
+    
+    public static void cargarcomboBoxCiclos(JComboBox cbx) throws EmptyException {
+        CicloControl cc = new CicloControl();
+        cbx.removeAllItems();
+        for (Integer i = 0; i < cc.getCiclos().getLenght(); i++) {
+            cbx.addItem(cc.getCiclos().getInfo(i));
+        }
+    }    
+    
     public static void cargarcomboBoxDocente(JComboBox cbx) throws EmptyException {
         DocenteControl dc = new DocenteControl();
         cbx.removeAllItems();

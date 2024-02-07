@@ -12,7 +12,9 @@ public class Cuenta {
     private Integer id;
     private String correo;
     private String contraseña;
+//    private Integer id_persona ;
     private Persona persona;
+    private Boolean estado;
 
     public Cuenta() {
     }
@@ -59,13 +61,6 @@ public class Cuenta {
         this.contraseña = contraseña;
     }
 
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
 
     public Boolean compare(Cuenta p, String field, Integer type){
         switch (type) {
@@ -75,7 +70,7 @@ public class Cuenta {
         }else if(field.equalsIgnoreCase("nombre")){
             return getPersona().getNombre().compareTo(p.getPersona().getNombre()) < 0;
         }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
+            return (getId().intValue() < p.getId().intValue());
         }
             case 1:
         if(field.equalsIgnoreCase("apellido")){
@@ -83,7 +78,7 @@ public class Cuenta {
         }else if(field.equalsIgnoreCase("nombre")){
             return getPersona().getNombre().compareTo(p.getPersona().getNombre()) > 0;
         }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
+            return (getId().intValue() < p.getId().intValue());
         }  
         
         default:
@@ -91,6 +86,29 @@ public class Cuenta {
 
         }
     } 
-    
+
+    /**
+     * @return the estado
+     */
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
+
     
 }

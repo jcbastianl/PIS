@@ -6,6 +6,7 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
 import modelo.Cursa;
 
@@ -16,6 +17,7 @@ import modelo.Cursa;
 public class CursaModeloTabla extends AbstractTableModel{
     
     private DynamicList<Cursa>listaCursos;
+    private int variableColumnas = 5;
 
     @Override
     public int getRowCount() {
@@ -24,7 +26,7 @@ public class CursaModeloTabla extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return getVariableColumnas();
     }
 
     @Override
@@ -33,13 +35,15 @@ public class CursaModeloTabla extends AbstractTableModel{
             Cursa d = getListaCursos().getInfo(rowIndex);
             switch (columnIndex) {
                 case 0:
-                    return (d != null) ? d.getDocente().getNombre() +" "+d.getDocente().getApellido() : " ";
+                    return (d != null) ? d.getAsignatura().getNombre() : " ";
                 case 1:
-                    return (d != null) ? d.getCiclo()+""+d.getLetra()  : " ";
+                    return (d != null) ? d.getCiclo().getCiclo()+""+d.getCiclo().getParalelo()  : " ";
                 case 2:
-                    return (d != null) ? d.getAula() : " ";
+                    return (d != null) ? d.getDocente().getNombre() +" "+d.getDocente().getApellido() : " ";
                 case 3:
-                    return (d != null) ? d.getId_asignatura() : " ";
+                    return (d != null) ? Utiles.formaterarFecha(d.getFechaInicio()) : " ";
+                case 4:
+                    return (d != null) ? Utiles.formaterarFecha(d.getFechaFin()) : " ";                    
                 default:
                     return null;
             }
@@ -52,13 +56,17 @@ public class CursaModeloTabla extends AbstractTableModel{
     public String getColumnName(int column) {
         switch (column) {
             case 0:
-                return "DOCENTE";
+                return "ASIGNATURA";
             case 1:
-                return "PARALELO";
+                return "CICLO";
             case 2:
-                return "AULA"; 
+                return "DOCENTE"; 
             case 3:
                 return "ID ASIGNATURA"; 
+            case 4:
+                return "INICIO"; 
+            case 5:
+                return "FIN";                 
             default:
                 return null;
         }
@@ -69,6 +77,20 @@ public class CursaModeloTabla extends AbstractTableModel{
 
     public void setListaCursos(DynamicList<Cursa> listaCursos) {
         this.listaCursos = listaCursos;
+    }
+
+    /**
+     * @return the variableColumnas
+     */
+    public int getVariableColumnas() {
+        return variableColumnas;
+    }
+
+    /**
+     * @param variableColumnas the variableColumnas to set
+     */
+    public void setVariableColumnas(int variableColumnas) {
+        this.variableColumnas = variableColumnas;
     }
 
     

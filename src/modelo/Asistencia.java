@@ -11,15 +11,12 @@ import java.util.Date;
  * @author jsbal
  */
 public class Asistencia {
+
     private Integer id;
-    private Estudiante estudiante;
-    private ClaseDictada claseDictada;
-    private Date fecha;
-    private Integer id_horario;
+    private Boolean estadoAsistencia;
+    private Integer id_estudiante;
+    private Integer id_claseDictada;
     private Integer id_justificativo;
-    private EstadoAsistencia estadoAsistencia;
-    private Horario horario;
-    
 
     public Asistencia() {
     }
@@ -39,48 +36,45 @@ public class Asistencia {
     }
 
     /**
-     * @return the estudiante
+     * @return the estadoAsistencia
      */
-    public Estudiante getEstudiante() {
-        return estudiante;
+    public Boolean getEstadoAsistencia() {
+        return estadoAsistencia;
     }
 
     /**
-     * @param estudiante the estudiante to set
+     * @param estadoAsistencia the estadoAsistencia to set
      */
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
+    public void setEstadoAsistencia(Boolean estadoAsistencia) {
+        this.estadoAsistencia = estadoAsistencia;
+    }
+
+    /**
+     * @return the id_estudiante
+     */
+    public Integer getId_estudiante() {
+        return id_estudiante;
+    }
+
+    /**
+     * @param id_estudiante the id_estudiante to set
+     */
+    public void setId_estudiante(Integer id_estudiante) {
+        this.id_estudiante = id_estudiante;
     }
 
     /**
      * @return the id_claseDictada
      */
-    public ClaseDictada getClaseDictada() {
-            if (claseDictada == null) {
-                    claseDictada = new ClaseDictada();
-            }
-            return claseDictada;
+    public Integer getId_claseDictada() {
+        return id_claseDictada;
     }
 
     /**
-     * @param claseDictada the claseDictada to set
+     * @param id_claseDictada the id_claseDictada to set
      */
-    public void setClaseDictada(ClaseDictada claseDictada) {
-        this.claseDictada = claseDictada;
-    }
-
-    /**
-     * @return the id_horario
-     */
-    public Integer getId_horario() {
-        return id_horario;
-    }
-
-    /**
-     * @param id_horario the id_horario to set
-     */
-    public void setId_horario(Integer id_horario) {
-        this.id_horario = id_horario;
+    public void setId_claseDictada(Integer id_claseDictada) {
+        this.id_claseDictada = id_claseDictada;
     }
 
     /**
@@ -97,41 +91,5 @@ public class Asistencia {
         this.id_justificativo = id_justificativo;
     }
 
-    /**
-     * @return the estadoAsistencia
-     */
-    public EstadoAsistencia getEstadoAsistencia() {
-            if (estadoAsistencia == null) {
-                    estadoAsistencia = new EstadoAsistencia();
-            }
-            return estadoAsistencia;
-    }
 
-    /**
-     * @param estadoAsistencia the estadoAsistencia to set
-     */
-    public void setEstadoAsistencia(EstadoAsistencia estadoAsistencia) {
-        this.estadoAsistencia = estadoAsistencia;
-    }
-
-        public Date getFecha() {
-                return fecha;
-        }
-
-        public void setFecha(Date fecha) {
-                this.fecha = fecha;
-        }
-
-        public Horario getHorario() {
-                if (horario == null) {
-                        horario = new Horario();
-                }
-                return horario;
-        }
-
-        public void setHorario(Horario horario) {
-                this.horario = horario;
-        }
-        
-        
 }

@@ -12,8 +12,7 @@ import java.util.Date;
  */
 public class Asignatura {
     private String nombre;
-    private Date fechaInicio;
-    private Date fechaFin;
+    private String codigo;
     private Integer id;
 
     public Asignatura() {
@@ -31,34 +30,6 @@ public class Asignatura {
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    /**
-     * @return the fechaInicio
-     */
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    /**
-     * @param fechaInicio the fechaInicio to set
-     */
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    /**
-     * @return the fechaFin
-     */
-    public Date getFechaFin() {
-        return fechaFin;
-    }
-
-    /**
-     * @param fechaFin the fechaFin to set
-     */
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
     }
 
     /**
@@ -80,10 +51,8 @@ public class Asignatura {
         case 0: // Ascendente
             if (field.equalsIgnoreCase("nombre")) {
                 return getNombre().compareTo(a.getNombre()) < 0;
-            } else if (field.equalsIgnoreCase("fechaInicio")) {
-                return getFechaInicio().compareTo(a.getFechaInicio()) < 0;
-            } else if (field.equalsIgnoreCase("fechaFin")) {
-                return getFechaFin().compareTo(a.getFechaFin()) < 0;
+            } else if (field.equalsIgnoreCase("codigo")) {
+                return getCodigo().compareTo(a.getCodigo()) < 0;
             } else if (field.equalsIgnoreCase("id")) {
                 return (getId().intValue() < a.getId().intValue());
             }
@@ -91,10 +60,8 @@ public class Asignatura {
         case 1: // Descendente
             if (field.equalsIgnoreCase("nombre")) {
                 return getNombre().compareTo(a.getNombre()) > 0;
-            } else if (field.equalsIgnoreCase("fechaInicio")) {
-                return getFechaInicio().compareTo(a.getFechaInicio()) > 0;
-            } else if (field.equalsIgnoreCase("fechaFin")) {
-                return getFechaFin().compareTo(a.getFechaFin()) > 0;
+            } else if (field.equalsIgnoreCase("codigo")) {
+                return getCodigo().compareTo(a.getCodigo()) > 0;
             } else if (field.equalsIgnoreCase("id")) {
                 return (getId().intValue() > a.getId().intValue());
             }
@@ -104,7 +71,21 @@ public class Asignatura {
 }
     @Override
     public String toString() {
-        return nombre;
+        return getNombre();
+    }
+
+    /**
+     * @return the codigo
+     */
+    public String getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * @param codigo the codigo to set
+     */
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
     
 }

@@ -86,9 +86,11 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         btnAdmin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setMinimumSize(new java.awt.Dimension(800, 600));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1280, 720));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(0, 51, 102));
@@ -98,14 +100,14 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 1280, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 12, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 800, 12));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1280, 12));
 
         jPanel3.setBackground(new java.awt.Color(240, 239, 239));
         jPanel3.setFocusCycleRoot(true);
@@ -139,22 +141,22 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 300, 40));
         jPanel3.add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 300, -1));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, 360, 300));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 260, 360, 300));
 
         jLabel4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Servicio de");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 40, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 40, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Autenticación Centralizada");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 70, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 70, -1, -1));
 
-        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/HEADERSGA.png"))); // NOI18N
+        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/BLUEHEADER.png"))); // NOI18N
         HEADER.setAutoscrolls(true);
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
+        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 1280, 170));
 
         btnEstudent.setText("Estudiante");
         btnEstudent.addActionListener(new java.awt.event.ActionListener() {
@@ -162,7 +164,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                 btnEstudentActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEstudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 250, -1, -1));
+        jPanel1.add(btnEstudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 280, -1, -1));
 
         btnDocente.setText("Docente");
         btnDocente.addActionListener(new java.awt.event.ActionListener() {
@@ -170,7 +172,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                 btnDocenteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 280, -1, -1));
+        jPanel1.add(btnDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 310, -1, -1));
 
         btnAdmin.setText("ADMIN");
         btnAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +180,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                 btnAdminActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, -1, -1));
+        jPanel1.add(btnAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 340, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -188,7 +190,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -205,6 +207,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
         // TODO add your handling code here:
         new FrmAdmPrincipal().setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
 
     private void btnDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocenteActionPerformed

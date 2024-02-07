@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
 
-
 public class Utiles {
 
     //CMETODO PARA VALIDAD CEDULAS 
@@ -71,9 +70,6 @@ public class Utiles {
 
     }
 
-
-
-    
     //METODO GETFIELD REALIZADO EN CLASE
     public static Field getField(Class clazz, String atribute) {
         Field field = null;
@@ -93,7 +89,6 @@ public class Utiles {
         return field;
     }
 
-   
     public static Integer encontrarPosicion(String tipoObj, Integer id) {
 
         try {
@@ -152,21 +147,20 @@ public class Utiles {
             return -1;
         }
     }
-    
-    
+
     //METODO PARA TRANSFORMAR UN LOCALDATE A DATE
-    public static LocalDate DateALocal(Date fecha){
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");   
+    public static LocalDate DateALocal(Date fecha) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return LocalDate.parse(dateFormat.format(fecha));
     }
 
     //METODO PARA TRANSFORMAR UN DATE A LOCALDATE   
-    public static Date LocalADate(LocalDate fechaLocal){
+    public static Date LocalADate(LocalDate fechaLocal) {
         return Date.from(fechaLocal.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
-    
+
     //METODO PARA DEVOLVER UN STRING DE UN DECIMAL CON UN FORMATO APTO PARA COMPARAR COMO STRING
-    public static String decimalFormato(Double d){
+    public static String decimalFormato(Double d) {
         try {
 
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -174,20 +168,47 @@ public class Utiles {
         } catch (IllegalArgumentException e) {
 
             System.err.println("Error: Formato inválido.");
-            return ""; 
+            return "";
         }
     }
-    
+
     public static String formaterarFecha(Date date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         return sdf.format(date);
     }
-    
-    public static boolean compararTextoss(String text1, String text2){
+
+    public static boolean compararTextoss(String text1, String text2) {
         return (text1.equals(text2));
-    
+
     }
-    
+
+    public static String generarCodigoAsignatura(String texto, int numero) {
+        StringBuilder codigo = new StringBuilder();
+        
+        // Separar el texto en palabras
+        String[] palabras = texto.split("\\s+");
+        
+        // Si el texto tiene varias palabras
+        if (palabras.length > 1) {
+            for (String palabra : palabras) {
+                // Tomar la primera letra de cada palabra hasta alcanzar una longitud de 5
+                if (codigo.length() < 5) {
+                    codigo.append(Character.toUpperCase(palabra.charAt(0)));
+                } else {
+                    break;
+                }
+            }
+        } else {
+            // Si el texto tiene solo una palabra
+            codigo.append(texto.substring(0, Math.min(texto.length(), 5)).toUpperCase());
+        }
+        
+        // Agregar el número al código
+        codigo.append(numero);
+        
+        return codigo.toString();
+    }
+
 }

@@ -4,13 +4,18 @@
  */
 package vista.admin;
 
+import controlador.clases.CicloControl;
 import controlador.clases.CursaControl;
 import controlador.clases.EstadoMatriculaControl;
 import controlador.clases.EstudianteControl;
 import controlador.clases.MatriculaControl;
+import controlador.clases.PeriodoAcademicoControl;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import vista.modeloTablas.CursaModeloTabla;
 import vista.modeloTablas.MatriculaModeloTabla;
+import vista.modeloTablas.PeriodoAcademicoModeloTabla;
 import vista.utiles.UtilVista;
 
 /**
@@ -21,53 +26,81 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
 
     MatriculaControl matriculaControl = new MatriculaControl();
     MatriculaModeloTabla modelo = new MatriculaModeloTabla();
+    PeriodoAcademicoControl periodoControl = new PeriodoAcademicoControl();
+    PeriodoAcademicoModeloTabla modeloPeriodo = new PeriodoAcademicoModeloTabla();
+    CicloControl cicloControl = new CicloControl();
+    CursaModeloTabla modeloCursa = new CursaModeloTabla();
 
     private Boolean verificar() {
-        return (!(txtNumeroMatricula.getText().trim().isEmpty())
+        return (!(txtCodigo.getText().trim().isEmpty())
                 && !(txtFecha.getDate() == null)
-                && !(cbxCursa.getSelectedIndex() == -1)
+                && !(cbxCiclo.getSelectedIndex() == -1)
                 && !(cbxEstado.getSelectedIndex() == -1)
-                && !(cbxEstudiantes.getSelectedIndex() == -1));
+                && !(cbxEstudiantes.getSelectedIndex() == -1)
+                && !(cbxPeriodos.getSelectedIndex() == -1));
     }
 
     private void cargarTabla() {
         modelo.setMatriculas(matriculaControl.getListaMatriculas());
         tblMatricula.setModel(modelo);
         tblMatricula.updateUI();
+
+        modeloPeriodo.setPeriodos(periodoControl.getListaPeriodos());
+        tblPeriodos.setModel(modeloPeriodo);
+        tblPeriodos.updateUI();
     }
 
     private void cargarCombos() {
         try {
             UtilVista.cargarcomboBoxEstudiante(cbxEstudiantes);
-            UtilVista.cargarcomboBoxCursa(cbxCursa);
+            UtilVista.cargarcomboBoxCiclos(cbxCiclo);
             UtilVista.cargarcomboBoxEstadosMatricula(cbxEstado);
+            UtilVista.cargarcomboBoxPeriodos(cbxPeriodos);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void cargarCursasCiclo() {
+        try {
+
+            cicloControl.setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
+            cicloControl.getCiclo().setCursas(cicloControl.recuperarListaCursas(cicloControl.getCiclo().getId() - 1));
+            modeloCursa.setListaCursos(cicloControl.getCiclo().getCursas());
+            modeloCursa.setVariableColumnas(1);
+            tblCursasCiclo.setModel(modeloCursa);
+            tblCursasCiclo.updateUI();
         } catch (Exception e) {
         }
     }
 
     private void limpiar() {
         txtFecha.setDate(null);
-        txtNumeroMatricula.setText("");
-        cbxCursa.setSelectedIndex(-1);
+        txtCodigo.setText("");
+        cbxCiclo.setSelectedIndex(-1);
         cbxEstado.setSelectedIndex(-1);
         cbxEstudiantes.setSelectedIndex(-1);
+        cbxPeriodos.setSelectedIndex(-1);
 
+        cargarCursasCiclo();
         cargarTabla();
         cargarCombos();
         tblMatricula.clearSelection();
     }
 
     private void guardar() {
+
         if (verificar()) {
             try {
-                matriculaControl.getMatricula().setCursa(new CursaControl().getListaCursas().getInfo(cbxCursa.getSelectedIndex()));
+                matriculaControl.getMatricula().setCursa(new CursaControl().getListaCursas().getInfo(cbxCiclo.getSelectedIndex()));
                 matriculaControl.getMatricula().setEstadoMatricula(cbxEstado.getSelectedItem().toString());
                 matriculaControl.getMatricula().setEstudiante(new EstudianteControl().getListaEstudiantes().getInfo(cbxEstudiantes.getSelectedIndex()));
+                matriculaControl.getMatricula().setIdPeriodoAcademico(cbxPeriodos.getSelectedIndex());
 
             } catch (Exception e) {
             }
             matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
-            matriculaControl.getMatricula().setNumero(Integer.parseInt(txtNumeroMatricula.getText()));
+            matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
             if (matriculaControl.persist()) {
                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
             } else {
@@ -83,7 +116,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     private void modificar() {
         if (verificar()) {
             try {
-                matriculaControl.getMatricula().setCursa(new CursaControl().getListaCursas().getInfo(cbxCursa.getSelectedIndex()));
+                matriculaControl.getMatricula().setCursa(new CursaControl().getListaCursas().getInfo(cbxCiclo.getSelectedIndex()));
             } catch (Exception e) {
             }
             matriculaControl.getMatricula().setEstadoMatricula(cbxEstado.getSelectedItem().toString());
@@ -93,7 +126,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             } catch (Exception e) {
             }
             matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
-            matriculaControl.getMatricula().setNumero(Integer.parseInt(txtNumeroMatricula.getText()));
+            matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
             try {
                 Integer indexMatricula = Utiles.encontrarPosicion("matricula", modelo.getMatriculas().getInfo(tblMatricula.getSelectedRow()).getId());
 
@@ -106,6 +139,9 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             }
             matriculaControl.setMatricula(null);
             limpiar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Llena todo los campos");
+
         }
     }
 
@@ -151,6 +187,28 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         tblMatricula.updateUI();
     }
 
+    private void guardarPeriodoAcademico() {
+        if (!txtyearFin.getText().trim().isEmpty()
+                && !txtyearInicio.getText().trim().isEmpty()) {
+            periodoControl.getPeriodo().setMesFin(cbxMesFin.getSelectedItem().toString());
+            periodoControl.getPeriodo().setMesInicio(cbxMesInicio.getSelectedItem().toString());
+            periodoControl.getPeriodo().setYearInicio(txtyearInicio.getText());
+            periodoControl.getPeriodo().setYearFin(txtyearFin.getText());
+            if (periodoControl.persist()) {
+                JOptionPane.showMessageDialog(null, "Se guardo el periodo academico");
+                limpiar();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No se guardo el periodo academico");
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay suficiente informacion para crear el periodo academico");
+        }
+
+    }
+
     /**
      * Creates new form FrmAdmMatricula
      */
@@ -174,12 +232,12 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         txtBusqueda = new javax.swing.JTextField();
         cbxCriterioOrden = new javax.swing.JComboBox<>();
         cbxCriterioBusqueda = new javax.swing.JComboBox<>();
-        txtNumeroMatricula = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cbxEstado = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        cbxCursa = new javax.swing.JComboBox<>();
+        cbxCiclo = new javax.swing.JComboBox<>();
         txtFecha = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -188,19 +246,38 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         HEADER = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        btnGuardar = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
-        btnBorrar = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
         btnTipoOrden = new javax.swing.JRadioButton();
         btnOrdenar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        cbxPeriodos = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        btnGuardarPeriodo = new javax.swing.JButton();
+        txtyearFin = new javax.swing.JTextField();
+        cbxMesFin = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        cbxMesInicio = new javax.swing.JComboBox<>();
+        txtyearInicio = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblPeriodos = new javax.swing.JTable();
+        btnSalir = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblCursasCiclo = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -233,40 +310,45 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblMatricula);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 460, 200));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, 700, 230));
 
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtBusquedaKeyPressed(evt);
             }
         });
-        jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
+        jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 500, 220, -1));
 
         cbxCriterioOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "DNI", "ID" }));
-        jPanel1.add(cbxCriterioOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 450, 120, -1));
+        jPanel1.add(cbxCriterioOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 540, 120, -1));
 
         cbxCriterioBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FechaRegistro", "EstadoMatricula", "ID" }));
-        jPanel1.add(cbxCriterioBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, 220, -1));
-        jPanel1.add(txtNumeroMatricula, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 60, -1));
+        jPanel1.add(cbxCriterioBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 470, 220, -1));
+        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 140, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Numero:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, 20));
+        jLabel4.setText("Periodo Academico:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, -1, 20));
 
         cbxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PENDIENTE", "APROVADA", "REPROBADA" }));
-        jPanel1.add(cbxEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 160, -1));
+        jPanel1.add(cbxEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 220, -1));
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Estado:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, 20));
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel5.setText("Cursa:");
+        jLabel5.setText("Ciclo");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, 20));
 
-        cbxCursa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbxCursa, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 280, 160, -1));
-        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 290, -1));
+        cbxCiclo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxCiclo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCicloActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cbxCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, 220, -1));
+        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 250, 220, -1));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText("Fecha:");
@@ -277,7 +359,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, 20));
 
         cbxEstudiantes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbxEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 260, -1));
+        jPanel1.add(cbxEstudiantes, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 220, -1));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -285,14 +367,14 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 1280, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 10, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 800, 10));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1280, 10));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
@@ -306,69 +388,20 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jLabel2.setText("MATRÍCULAS");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, -1, -1));
 
-        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/HEADER.jpg"))); // NOI18N
+        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/REDHEADER.png"))); // NOI18N
         HEADER.setText("jLabel7");
         HEADER.setAutoscrolls(true);
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 800, 170));
-
-        jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel13.setText("INGRESO DE DATOS:");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
+        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 1280, 170));
 
         jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel14.setText("INGRESO DE DATOS:");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
 
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
-        btnGuardar.setText("    GUARDAR");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 140, -1));
-
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
-        btnModificar.setText("MODIFICAR");
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 140, -1));
-
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
-        btnBorrar.setText("DAR DE BAJA");
-        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 140, -1));
-
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
-        btnSalir.setText("       SALIR");
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 130, -1));
-
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
-        btnCancelar.setText("CANCELAR");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 130, -1));
-
         btnTipoOrden.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnTipoOrden.setText("Descendente");
         btnTipoOrden.setContentAreaFilled(false);
-        jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 450, 100, -1));
+        jPanel1.add(btnTipoOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 540, 100, -1));
 
         btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconOrdenar.png"))); // NOI18N
         btnOrdenar.setText("ORDENAR");
@@ -377,21 +410,167 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
                 btnOrdenarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnOrdenar, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 490, -1, -1));
+        jPanel1.add(btnOrdenar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 580, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setText("MATRÍCULAS REGISTRADAS EN EL SISTEMA:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, -1, 20));
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/icons8-shuffle-20.png"))); // NOI18N
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 20, 20));
+
+        cbxPeriodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbxPeriodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 180, -1));
+
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel15.setText("INGRESO DE DATOS:");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
+
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel11.setText("Codigo");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, 20));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(new javax.swing.border.MatteBorder(null));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnGuardarPeriodo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
+        btnGuardarPeriodo.setText("GUARDAR PERIODO ACADEMICO");
+        btnGuardarPeriodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarPeriodoActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btnGuardarPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
+        jPanel3.add(txtyearFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 80, -1));
+
+        cbxMesFin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" }));
+        jPanel3.add(cbxMesFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+
+        jLabel17.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel17.setText("MES");
+        jPanel3.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, 20));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel12.setText("AÑO");
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 310, -1, 20));
+
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel9.setText("FIN");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, 20));
+
+        cbxMesInicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" }));
+        jPanel3.add(cbxMesInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        jPanel3.add(txtyearInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 80, -1));
+
+        jLabel18.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel18.setText("AÑO");
+        jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, 20));
+
+        jLabel19.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel19.setText("MES");
+        jPanel3.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, 20));
+
+        jLabel16.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel16.setText("INICIO");
+        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, 20));
+
+        jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel13.setText("NUEVO PERIODO ACADEMICO");
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
+
+        tblPeriodos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblPeriodos);
+
+        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 12, 250, 240));
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 170, 530, 270));
+
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
+        btnSalir.setText("       SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 390, 140, -1));
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
+        btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 340, 140, -1));
+
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
+        btnGuardar.setText("    GUARDAR");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 190, 140, -1));
+
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
+        btnModificar.setText("MODIFICAR");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 240, 140, -1));
+
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
+        btnBorrar.setText("DAR DE BAJA");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 290, 140, -1));
+
+        tblCursasCiclo.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tblCursasCiclo);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 190, 180, 240));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
         );
 
         pack();
@@ -411,7 +590,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             Integer indiceDocente = Utiles.encontrarPosicion("matricula", modelo.getMatriculas().getInfo(tblMatricula.getSelectedRow()).getId());
             matriculaControl.setMatricula(matriculaControl.getListaMatriculas().getInfo(indiceDocente));
             txtFecha.setDate(matriculaControl.getMatricula().getFechaRegistro());
-            txtNumeroMatricula.setText(matriculaControl.getMatricula().getNumero().toString());
+            txtCodigo.setText(matriculaControl.getMatricula().getCodigo().toString());
 //            cbxCursa.setSelectedIndex(Utiles.encontrarPosicion("cursa", new CursaControl().getListaCursas().getInfo(cbxCursa.getSelectedIndex()).getId()));
 //            cbxEstudiantes.setSelectedIndex(Utiles.encontrarPosicion("estudiante", new EstudianteControl().getListaEstudiantes().getInfo(cbxEstudiantes.getSelectedIndex()).getId()));
 //            cbxEstado.setSelectedIndex(Utiles.encontrarPosicion("estadomatricula", new EstadoMatriculaControl().getListaEstados().getInfo(cbxEstado.getSelectedIndex()).getId()));
@@ -470,6 +649,25 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnOrdenarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //txtCodigo.setText(Utiles.generarCodigoAsignatura(txt, ERROR));
+
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnGuardarPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarPeriodoActionPerformed
+        // TODO add your handling code here:
+        try {
+            guardarPeriodoAcademico();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnGuardarPeriodoActionPerformed
+
+    private void cbxCicloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCicloActionPerformed
+        // TODO add your handling code here:
+        cargarCursasCiclo();
+    }//GEN-LAST:event_cbxCicloActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -510,18 +708,30 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnGuardarPeriodo;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnOrdenar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JRadioButton btnTipoOrden;
+    private javax.swing.JComboBox<String> cbxCiclo;
     private javax.swing.JComboBox<String> cbxCriterioBusqueda;
     private javax.swing.JComboBox<String> cbxCriterioOrden;
-    private javax.swing.JComboBox<String> cbxCursa;
     private javax.swing.JComboBox<String> cbxEstado;
     private javax.swing.JComboBox<String> cbxEstudiantes;
+    private javax.swing.JComboBox<String> cbxMesFin;
+    private javax.swing.JComboBox<String> cbxMesInicio;
+    private javax.swing.JComboBox<String> cbxPeriodos;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -529,12 +739,20 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable tblCursasCiclo;
     private javax.swing.JTable tblMatricula;
+    private javax.swing.JTable tblPeriodos;
     private javax.swing.JTextField txtBusqueda;
+    private javax.swing.JTextField txtCodigo;
     private com.toedter.calendar.JDateChooser txtFecha;
-    private javax.swing.JTextField txtNumeroMatricula;
+    private javax.swing.JTextField txtyearFin;
+    private javax.swing.JTextField txtyearInicio;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,13 +13,14 @@ import java.util.Date;
 public class Matricula {
 
     private Date fechaRegistro;
-    private Integer numero;
+    private Integer codigo;
     private Integer id;
 //    private Integer id_cursa;
     private Cursa cursa;
     //private Integer id_estudiante;
     private Estudiante estudiante;
     private String estadoMatricula;
+    private Integer idPeriodoAcademico;
 
     public Matricula() {
     }
@@ -39,19 +40,6 @@ public class Matricula {
         this.fechaRegistro = fechaRegistro;
     }
 
-    /**
-     * @return the numero
-     */
-    public Integer getNumero() {
-        return numero;
-    }
-
-    /**
-     * @param numero the numero to set
-     */
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
 
     /**
      * @return the id
@@ -66,16 +54,72 @@ public class Matricula {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
-    }
-
     
+    
+
+    public Boolean compare(Matricula p, String field, Integer type){
+        switch (type) {
+            case 0:
+        if(field.equalsIgnoreCase("ciclo")){
+            return getCursa().getCiclo().toString().compareTo(p.getCursa().getCiclo().toString()) < 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return getEstudiante().getNombre().compareTo(p.getEstudiante().getNombre()) < 0;
+        }else if(field.equalsIgnoreCase("fecharegistro")){
+            return getFechaRegistro().compareTo(p.getFechaRegistro()) < 0;
+        }else if(field.equalsIgnoreCase("apellido")){
+            return getEstudiante().getApellido().compareTo(p.getEstudiante().getApellido()) < 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (getId().intValue() < p.getId().intValue());
+        }
+            case 1:
+        if(field.equalsIgnoreCase("ciclo")){
+            return getCursa().getCiclo().toString().compareTo(p.getCursa().getCiclo().toString()) > 0;
+        }else if(field.equalsIgnoreCase("nombre")){
+            return getEstudiante().getNombre().compareTo(p.getEstudiante().getNombre()) > 0;
+        }else if(field.equalsIgnoreCase("fecharegistro")){
+            return getFechaRegistro().compareTo(p.getFechaRegistro()) > 0;
+        }else if(field.equalsIgnoreCase("apellido")){
+            return getEstudiante().getApellido().compareTo(p.getEstudiante().getApellido()) > 0;
+        }else if(field.equalsIgnoreCase("id")){
+            return (getId().intValue() < p.getId().intValue());
+        }
+        
+        default:
+        return null;
+
+        }
+    }      
+
+    /**
+     * @return the codigo
+     */
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * @param codigo the codigo to set
+     */
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    /**
+     * @return the idPeriodoAcademico
+     */
+    public Integer getIdPeriodoAcademico() {
+        return idPeriodoAcademico;
+    }
+
+    /**
+     * @param idPeriodoAcademico the idPeriodoAcademico to set
+     */
+    public void setIdPeriodoAcademico(Integer idPeriodoAcademico) {
+        this.idPeriodoAcademico = idPeriodoAcademico;
+    }
+
+
+
     /**
      * @return the estadoMatricula
      */
@@ -90,45 +134,31 @@ public class Matricula {
         this.estadoMatricula = estadoMatricula;
     }
 
+    /**
+     * @return the cursa
+     */
     public Cursa getCursa() {
         return cursa;
     }
 
+    /**
+     * @param cursa the cursa to set
+     */
     public void setCursa(Cursa cursa) {
         this.cursa = cursa;
     }
 
+    /**
+     * @return the estudiante
+     */
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
 
-    public Boolean compare(Matricula p, String field, Integer type){
-        switch (type) {
-            case 0:
-        if(field.equalsIgnoreCase("apellido")){
-            return estudiante.getApellido().compareTo(p.getEstudiante().getApellido()) < 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) < 0;
-        }else if(field.equalsIgnoreCase("fecharegistro")){
-            return fechaRegistro.compareTo(p.getFechaRegistro()) < 0;
-        }else if(field.equalsIgnoreCase("estadomatricula")){
-            return estadoMatricula.compareTo(p.getEstadoMatricula()) < 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
-        }
-            case 1:
-        if(field.equalsIgnoreCase("apellido")){
-            return estudiante.getApellido().compareTo(p.getEstudiante().getApellido()) > 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) > 0;
-        }else if(field.equalsIgnoreCase("fecharegistro")){
-            return fechaRegistro.compareTo(p.getFechaRegistro()) > 0;
-        }else if(field.equalsIgnoreCase("estadomatricula")){
-            return estadoMatricula.compareTo(p.getEstadoMatricula()) > 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() > p.getId().intValue());
-        } 
-        
-        default:
-        return null;
-
-        }
-    }      
+    /**
+     * @param estudiante the estudiante to set
+     */
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
 }
