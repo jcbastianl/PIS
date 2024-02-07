@@ -17,6 +17,7 @@ public class Persona {
     private String telefono;
     private Boolean isExtranjero;
     private Integer rol;
+    private Integer cuenta;
 
     public Persona() {
     }
@@ -113,5 +114,19 @@ public class Persona {
      */
     public void setRol(Integer rol) {
         this.rol = rol;
+    }
+
+    /**
+     * @return the cuenta
+     */
+    public Integer getCuenta() {
+        return cuenta;
+    }
+
+    /**
+     * @param cuenta the cuenta to set
+     */
+    public void setCuenta(Integer cuenta) {
+        this.cuenta = cuenta;
     }
 }

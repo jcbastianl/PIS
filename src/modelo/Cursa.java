@@ -5,7 +5,7 @@
 package modelo;
 
 import controlador.TDA.listas.DynamicList;
-import controlador.TDA.listas.Node;
+import controlador.clases.CicloControl;
 import java.util.Date;
 
 /**
@@ -15,13 +15,12 @@ import java.util.Date;
 public class Cursa {
 
     private Integer id;
-    private Ciclo ciclo;
+    private Integer ciclo;
     private Docente docente;
     private Asignatura asignatura;
     private DynamicList<Matricula> matriculas;
     private Date fechaInicio;
     private Date fechaFin;
-
 
     public Cursa() {
     }
@@ -73,14 +72,23 @@ public class Cursa {
 
     @Override
     public String toString() {
-        return getAsignatura() +" "+getCiclo().toString();
-    }
+        try {
+            return getAsignatura() + " " + new CicloControl().getCiclos().getInfo(getCiclo()).toString();
 
+        } catch (Exception e) {
+            System.out.println("error desde modelo cursa " + e.getMessage());
+            return "algo malo paso";
+        }
+
+    }
 
     /**
      * @return the matriculas
      */
     public DynamicList<Matricula> getMatriculas() {
+        if (matriculas == null) {
+            matriculas = new DynamicList<>();
+        }
         return matriculas;
     }
 
@@ -122,14 +130,14 @@ public class Cursa {
     /**
      * @return the ciclo
      */
-    public Ciclo getCiclo() {
+    public Integer getCiclo() {
         return ciclo;
     }
 
     /**
      * @param ciclo the ciclo to set
      */
-    public void setCiclo(Ciclo ciclo) {
+    public void setCiclo(Integer ciclo) {
         this.ciclo = ciclo;
     }
 
@@ -146,5 +154,5 @@ public class Cursa {
     public void setAsignatura(Asignatura asignatura) {
         this.asignatura = asignatura;
     }
-    
+
 }

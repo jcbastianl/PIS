@@ -6,13 +6,11 @@ package vista.admin;
 
 import controlador.clases.CicloControl;
 import controlador.clases.CursaControl;
-import controlador.clases.EstadoMatriculaControl;
 import controlador.clases.EstudianteControl;
 import controlador.clases.MatriculaControl;
 import controlador.clases.PeriodoAcademicoControl;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import vista.modeloTablas.CursaModeloTabla;
 import vista.modeloTablas.MatriculaModeloTabla;
 import vista.modeloTablas.PeriodoAcademicoModeloTabla;
@@ -29,7 +27,9 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     PeriodoAcademicoControl periodoControl = new PeriodoAcademicoControl();
     PeriodoAcademicoModeloTabla modeloPeriodo = new PeriodoAcademicoModeloTabla();
     CicloControl cicloControl = new CicloControl();
+    CursaControl cursaControl = new CursaControl();
     CursaModeloTabla modeloCursa = new CursaModeloTabla();
+    EstudianteControl estudianteControl = new EstudianteControl();
 
     private Boolean verificar() {
         return (!(txtCodigo.getText().trim().isEmpty())
@@ -88,13 +88,13 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         tblMatricula.clearSelection();
     }
 
-    private void guardar() {
-
+    private void guardar(Integer indexCursa, Integer indexEstudiante) throws Exception {
+        estudianteControl.setEstudiante(estudianteControl.getListaEstudiantes().getInfo(indexEstudiante));
         if (verificar()) {
             try {
-                matriculaControl.getMatricula().setCursa(new CursaControl().getListaCursas().getInfo(cbxCiclo.getSelectedIndex()));
+                matriculaControl.getMatricula().setCursa(indexCursa);
                 matriculaControl.getMatricula().setEstadoMatricula(cbxEstado.getSelectedItem().toString());
-                matriculaControl.getMatricula().setEstudiante(new EstudianteControl().getListaEstudiantes().getInfo(cbxEstudiantes.getSelectedIndex()));
+                matriculaControl.getMatricula().setEstudiante(indexEstudiante);
                 matriculaControl.getMatricula().setIdPeriodoAcademico(cbxPeriodos.getSelectedIndex());
 
             } catch (Exception e) {
@@ -102,29 +102,44 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
             matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
             if (matriculaControl.persist()) {
+                try {
+
+                    estudianteControl.getEstudiante().setMatriculas(estudianteControl.recuperarListaMatriculas(indexEstudiante));
+                    estudianteControl.getEstudiante().getMatriculas().add(matriculaControl.getMatricula());
+                    estudianteControl.merge(estudianteControl.getEstudiante(), indexEstudiante);
+                } catch (Exception e) {
+                    System.out.println("metiendo en estudiante " + e.getMessage());
+                }
+
+                try {
+                    cursaControl.setCursa(cursaControl.getListaCursas().getInfo(matriculaControl.getMatricula().getCursa()));
+                    cursaControl.getCursa().setMatriculas(cursaControl.recuperarListaMatriculas(indexCursa));
+                    cursaControl.getCursa().getMatriculas().add(matriculaControl.getMatricula());
+                    cursaControl.merge(cursaControl.getCursa(), indexCursa);
+                } catch (Exception e) {
+                    System.out.println("metiendo en cursa " + e.getMessage());
+                }
+
                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
             } else {
                 JOptionPane.showMessageDialog(null, "No se pudo guardar");
             }
             matriculaControl.setMatricula(null);
-            limpiar();
         } else {
             JOptionPane.showMessageDialog(null, "Llena todos los campos");
         }
     }
 
-    private void modificar() {
+    private void modificar() throws Exception {
+
+        matriculaControl.setMatricula(matriculaControl.getListaMatriculas().getInfo(tblMatricula.getSelectedRow()));
         if (verificar()) {
             try {
-                matriculaControl.getMatricula().setCursa(new CursaControl().getListaCursas().getInfo(cbxCiclo.getSelectedIndex()));
+                matriculaControl.getMatricula().setCursa(cbxCiclo.getSelectedIndex());
             } catch (Exception e) {
             }
             matriculaControl.getMatricula().setEstadoMatricula(cbxEstado.getSelectedItem().toString());
-            try {
-                matriculaControl.getMatricula().setEstudiante(new EstudianteControl().getListaEstudiantes().getInfo(cbxEstudiantes.getSelectedIndex()));
-
-            } catch (Exception e) {
-            }
+            matriculaControl.getMatricula().setEstudiante(cbxEstudiantes.getSelectedIndex());
             matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
             matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
             try {
@@ -148,13 +163,38 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     public void borrar() {
         if (tblMatricula.getSelectedRow() > -1) {
             try {
-
                 Integer indexMatricula = Utiles.encontrarPosicion("matricula", modelo.getMatriculas().getInfo(tblMatricula.getSelectedRow()).getId());
+
+                matriculaControl.setMatricula(matriculaControl.getListaMatriculas().getInfo(indexMatricula));
+
+                try {
+
+                    cursaControl.setCursa(cursaControl.getListaCursas().getInfo(matriculaControl.getMatricula().getCursa()));
+                    cursaControl.getCursa().getMatriculas().remove(tblMatricula.getSelectedRow());
+                    cursaControl.merge(cursaControl.getCursa(), matriculaControl.getMatricula().getCursa());
+                    cursaControl.setCursa(null);
+                } catch (Exception e) {
+                    System.out.println("carajo cursa" + e.getMessage());
+                    dispose();
+                }
+
+                try {
+
+                    estudianteControl.setEstudiante(estudianteControl.getListaEstudiantes().getInfo(matriculaControl.getMatricula().getEstudiante()));
+                    estudianteControl.getEstudiante().getMatriculas().remove(tblMatricula.getSelectedRow());
+                    estudianteControl.merge(estudianteControl.getEstudiante(), matriculaControl.getMatricula().getEstudiante());
+                    estudianteControl.setEstudiante(null);
+                } catch (Exception e) {
+                    System.out.println("carajo estudiante" + e.getMessage());
+                    dispose();
+                }
                 if (matriculaControl.remove(indexMatricula)) {
+                    limpiar();
                     JOptionPane.showMessageDialog(null, "Se eliminaron los elementos");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se elimin[o nada");
                 }
+
             } catch (Exception e) {
             }
         } else {
@@ -606,10 +646,14 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+
         try {
-            guardar();
+            for (int i = 0; i < cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()).getCursas().getLenght(); i++) {
+                guardar(i, cbxEstudiantes.getSelectedIndex());
+            }
         } catch (Exception e) {
         }
+        limpiar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed

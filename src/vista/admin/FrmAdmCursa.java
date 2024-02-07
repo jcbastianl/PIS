@@ -76,7 +76,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 cursaControl.getCursa().setFechaInicio(txtFechaInicio.getDate());
                 cursaControl.getCursa().setAsignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()));
                 cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));
-                cursaControl.getCursa().setCiclo(cicloControl.getCiclo());
+                cursaControl.getCursa().setCiclo(cbxCiclo.getSelectedIndex());
             } catch (Exception e) {
 
             }
@@ -110,7 +110,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 cursaControl.getCursa().setFechaInicio(txtFechaInicio.getDate());
                 cursaControl.getCursa().setAsignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()));
                 cursaControl.getCursa().setDocente(new DocenteControl().getListaDocentes().getInfo(cbxDocente.getSelectedIndex()));
-                cursaControl.getCursa().setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
+                cursaControl.getCursa().setCiclo(cbxCiclo.getSelectedIndex());
             } catch (Exception e) {
             }
 
@@ -461,13 +461,13 @@ public class FrmAdmCursa extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel10.setText("Ciclo:");
-        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, 20));
-        jPanel3.add(txtCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 180, -1));
-        jPanel3.add(txtLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 180, -1));
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, 20));
+        jPanel3.add(txtCiclo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 180, -1));
+        jPanel3.add(txtLetra, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 180, -1));
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Paralelo");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, 20));
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, 20));
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel13.setText("CREAR UN CICLO");
@@ -547,7 +547,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
             cursaControl.setCursa(modelo.getListaCursos().getInfo(tblCursa.getSelectedRow()));
             txtFechaFin.setDate(cursaControl.getCursa().getFechaFin());
             txtFechaInicio.setDate(cursaControl.getCursa().getFechaInicio());
-            cbxCiclo.setSelectedIndex(cursaControl.getCursa().getCiclo().getId() - 1);
+            cbxCiclo.setSelectedIndex(cursaControl.getCursa().getCiclo());
             cbxAsignatura.setSelectedIndex(cursaControl.getCursa().getAsignatura().getId() - 1);
             cbxDocente.setSelectedIndex(cursaControl.getCursa().getDocente().getId() - 1);
             cbxCiclo.setEnabled(false);

@@ -102,6 +102,9 @@ public class Estudiante extends Persona {
      * @return the matriculas
      */
     public DynamicList<Matricula> getMatriculas() {
+        if (matriculas == null) {
+            matriculas = new DynamicList<>();
+        }
         return matriculas;
     }
 

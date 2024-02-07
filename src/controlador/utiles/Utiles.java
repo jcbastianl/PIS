@@ -17,9 +17,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Random;
-import java.util.function.Function;
-
 public class Utiles {
 
     //CMETODO PARA VALIDAD CEDULAS 
@@ -148,16 +145,6 @@ public class Utiles {
         }
     }
 
-    //METODO PARA TRANSFORMAR UN LOCALDATE A DATE
-    public static LocalDate DateALocal(Date fecha) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return LocalDate.parse(dateFormat.format(fecha));
-    }
-
-    //METODO PARA TRANSFORMAR UN DATE A LOCALDATE   
-    public static Date LocalADate(LocalDate fechaLocal) {
-        return Date.from(fechaLocal.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
 
     //METODO PARA DEVOLVER UN STRING DE UN DECIMAL CON UN FORMATO APTO PARA COMPARAR COMO STRING
     public static String decimalFormato(Double d) {
@@ -172,6 +159,7 @@ public class Utiles {
         }
     }
 
+    //APLICAR UN FORMATO A UN TIPO DATE PARA REPRESENTARSE GRAFICAMENTE
     public static String formaterarFecha(Date date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -179,11 +167,13 @@ public class Utiles {
         return sdf.format(date);
     }
 
+    //VERIFICAR QUE DOS TEXTOS SEAN IDENTICOS
     public static boolean compararTextoss(String text1, String text2) {
         return (text1.equals(text2));
 
     }
 
+    //GENERAR UN CODIGO EN BASE A UN TEXTO Y UN NUMERO
     public static String generarCodigoAsignatura(String texto, int numero) {
         StringBuilder codigo = new StringBuilder();
         
@@ -209,6 +199,11 @@ public class Utiles {
         codigo.append(numero);
         
         return codigo.toString();
+    }
+    
+    //GENERAR USUARIO
+    public static String crearNombreUser(String nombre, String apellido){
+        return nombre.toLowerCase()+""+apellido.toLowerCase();
     }
 
 }

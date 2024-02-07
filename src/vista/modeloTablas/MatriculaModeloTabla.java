@@ -6,8 +6,12 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.clases.CursaControl;
+import controlador.clases.EstudianteControl;
 import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
+import modelo.Cursa;
+import modelo.Estudiante;
 import modelo.Matricula;
 
 /**
@@ -32,11 +36,14 @@ public class MatriculaModeloTabla extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             Matricula d = getMatriculas().getInfo(rowIndex);
+            Estudiante e = new EstudianteControl().getListaEstudiantes().getInfo(d.getEstudiante());
+            Cursa c = new CursaControl().getListaCursas().getInfo(d.getCursa());
+            
             switch (columnIndex) {
                 case 0:
-                    return (d != null) ? d.getEstudiante().getNombre() +" "+d.getEstudiante().getApellido() : " ";
+                    return (d != null) ? e.getNombre() +" "+e.getApellido() : " ";
                 case 1:
-                    return (d != null) ? d.getCursa().getCiclo().toString() : " ";
+                    return (d != null) ? c.toString() : " ";
                 case 2:
                     return (d != null) ? d.getCodigo(): " ";
                 case 3:

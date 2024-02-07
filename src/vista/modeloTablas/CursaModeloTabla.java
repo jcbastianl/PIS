@@ -6,8 +6,10 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.clases.CicloControl;
 import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
+import modelo.Ciclo;
 import modelo.Cursa;
 
 /**
@@ -33,11 +35,12 @@ public class CursaModeloTabla extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             Cursa d = getListaCursos().getInfo(rowIndex);
+            Ciclo cc = new CicloControl().getCiclos().getInfo(d.getCiclo());
             switch (columnIndex) {
                 case 0:
                     return (d != null) ? d.getAsignatura().getNombre() : " ";
                 case 1:
-                    return (d != null) ? d.getCiclo().getCiclo()+""+d.getCiclo().getParalelo()  : " ";
+                    return (d != null) ? cc.getCiclo()+""+cc.getParalelo()  : " ";
                 case 2:
                     return (d != null) ? d.getDocente().getNombre() +" "+d.getDocente().getApellido() : " ";
                 case 3:

@@ -29,8 +29,11 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
                 && !txtColegio.getText().trim().isEmpty()
                 && !txtProvincia.getText().trim().isEmpty()
                 && !txtTelefono.getText().trim().isEmpty()
-                && !(txtDni.getText().trim().isEmpty())
-                && !(txtCorreo.getText().trim().isEmpty())
+                && !(txtDni.getText().trim().isEmpty()));
+    }
+
+    private Boolean verificarDatosCuenta() {
+        return (!(txtCorreo.getText().trim().isEmpty())
                 && !(txtClaveUno.getText().trim().isEmpty())
                 && !(txtClaveDos.getText().trim().isEmpty()));
     }
@@ -66,28 +69,34 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
             estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
             estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
             estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
+            estudianteControl.getEstudiante().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
             cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
             if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
                 cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
                 cuentaControl.getCuenta().setPersona(estudianteControl.getEstudiante());
                 cuentaControl.getCuenta().setEstado(true);
-                if (estudianteControl.persist()) {
-                    limpiar();
-                    JOptionPane.showMessageDialog(null, "Guardado Exitoso");
-                    if (cuentaControl.persist()) {
-                        JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                if (verificarDatosCuenta()) {
+                    if (estudianteControl.persist()) {
+
+                        if (cuentaControl.persist()) {
+                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al registrarse");
+                        }
+
+                        limpiar();
+                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Error al registrarse");
+                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Las claves no coinciden");
             }
 
             estudianteControl.setEstudiante(null);
-            
 
         } else {
             JOptionPane.showMessageDialog(null, "Rellena todos los campos");
@@ -123,10 +132,11 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
     private void borrar() {
         try {
-            Integer indiceDocente = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
+            Integer indiceEstudiante = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
 
             if (tblEstudiante.getSelectedRow() > -1) {
-                if (estudianteControl.remove(indiceDocente)) {
+                new CuentaControl().remove(estudianteControl.getListaEstudiantes().getInfo(indiceEstudiante).getCuenta());
+                if (estudianteControl.remove(indiceEstudiante)) {
                     JOptionPane.showMessageDialog(null, "Se borro el elemento");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
@@ -243,7 +253,22 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 230, -1));
+
+        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 230, -1));
+
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 230, -1));
 
         jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -419,6 +444,11 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
                 txtClaveUnoActionPerformed(evt);
             }
         });
+        txtClaveUno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtClaveUnoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtClaveUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 290, 230, -1));
 
         txtClaveDos.addActionListener(new java.awt.event.ActionListener() {
@@ -483,6 +513,9 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         txtApellido.setText(estudianteControl.getEstudiante().getApellido());
         txtNombre.setText(estudianteControl.getEstudiante().getNombre());
         txtDni.setText(estudianteControl.getEstudiante().getDni());
+        txtTelefono.setText(estudianteControl.getEstudiante().getTelefono());
+        txtProvincia.setText(estudianteControl.getEstudiante().getProvinciaOrigen());
+        txtColegio.setText(estudianteControl.getEstudiante().getColegioProcedencia());
 
     }//GEN-LAST:event_tblEstudianteMouseClicked
 
@@ -502,9 +535,18 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxCriterioBusquedaActionPerformed
 
+    public void generarUser() {
+        txtCorreo.setText(Utiles.crearNombreUser(txtNombre.getText(), txtApellido.getText()));
+
+    }
+
+    public void rellenarClaves() {
+        txtClaveUno.setText(txtDni.getText());
+        txtClaveDos.setText(txtClaveUno.getText());
+    }
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-
+        generarUser();
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
@@ -562,6 +604,25 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     private void btnEstadoExtranjeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadoExtranjeroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEstadoExtranjeroActionPerformed
+
+    private void txtApellidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtApellidoKeyPressed
+
+    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
+        // TODO add your handling code here:
+        generarUser();
+    }//GEN-LAST:event_txtApellidoKeyTyped
+
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        rellenarClaves();
+    }//GEN-LAST:event_txtDniKeyTyped
+
+    private void txtClaveUnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClaveUnoKeyTyped
+        // TODO add your handling code here:
+        txtClaveDos.setText(txtClaveUno.getText());
+    }//GEN-LAST:event_txtClaveUnoKeyTyped
 
     /**
      * @param args the command line arguments
