@@ -14,7 +14,6 @@ public class Estudiante extends Persona {
 
     private String colegioProcedencia;
     private String provinciaOrigen;
-    private DynamicList<Matricula>matriculas;
     private Integer id;
 
 
@@ -98,17 +97,5 @@ public class Estudiante extends Persona {
         return getNombre()+" "+getApellido();
     }    
 
-    /**
-     * @return the matriculas
-     */
-    public DynamicList<Matricula> getMatriculas() {
-        return matriculas;
-    }
-
-    /**
-     * @param matriculas the matriculas to set
-     */
-    public void setMatriculas(DynamicList<Matricula> matriculas) {
-        this.matriculas = matriculas;
-    }
+   
 }

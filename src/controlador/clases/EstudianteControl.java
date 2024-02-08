@@ -136,8 +136,5 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
         }
     }    
     
-        public DynamicList<Matricula>recuperarListaMatriculas(int id) throws Exception{
-        return all().getInfo(id).getMatriculas();
-    }
 }
 

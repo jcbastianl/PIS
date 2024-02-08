@@ -1,1 +1,0 @@
-{"controlador.TDA.listas.DynamicList":{"header":{"info":{"@class":"modelo.EstadoMatricula","id":1,"nombre":"PENDIENTE"},"next":{"info":{"@class":"modelo.EstadoMatricula","id":2,"nombre":"APROBADO"},"next":{"info":{"@class":"modelo.EstadoMatricula","id":3,"nombre":"REPROBADO"}}}},"last":{"@reference":"..\/header\/next\/next"},"lenght":3}}

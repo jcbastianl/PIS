@@ -4,21 +4,19 @@
  */
 package controlador.utiles;
 
+import controlador.TDA.listas.DynamicList;
 import controlador.clases.AsignaturaControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
-import controlador.clases.EstadoMatriculaControl;
 import controlador.clases.EstudianteControl;
 import controlador.clases.MatriculaControl;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Random;
-import java.util.function.Function;
+import modelo.Cursa;
+import modelo.Matricula;
 
 public class Utiles {
 
@@ -123,14 +121,6 @@ public class Utiles {
                             return i;
                         }
                     }
-                case "estadomatricula":
-                    EstadoMatriculaControl emc = new EstadoMatriculaControl();
-                    for (int i = 0; i < emc.all().getLenght(); i++) {
-                        if (Objects.equals(emc.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
-                    break;
                 case "asignatura":
                     AsignaturaControl ac = new AsignaturaControl();
                     for (int i = 0; i < ac.all().getLenght(); i++) {
@@ -148,17 +138,6 @@ public class Utiles {
         }
     }
 
-    //METODO PARA TRANSFORMAR UN LOCALDATE A DATE
-    public static LocalDate DateALocal(Date fecha) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return LocalDate.parse(dateFormat.format(fecha));
-    }
-
-    //METODO PARA TRANSFORMAR UN DATE A LOCALDATE   
-    public static Date LocalADate(LocalDate fechaLocal) {
-        return Date.from(fechaLocal.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    }
-
     //METODO PARA DEVOLVER UN STRING DE UN DECIMAL CON UN FORMATO APTO PARA COMPARAR COMO STRING
     public static String decimalFormato(Double d) {
         try {
@@ -172,6 +151,7 @@ public class Utiles {
         }
     }
 
+    //APLICAR UN FORMATO A UN TIPO DATE PARA REPRESENTARSE GRAFICAMENTE
     public static String formaterarFecha(Date date) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -179,17 +159,19 @@ public class Utiles {
         return sdf.format(date);
     }
 
+    //VERIFICAR QUE DOS TEXTOS SEAN IDENTICOS
     public static boolean compararTextoss(String text1, String text2) {
         return (text1.equals(text2));
 
     }
 
+    //GENERAR UN CODIGO EN BASE A UN TEXTO Y UN NUMERO
     public static String generarCodigoAsignatura(String texto, int numero) {
         StringBuilder codigo = new StringBuilder();
-        
+
         // Separar el texto en palabras
         String[] palabras = texto.split("\\s+");
-        
+
         // Si el texto tiene varias palabras
         if (palabras.length > 1) {
             for (String palabra : palabras) {
@@ -204,11 +186,60 @@ public class Utiles {
             // Si el texto tiene solo una palabra
             codigo.append(texto.substring(0, Math.min(texto.length(), 5)).toUpperCase());
         }
-        
+
         // Agregar el número al código
         codigo.append(numero);
-        
+
         return codigo.toString();
     }
 
+    //GENERAR USUARIO
+    public static String crearNombreUser(String nombre, String apellido) {
+        return nombre.toLowerCase() + "" + apellido.toLowerCase();
+    }
+
+    public static Integer encontrarIndexSegunLista(DynamicList<Matricula> lista, Integer idBuscar) throws Exception{
+        for (int i = 0; i < lista.getLenght(); i++) {
+            if (Objects.equals(lista.getInfo(i).getId(), idBuscar)) {
+                return i;
+            }
+        }
+        return null;
+    }
+    
+    public static Boolean identificarEstado(Integer i){
+        if (i == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public static String traducirEstadoString(Boolean i){
+        if (i) {
+            return "APROBADO";
+        } else {
+            return "CANCELADO";
+        }
+    }
+    
+    public static Integer traducirEstadoIndice(Boolean i){
+        if (i) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+    
+    public static DynamicList<Cursa> identificarCursas(int u) throws Exception{
+        CursaControl cc = new CursaControl();
+        DynamicList<Cursa>aux = new DynamicList<>();
+        for (int i = 0; i < cc.all().getLenght(); i++) {
+            if (cc.all().getInfo(i).getCiclo() == u) {
+                aux.add(cc.all().getInfo(i));
+            }
+        }
+        return aux;
+    }
+    
 }

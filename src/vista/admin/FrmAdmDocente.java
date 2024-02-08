@@ -26,11 +26,14 @@ public class FrmAdmDocente extends javax.swing.JFrame {
                 && !(txtNombre.getText().trim().isEmpty())
                 && !(txtDni.getText().trim().isEmpty())
                 && !(txtTitulo.getText().trim().isEmpty())
-                && !(txtCorreo.getText().trim().isEmpty())
-                && !(txtClaveUno.getText().trim().isEmpty())
-                && !(txtClaveDos.getText().trim().isEmpty())
                 && !txtTelefono.getText().trim().isEmpty()
                 && !txtPreparacion.getText().trim().isEmpty());
+    }
+
+    private Boolean verificarDatosCuenta() {
+        return (!(txtCorreo.getText().trim().isEmpty())
+                && !(txtClaveUno.getText().trim().isEmpty())
+                && !(txtClaveDos.getText().trim().isEmpty()));
     }
 
     public void cargarTabla() {
@@ -64,21 +67,27 @@ public class FrmAdmDocente extends javax.swing.JFrame {
             docenteControl.getDocente().setRol(0);
             docenteControl.getDocente().setTelefono(txtTelefono.getText());
             docenteControl.getDocente().setPreparacion(txtPreparacion.getText());
+            docenteControl.getDocente().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
             cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
             if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
                 cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
                 cuentaControl.getCuenta().setPersona(docenteControl.getDocente());
                 cuentaControl.getCuenta().setEstado(true);
-                if (docenteControl.persist()) {
-                    limpiar();
-                    JOptionPane.showMessageDialog(null, "Guardado Exitoso");
-                    if (cuentaControl.persist()) {
-                        JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                if (verificarDatosCuenta()) {
+                    if (docenteControl.persist()) {
+                        if (cuentaControl.persist()) {
+                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al registrarse");
+                        }
+
+                        limpiar();
+                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Error al registrarse");
+                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Las claves no coinciden");
@@ -124,8 +133,10 @@ public class FrmAdmDocente extends javax.swing.JFrame {
             Integer indiceDocente = Utiles.encontrarPosicion("docente", modelo.getDocentes().getInfo(tblDocente.getSelectedRow()).getId());
 
             if (tblDocente.getSelectedRow() > -1) {
+                new CuentaControl().remove(docenteControl.getListaDocentes().getInfo(indiceDocente).getCuenta());
                 if (docenteControl.remove(indiceDocente)) {
                     JOptionPane.showMessageDialog(null, "Se borro el elemento");
+
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
                 }
@@ -167,6 +178,16 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     public FrmAdmDocente() {
         initComponents();
         limpiar();
+    }
+
+    public void generarUser() {
+        txtCorreo.setText(Utiles.crearNombreUser(txtNombre.getText(), txtApellido.getText()));
+
+    }
+
+    public void rellenarClaves() {
+        txtClaveUno.setText(txtDni.getText());
+        txtClaveDos.setText(txtClaveUno.getText());
     }
 
     /**
@@ -238,8 +259,26 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         jLabel5.setText("Titulo:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, 20));
         jPanel1.add(txtTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 220, -1));
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 220, -1));
+
+        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 220, -1));
+
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, 220, -1));
 
         jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -364,6 +403,11 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         txtClaveUno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtClaveUnoActionPerformed(evt);
+            }
+        });
+        txtClaveUno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtClaveUnoKeyTyped(evt);
             }
         });
         jPanel1.add(txtClaveUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 290, 230, -1));
@@ -546,6 +590,25 @@ public class FrmAdmDocente extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        rellenarClaves();
+    }//GEN-LAST:event_txtDniKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        generarUser();
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
+        generarUser();
+    }//GEN-LAST:event_txtApellidoKeyTyped
+
+    private void txtClaveUnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClaveUnoKeyTyped
+        // TODO add your handling code here:
+        txtClaveDos.setText(txtClaveUno.getText());
+    }//GEN-LAST:event_txtClaveUnoKeyTyped
 
     /**
      * @param args the command line arguments

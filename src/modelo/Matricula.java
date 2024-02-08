@@ -15,11 +15,9 @@ public class Matricula {
     private Date fechaRegistro;
     private Integer codigo;
     private Integer id;
-//    private Integer id_cursa;
-    private Cursa cursa;
-    //private Integer id_estudiante;
-    private Estudiante estudiante;
-    private String estadoMatricula;
+    private Integer cursa;
+    private Integer estudiante;
+    private Boolean estadoMatricula;
     private Integer idPeriodoAcademico;
 
     public Matricula() {
@@ -60,26 +58,14 @@ public class Matricula {
     public Boolean compare(Matricula p, String field, Integer type){
         switch (type) {
             case 0:
-        if(field.equalsIgnoreCase("ciclo")){
-            return getCursa().getCiclo().toString().compareTo(p.getCursa().getCiclo().toString()) < 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getEstudiante().getNombre().compareTo(p.getEstudiante().getNombre()) < 0;
-        }else if(field.equalsIgnoreCase("fecharegistro")){
+        if(field.equalsIgnoreCase("fecharegistro")){
             return getFechaRegistro().compareTo(p.getFechaRegistro()) < 0;
-        }else if(field.equalsIgnoreCase("apellido")){
-            return getEstudiante().getApellido().compareTo(p.getEstudiante().getApellido()) < 0;
         }else if(field.equalsIgnoreCase("id")){
             return (getId().intValue() < p.getId().intValue());
         }
             case 1:
-        if(field.equalsIgnoreCase("ciclo")){
-            return getCursa().getCiclo().toString().compareTo(p.getCursa().getCiclo().toString()) > 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getEstudiante().getNombre().compareTo(p.getEstudiante().getNombre()) > 0;
-        }else if(field.equalsIgnoreCase("fecharegistro")){
+        if(field.equalsIgnoreCase("fecharegistro")){
             return getFechaRegistro().compareTo(p.getFechaRegistro()) > 0;
-        }else if(field.equalsIgnoreCase("apellido")){
-            return getEstudiante().getApellido().compareTo(p.getEstudiante().getApellido()) > 0;
         }else if(field.equalsIgnoreCase("id")){
             return (getId().intValue() < p.getId().intValue());
         }
@@ -123,42 +109,42 @@ public class Matricula {
     /**
      * @return the estadoMatricula
      */
-    public String getEstadoMatricula() {
+    public Boolean getEstadoMatricula() {
         return estadoMatricula;
     }
 
     /**
      * @param estadoMatricula the estadoMatricula to set
      */
-    public void setEstadoMatricula(String estadoMatricula) {
+    public void setEstadoMatricula(Boolean estadoMatricula) {
         this.estadoMatricula = estadoMatricula;
     }
 
     /**
      * @return the cursa
      */
-    public Cursa getCursa() {
+    public Integer getCursa() {
         return cursa;
     }
 
     /**
      * @param cursa the cursa to set
      */
-    public void setCursa(Cursa cursa) {
+    public void setCursa(Integer cursa) {
         this.cursa = cursa;
     }
 
     /**
      * @return the estudiante
      */
-    public Estudiante getEstudiante() {
+    public Integer getEstudiante() {
         return estudiante;
     }
 
     /**
      * @param estudiante the estudiante to set
      */
-    public void setEstudiante(Estudiante estudiante) {
+    public void setEstudiante(Integer estudiante) {
         this.estudiante = estudiante;
     }
 }

@@ -4,12 +4,16 @@
  */
 package controlador;
 
+import controlador.clases.CursaControl;
+import controlador.clases.EstudianteControl;
+
+
 /**
  *
  * @author mrbingus
  */
 public class controlador {
     public static void main(String[] args) {
-        
+
     }
 }

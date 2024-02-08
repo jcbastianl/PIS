@@ -14,7 +14,6 @@ public class Ciclo {
     private Integer id;
     private Integer ciclo;
     private String paralelo;
-    private DynamicList<Cursa>cursas;
 
     public Ciclo() {
     }
@@ -66,23 +65,7 @@ public class Ciclo {
         return getCiclo()+""+getParalelo();
     }
 
-    /**
-     * @return the cursas
-     */
-    public DynamicList<Cursa> getCursas() {
-        if(cursas == null){
-            cursas = new DynamicList<>();
-        }
-        return cursas;
-    }
 
-    /**
-     * @param cursas the cursas to set
-     */
-    public void setCursas(DynamicList<Cursa> cursas) {
-        this.cursas = cursas;
-    }
-    
     
     
     

@@ -137,8 +137,5 @@ public class CursaControl extends DaoImplement<Cursa>{
 //            return null;
 //        }
 //    }  
-    
-    public DynamicList<Matricula> recuperarListaMatriculas(int id) throws Exception {
-        return all().getInfo(id).getMatriculas();
-    }    
+       
 }
