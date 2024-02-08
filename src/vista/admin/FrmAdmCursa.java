@@ -81,15 +81,9 @@ public class FrmAdmCursa extends javax.swing.JFrame {
 
             }
             if (cursaControl.persist()) {
-                try {
-                    cicloControl.getCiclo().setCursas(cicloControl.recuperarListaCursas(cicloControl.getCiclo().getId()-1));
-                    cicloControl.getCiclo().getCursas().add(cursaControl.getCursa());
-                    cicloControl.merge(cicloControl.getCiclo(), cicloControl.getCiclo().getId() -1);
-                    limpiar();
-                    JOptionPane.showMessageDialog(null, "Se guardo todo");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+
+                limpiar();
+                JOptionPane.showMessageDialog(null, "Se guardo todo");
 
             } else {
                 JOptionPane.showMessageDialog(null, "No se guardo");
@@ -134,15 +128,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
 
     public void borrar() {
         if (tblCursa.getSelectedRow() > -1) {
-            try {
-                cicloControl.setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
-                cicloControl.getCiclo().setCursas(cicloControl.recuperarListaCursas(cicloControl.getCiclo().getId()-1));
-                cicloControl.getCiclo().getCursas().remove(tblCursa.getSelectedRow());
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
             if (cursaControl.remove(tblCursa.getSelectedRow())) {
-                cicloControl.merge(cicloControl.getCiclo(), cicloControl.getCiclo().getId()-1);
                 JOptionPane.showMessageDialog(null, "Se borro el elemento");
             } else {
                 JOptionPane.showMessageDialog(null, "No se borro el elemento");
@@ -151,7 +137,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
             cicloControl.setCiclo(null);
             cursaControl.setCursa(null);
         } else {
-            
+
             JOptionPane.showConfirmDialog(null, "Selecciona un elemento a borrar");
         }
 

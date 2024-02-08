@@ -59,8 +59,4 @@ public class CicloControl extends DaoImplement<Ciclo> {
         return persist(ciclo);
     }
     
-        public DynamicList<Cursa>recuperarListaCursas(int id) throws Exception{
-        return all().getInfo(id).getCursas();
-    }
-
 }

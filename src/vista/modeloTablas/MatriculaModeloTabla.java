@@ -47,7 +47,7 @@ public class MatriculaModeloTabla extends AbstractTableModel{
                 case 2:
                     return (d != null) ? d.getCodigo(): " ";
                 case 3:
-                    return (d != null) ? d.getEstadoMatricula() : " ";
+                    return (d != null) ? Utiles.traducirEstadoString(d.getEstadoMatricula()) : " ";
                 case 4:
                     return (d != null) ? Utiles.formaterarFecha(d.getFechaRegistro()) : " ";
                 default:

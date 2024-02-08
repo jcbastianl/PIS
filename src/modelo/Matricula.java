@@ -17,7 +17,7 @@ public class Matricula {
     private Integer id;
     private Integer cursa;
     private Integer estudiante;
-    private String estadoMatricula;
+    private Boolean estadoMatricula;
     private Integer idPeriodoAcademico;
 
     public Matricula() {
@@ -109,14 +109,14 @@ public class Matricula {
     /**
      * @return the estadoMatricula
      */
-    public String getEstadoMatricula() {
+    public Boolean getEstadoMatricula() {
         return estadoMatricula;
     }
 
     /**
      * @param estadoMatricula the estadoMatricula to set
      */
-    public void setEstadoMatricula(String estadoMatricula) {
+    public void setEstadoMatricula(Boolean estadoMatricula) {
         this.estadoMatricula = estadoMatricula;
     }
 
