@@ -9,11 +9,12 @@ import controlador.clases.AsistenciaControl;
 import controlador.clases.ClaseDictadaControl;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import modelo.Asistencia;
-import modelo.ClaseDictada;
-import modelo.Cursa;
 import vista.modeloTablas.AsistenciaModeloTabla;
+
+
+
+
 
 /**
  *
@@ -32,15 +33,17 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
 
         this.idClase = claseDic;
         initComponents();
-        cargarTabla();
+        cargarInformacion();
     }
 
-    private void cargarTabla() {
+    private void cargarInformacion() {
         try {
+            claseControl.setClase(claseControl.getListaClases().getInfo(Utiles.encontrarPosicion("clasedictada", idClase)));
+            txtFecha.setDate(claseControl.getClase().getFecha());
+            txtTema.setText(claseControl.getClase().getTema());
             aux = Utiles.recuperarAsistenciasClase(idClase);
-
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("mal cargado" + e.getMessage());
         }
         modelo.setAsistencias(aux);
         tblAsistencias.setModel(modelo);
@@ -51,12 +54,12 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
         for (int i = 0; i < modelo.getAsistencias().getLenght(); i++) {
             asistenciaControl.setAsistencia(modelo.getAsistencias().getInfo(i));
             try {
-                asistenciaControl.persist();
+                asistenciaControl.merge(asistenciaControl.getAsistencia(), i);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error en el guardado");
+                JOptionPane.showMessageDialog(null, "Error al modficar");
             }
         }
-        JOptionPane.showMessageDialog(null, "Se guardaron todas las asistencias");
+        JOptionPane.showMessageDialog(null, "Se modificaron todas las asistencias");
 
         if (modificarClase()) {
             JOptionPane.showMessageDialog(null, "Se modifico la clase");
