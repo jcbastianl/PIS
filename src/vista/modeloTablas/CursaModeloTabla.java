@@ -7,10 +7,12 @@ package vista.modeloTablas;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.CicloControl;
+import controlador.clases.DocenteControl;
 import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
 import modelo.Ciclo;
 import modelo.Cursa;
+import modelo.Docente;
 
 /**
  *
@@ -35,14 +37,16 @@ public class CursaModeloTabla extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             Cursa d = getListaCursos().getInfo(rowIndex);
-            Ciclo cc = new CicloControl().getCiclos().getInfo(d.getCiclo());
+            Docente o = new DocenteControl().all().getInfo(Utiles.encontrarPosicion("docente", d.getDocente()));
+            Ciclo cc = new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("ciclo", d.getCiclo()));
+            
             switch (columnIndex) {
                 case 0:
                     return (d != null) ? d.getAsignatura().getNombre() : " ";
                 case 1:
                     return (d != null) ? cc.getCiclo()+""+cc.getParalelo()  : " ";
                 case 2:
-                    return (d != null) ? d.getDocente().getNombre() +" "+d.getDocente().getApellido() : " ";
+                    return (d != null) ? o.getNombre() +" "+o.getApellido() : " ";
                 case 3:
                     return (d != null) ? Utiles.formaterarFecha(d.getFechaInicio()) : " ";
                 case 4:
@@ -65,11 +69,9 @@ public class CursaModeloTabla extends AbstractTableModel{
             case 2:
                 return "DOCENTE"; 
             case 3:
-                return "ID ASIGNATURA"; 
-            case 4:
                 return "INICIO"; 
-            case 5:
-                return "FIN";                 
+            case 4:
+                return "FIN";             
             default:
                 return null;
         }

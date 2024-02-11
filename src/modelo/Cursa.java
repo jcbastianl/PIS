@@ -6,6 +6,7 @@ package modelo;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.clases.CicloControl;
+import controlador.utiles.Utiles;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ public class Cursa {
 
     private Integer id;
     private Integer ciclo;
-    private Docente docente;
+    private Integer docente;
     private Asignatura asignatura;
     private Date fechaInicio;
     private Date fechaFin;
@@ -38,13 +39,6 @@ public class Cursa {
         this.id = id;
     }
 
-    public Docente getDocente() {
-        return docente;
-    }
-
-    public void setDocente(Docente docente) {
-        this.docente = docente;
-    }
 
     public Boolean compare(Cursa p, String field, Integer type) {
         switch (type) {
@@ -68,7 +62,7 @@ public class Cursa {
     @Override
     public String toString() {
         try {
-            return getAsignatura() + " " + new CicloControl().getCiclos().getInfo(getCiclo()).toString();
+            return getAsignatura() + " " + new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("cursa", getCiclo())).toString();
 
         } catch (Exception e) {
             System.out.println("error desde modelo cursa " + e.getMessage());
@@ -131,6 +125,20 @@ public class Cursa {
      */
     public void setAsignatura(Asignatura asignatura) {
         this.asignatura = asignatura;
+    }
+
+    /**
+     * @return the docente
+     */
+    public Integer getDocente() {
+        return docente;
+    }
+
+    /**
+     * @param docente the docente to set
+     */
+    public void setDocente(Integer docente) {
+        this.docente = docente;
     }
 
 }

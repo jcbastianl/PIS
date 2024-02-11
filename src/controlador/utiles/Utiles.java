@@ -6,6 +6,7 @@ package controlador.utiles;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.clases.AsignaturaControl;
+import controlador.clases.CicloControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import controlador.clases.EstudianteControl;
@@ -129,6 +130,14 @@ public class Utiles {
                         }
                     }
                     break;
+                case "ciclo":
+                    CicloControl cic = new CicloControl();
+                    for (int i = 0; i < cic.all().getLenght(); i++) {
+                        if (Objects.equals(cic.all().getInfo(i).getId(), id)) {
+                            return i;
+                        }
+                    }
+                    break;
                 default:
                     throw new AssertionError();
             }
@@ -198,7 +207,7 @@ public class Utiles {
         return nombre.toLowerCase() + "" + apellido.toLowerCase();
     }
 
-    public static Integer encontrarIndexSegunLista(DynamicList<Matricula> lista, Integer idBuscar) throws Exception{
+    public static Integer encontrarIndexSegunLista(DynamicList<Matricula> lista, Integer idBuscar) throws Exception {
         for (int i = 0; i < lista.getLenght(); i++) {
             if (Objects.equals(lista.getInfo(i).getId(), idBuscar)) {
                 return i;
@@ -206,40 +215,59 @@ public class Utiles {
         }
         return null;
     }
-    
-    public static Boolean identificarEstado(Integer i){
+
+    public static Boolean identificarEstado(Integer i) {
         if (i == 0) {
             return true;
         } else {
             return false;
         }
     }
-    
-    public static String traducirEstadoString(Boolean i){
+
+    public static String traducirEstadoString(Boolean i) {
         if (i) {
             return "APROBADO";
         } else {
             return "CANCELADO";
         }
     }
-    
-    public static Integer traducirEstadoIndice(Boolean i){
+
+    public static Integer traducirEstadoIndice(Boolean i) {
         if (i) {
             return 0;
         } else {
             return 1;
         }
     }
-    
-    public static DynamicList<Cursa> identificarCursas(int u) throws Exception{
+
+    public static DynamicList<Cursa> identificarCursas(int u) throws Exception {
         CursaControl cc = new CursaControl();
-        DynamicList<Cursa>aux = new DynamicList<>();
+        DynamicList<Cursa> aux = new DynamicList<>();
         for (int i = 0; i < cc.all().getLenght(); i++) {
             if (cc.all().getInfo(i).getCiclo() == u) {
                 aux.add(cc.all().getInfo(i));
             }
         }
+
         return aux;
     }
-    
+
+    public static Integer encontraridDocente(Integer u) throws Exception {
+        return new DocenteControl().getListaDocentes().getInfo(u).getId();
+    }
+
+    public static Integer encontraridCiclo(Integer u) throws Exception {
+        return new CicloControl().getCiclos().getInfo(u).getId();
+    }
+
+    public static DynamicList<Cursa> recuperarCursasDocente(Integer id) throws Exception {
+        CursaControl cc = new CursaControl();
+        DynamicList<Cursa> aux = new DynamicList<>();
+        for (int i = 0; i < cc.all().getLenght(); i++) {
+            if (cc.all().getInfo(i).getDocente().equals(id)) { // Corregir aquí
+                aux.add(cc.all().getInfo(i));
+            }
+        }
+        return aux;
+    }
 }
