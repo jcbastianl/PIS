@@ -91,5 +91,12 @@ public class Asistencia {
         this.id_justificativo = id_justificativo;
     }
 
+    @Override
+    public String toString() {
+        return estadoAsistencia.toString();
+    }
+    
+    
+
 
 }

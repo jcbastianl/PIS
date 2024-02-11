@@ -36,8 +36,8 @@ public class MatriculaModeloTabla extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             Matricula d = getMatriculas().getInfo(rowIndex);
-            Estudiante e = new EstudianteControl().getListaEstudiantes().getInfo(d.getEstudiante());
-            Cursa c = new CursaControl().getListaCursas().getInfo(d.getCursa());
+            Estudiante e = new EstudianteControl().getListaEstudiantes().getInfo(Utiles.encontrarPosicion("estudiante", d.getEstudiante()));
+            Cursa c = new CursaControl().getListaCursas().getInfo(Utiles.encontrarPosicion("cursa", d.getCursa()));
             
             switch (columnIndex) {
                 case 0:

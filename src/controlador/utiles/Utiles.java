@@ -6,7 +6,9 @@ package controlador.utiles;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.clases.AsignaturaControl;
+import controlador.clases.AsistenciaControl;
 import controlador.clases.CicloControl;
+import controlador.clases.ClaseDictadaControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import controlador.clases.EstudianteControl;
@@ -16,7 +18,10 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import modelo.Asistencia;
+import modelo.ClaseDictada;
 import modelo.Cursa;
+import modelo.Estudiante;
 import modelo.Matricula;
 
 public class Utiles {
@@ -88,63 +93,107 @@ public class Utiles {
         return field;
     }
 
+//    public static Integer encontrarPosicion(String tipoObj, Integer id) {
+//
+//        try {
+//
+//            switch (tipoObj) {
+//                case "docente":
+//                    DocenteControl dc = new DocenteControl();
+//                    for (int i = 0; i < dc.all().getLenght(); i++) {
+//                        if (Objects.equals(dc.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                    break;
+//                case "matricula":
+//                    MatriculaControl cc = new MatriculaControl();
+//                    for (int i = 0; i < cc.all().getLenght(); i++) {
+//                        if (Objects.equals(cc.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                case "estudiante":
+//                    EstudianteControl ec = new EstudianteControl();
+//                    for (int i = 0; i < ec.all().getLenght(); i++) {
+//                        if (Objects.equals(ec.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                case "cursa":
+//                    CursaControl curc = new CursaControl();
+//                    for (int i = 0; i < curc.all().getLenght(); i++) {
+//                        if (Objects.equals(curc.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                case "asignatura":
+//                    AsignaturaControl ac = new AsignaturaControl();
+//                    for (int i = 0; i < ac.all().getLenght(); i++) {
+//                        if (Objects.equals(ac.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                    break;
+//                case "ciclo":
+//                    CicloControl cic = new CicloControl();
+//                    for (int i = 0; i < cic.all().getLenght(); i++) {
+//                        if (Objects.equals(cic.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                    break;
+//                case "clasedictada":
+//                    ClaseDictadaControl cdc = new ClaseDictadaControl();
+//                    for (int i = 0; i < cdc.all().getLenght(); i++) {
+//                        if (Objects.equals(cdc.all().getInfo(i).getId(), id)) {
+//                            return i;
+//                        }
+//                    }
+//                    break;
+//                default:
+//                    throw new AssertionError();
+//            }
+//            return -1;
+//        } catch (Exception e) {
+//            return -1;
+//        }
+//    }
     public static Integer encontrarPosicion(String tipoObj, Integer id) {
-
         try {
-
             switch (tipoObj) {
                 case "docente":
-                    DocenteControl dc = new DocenteControl();
-                    for (int i = 0; i < dc.all().getLenght(); i++) {
-                        if (Objects.equals(dc.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
-                    break;
+                    return encontrarPosicion(DocenteControl.class, id);
                 case "matricula":
-                    MatriculaControl cc = new MatriculaControl();
-                    for (int i = 0; i < cc.all().getLenght(); i++) {
-                        if (Objects.equals(cc.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
+                    return encontrarPosicion(MatriculaControl.class, id);
                 case "estudiante":
-                    EstudianteControl ec = new EstudianteControl();
-                    for (int i = 0; i < ec.all().getLenght(); i++) {
-                        if (Objects.equals(ec.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
+                    return encontrarPosicion(EstudianteControl.class, id);
                 case "cursa":
-                    CursaControl curc = new CursaControl();
-                    for (int i = 0; i < curc.all().getLenght(); i++) {
-                        if (Objects.equals(curc.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
+                    return encontrarPosicion(CursaControl.class, id);
                 case "asignatura":
-                    AsignaturaControl ac = new AsignaturaControl();
-                    for (int i = 0; i < ac.all().getLenght(); i++) {
-                        if (Objects.equals(ac.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
-                    break;
+                    return encontrarPosicion(AsignaturaControl.class, id);
                 case "ciclo":
-                    CicloControl cic = new CicloControl();
-                    for (int i = 0; i < cic.all().getLenght(); i++) {
-                        if (Objects.equals(cic.all().getInfo(i).getId(), id)) {
-                            return i;
-                        }
-                    }
-                    break;
+                    return encontrarPosicion(CicloControl.class, id);
+                case "clasedictada":
+                    return encontrarPosicion(ClaseDictadaControl.class, id);
                 default:
-                    throw new AssertionError();
+                    throw new IllegalArgumentException("Tipo de objeto desconocido: " + tipoObj);
             }
-            return -1;
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    private static <T> Integer encontrarPosicion(Class<T> controlClass, Integer id) throws Exception {
+        T control = controlClass.getDeclaredConstructor().newInstance();
+        DynamicList<T> list = (DynamicList<T>) control.getClass().getMethod("all").invoke(control);
+        for (int i = 0; i < list.getLenght(); i++) {
+            Object obj = list.getInfo(i);
+            if (obj.getClass().getMethod("getId").invoke(obj).equals(id)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     //METODO PARA DEVOLVER UN STRING DE UN DECIMAL CON UN FORMATO APTO PARA COMPARAR COMO STRING
@@ -260,6 +309,18 @@ public class Utiles {
         return new CicloControl().getCiclos().getInfo(u).getId();
     }
 
+    public static Integer encontraridEstudiante(Integer u) throws Exception {
+        return new EstudianteControl().getListaEstudiantes().getInfo(u).getId();
+    }
+
+    public static Integer encontraridCursa(Integer u) throws Exception {
+        return new CursaControl().getListaCursas().getInfo(u).getId();
+    }
+    
+    public static Integer encontraridClase(Integer u) throws Exception {
+        return new ClaseDictadaControl().getListaClases().getInfo(u).getId();
+    }    
+
     public static DynamicList<Cursa> recuperarCursasDocente(Integer id) throws Exception {
         CursaControl cc = new CursaControl();
         DynamicList<Cursa> aux = new DynamicList<>();
@@ -270,4 +331,67 @@ public class Utiles {
         }
         return aux;
     }
+
+    public static DynamicList<ClaseDictada> recuperarClasesCursa(Integer id) throws Exception {
+        ClaseDictadaControl cd = new ClaseDictadaControl();
+        DynamicList<ClaseDictada> aux = new DynamicList<>();
+        for (int i = 0; i < cd.all().getLenght(); i++) {
+            if (cd.all().getInfo(i).getId_cursa().equals(id)) { // Corregir aquí
+                aux.add(cd.all().getInfo(i));
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<Estudiante> recuperarEstudiantesCursa(Integer id) throws Exception {
+        MatriculaControl mc = new MatriculaControl();
+        DynamicList<Estudiante> aux = new DynamicList<>();
+        DynamicList<Matricula> listaMatriculas = mc.all();
+
+        EstudianteControl estudianteControl = new EstudianteControl();
+        DynamicList<Estudiante> listaEstudiantes = estudianteControl.getListaEstudiantes();
+
+        for (int i = 0; i < listaMatriculas.getLenght(); i++) {
+            Matricula matricula = listaMatriculas.getInfo(i);
+            if (matricula.getCursa().equals(id)) {
+                Estudiante estudiante = listaEstudiantes.getInfo(encontrarPosicion("estudiante", matricula.getEstudiante()));
+                aux.add(estudiante);
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<Asistencia> generarAsistenciasporClase(ClaseDictada clase) throws Exception {
+
+        DynamicList<Asistencia> asistencias = new DynamicList<>();
+        DynamicList<Estudiante> estudiantes = recuperarEstudiantesCursa(clase.getId_cursa());
+        Integer ultimoId = new AsistenciaControl().all().getLenght();
+
+        for (int i = 0; i < estudiantes.getLenght(); i++) {
+            Asistencia asistencia = new Asistencia();
+            asistencia.setEstadoAsistencia(true);
+            asistencia.setId_estudiante(estudiantes.getInfo(i).getId());
+            asistencia.setId_claseDictada(clase.getId());
+            asistencia.setId(ultimoId + i + 1);
+            asistencias.add(asistencia);
+            asistencia = null;
+        }
+        estudiantes = null;
+        return asistencias;
+    }
+
+    public static DynamicList<Asistencia> recuperarAsistenciasClase(Integer idClase) throws Exception {
+        AsistenciaControl ac = new AsistenciaControl();
+        DynamicList<Asistencia> asistencias = new DynamicList<>();
+        DynamicList<Asistencia> aux = ac.all();
+
+        for (int i = 0; i < aux.getLenght(); i++) {
+            Asistencia asistencia = aux.getInfo(i);
+            if (asistencia.getId_claseDictada().equals(idClase)) {
+                asistencias.add(asistencia);
+            }
+        }
+        return asistencias;
+    }
+
 }

@@ -64,7 +64,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         try {
 
             cicloControl.setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
-            modeloCursa.setListaCursos(Utiles.identificarCursas(cicloControl.getCiclo().getId() - 1));
+            modeloCursa.setListaCursos(Utiles.identificarCursas(cicloControl.getCiclo().getId()));
             modeloCursa.setVariableColumnas(1);
             tblCursasCiclo.setModel(modeloCursa);
             tblCursasCiclo.updateUI();
@@ -113,7 +113,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     }
 
     private void modificar() throws Exception {
-        Integer indiceModificar;
+
         matriculaControl.setMatricula(matriculaControl.getListaMatriculas().getInfo(tblMatricula.getSelectedRow()));
         if (verificar()) {
             matriculaControl.getMatricula().setEstadoMatricula(Utiles.identificarEstado(cbxEstado.getSelectedIndex()));
@@ -614,7 +614,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
 
         try {
             for (int i = 0; i < modeloCursa.getListaCursos().getLenght(); i++) {
-                guardar(i, cbxEstudiantes.getSelectedIndex());
+                guardar(Utiles.encontraridCursa(i), Utiles.encontraridEstudiante(cbxEstudiantes.getSelectedIndex()));
             }
         } catch (Exception e) {
         }

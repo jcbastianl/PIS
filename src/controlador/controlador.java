@@ -35,6 +35,8 @@ public class controlador {
 //        cc.setCuenta(cuenta);
 //        cc.persist();
 
-        new FrmDocenteAsignaciones(new CursaControl().all().getInfo(1)).setVisible(true);
+        //new FrmDocenteAsignaciones(new CursaControl().all().getInfo(1)).setVisible(true);
+        
+        new FrmDocentePrincipal(new DocenteControl().getListaDocentes().getInfo(2)).setVisible(true);
     }
 }
