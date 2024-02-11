@@ -9,7 +9,10 @@ import controlador.clases.CuentaControl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import modelo.Docente;
+import modelo.Persona;
 import vista.admin.FrmAdmPrincipal;
+import vista.docente.FrmDocentePrincipal;
 import vista.docente.frmAsistencia;
 import vista.estudiante.frmEstudiante;
 
@@ -28,25 +31,40 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     
     }
     
-    public void iniciarSesion(){
+    public Persona iniciarSesion(){
         if(verificar()){
             cuentaControl.setCuenta(cuentaControl.busquedaLineal(txtCorreo.getText()));
    
             if(txtClave.getText().equals(cuentaControl.getCuenta().getContraseña())){
-                JOptionPane.showMessageDialog(null, "Sesion Iniciada");
+                //JOptionPane.showMessageDialog(null, "Sesion Iniciada");
                 JOptionPane.showMessageDialog(null, cuentaControl.getCuenta().getPersona().getNombre() +" "+cuentaControl.getCuenta().getPersona().getApellido());
+                if (cuentaControl.getCuenta().getPersona().getRol() == 2) {
+                    new FrmAdmPrincipal().setVisible(true);
+                    dispose();
+                }else{
+                    continuarSesion(cuentaControl.getCuenta().getPersona());
+                }
             }else{
-            JOptionPane.showMessageDialog(null, "La contraseña no coincida");                
+            JOptionPane.showMessageDialog(null, "El correo o la contraseña son incorrectos");                
             }                
 
 
         }else{
             JOptionPane.showMessageDialog(null, "Rellena los campos");
         }
+        return cuentaControl.getCuenta().getPersona();
     
     }
     
     
+    public void continuarSesion(Persona persona){
+        if (persona.getRol() == 0) {
+            new FrmDocentePrincipal((Docente)persona).setVisible(true);
+            dispose();
+        } else {
+        }
+    
+    }
     
     
     
