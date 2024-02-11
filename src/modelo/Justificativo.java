@@ -14,7 +14,6 @@ public class Justificativo {
 
     private Integer id;
     private String motivo;
-    private String motivoJustificante;
     private String descripcion;
     private Integer id_asistencia;
 
@@ -77,18 +76,5 @@ public class Justificativo {
         this.id_asistencia = id_asistencia;
     }
 
-    /**
-     * @return the motivoJustificante
-     */
-    public String getMotivoJustificante() {
-        return motivoJustificante;
-    }
-
-    /**
-     * @param motivoJustificante the motivoJustificante to set
-     */
-    public void setMotivoJustificante(String motivoJustificante) {
-        this.motivoJustificante = motivoJustificante;
-    }
 
 }

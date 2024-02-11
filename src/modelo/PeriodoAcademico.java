@@ -105,7 +105,7 @@ public class PeriodoAcademico {
 
     @Override
     public String toString() {
-        return getMesInicio()+ " " + getYearInicio() + " - " +getMesFin() + " " + getYearFin();
+        return getMesInicio()+ " " + getYearInicio() + " - " +getMesFin() + " " + getYearFin()+" "+getModalidad();
     }
     
     

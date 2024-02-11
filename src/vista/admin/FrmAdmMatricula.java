@@ -193,6 +193,11 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             periodoControl.getPeriodo().setMesInicio(cbxMesInicio.getSelectedItem().toString());
             periodoControl.getPeriodo().setYearInicio(txtyearInicio.getText());
             periodoControl.getPeriodo().setYearFin(txtyearFin.getText());
+            if (btnIsVirtual.isSelected()) {
+                periodoControl.getPeriodo().setModalidad("VIRTUAL");
+            } else {
+                periodoControl.getPeriodo().setModalidad("PRESENCIAL");
+            }
             if (periodoControl.persist()) {
                 JOptionPane.showMessageDialog(null, "Se guardo el periodo academico");
                 limpiar();
@@ -268,6 +273,8 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPeriodos = new javax.swing.JTable();
+        btnIsVirtual = new javax.swing.JCheckBox();
+        jLabel20 = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -418,7 +425,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel8.setText("MATRÍCULAS REGISTRADAS EN EL SISTEMA:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, -1, 20));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 430, -1, 20));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/icons8-shuffle-20.png"))); // NOI18N
         jButton1.setContentAreaFilled(false);
@@ -430,7 +437,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 340, 20, 20));
 
         cbxPeriodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbxPeriodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 180, -1));
+        jPanel1.add(cbxPeriodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 392, 310, 30));
 
         jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel15.setText("INGRESO DE DATOS:");
@@ -452,14 +459,14 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnGuardarPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
-        jPanel3.add(txtyearFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 80, -1));
+        jPanel3.add(txtyearFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 70, -1));
 
         cbxMesFin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" }));
-        jPanel3.add(cbxMesFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
+        jPanel3.add(cbxMesFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 100, -1));
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel17.setText("MES");
-        jPanel3.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, 20));
+        jPanel3.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, 20));
 
         jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel12.setText("AÑO");
@@ -467,15 +474,15 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setText("FIN");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, 20));
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, 20));
 
         cbxMesInicio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" }));
-        jPanel3.add(cbxMesInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
-        jPanel3.add(txtyearInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 80, -1));
+        jPanel3.add(cbxMesInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 100, -1));
+        jPanel3.add(txtyearInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 70, -1));
 
         jLabel18.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel18.setText("AÑO");
-        jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, 20));
+        jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, -1, 20));
 
         jLabel19.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel19.setText("MES");
@@ -503,6 +510,14 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblPeriodos);
 
         jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 12, 250, 240));
+
+        btnIsVirtual.setText("Virtual");
+        btnIsVirtual.setContentAreaFilled(false);
+        jPanel3.add(btnIsVirtual, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, -1, -1));
+
+        jLabel20.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel20.setText("AÑO");
+        jPanel3.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, -1, 20));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 170, 530, 270));
 
@@ -722,6 +737,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnGuardarPeriodo;
+    private javax.swing.JCheckBox btnIsVirtual;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnOrdenar;
     private javax.swing.JButton btnSalir;
@@ -746,6 +762,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
