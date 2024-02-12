@@ -12,6 +12,7 @@ import controlador.clases.ClaseDictadaControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
 import controlador.clases.EstudianteControl;
+import controlador.clases.JustificativoControl;
 import controlador.clases.MatriculaControl;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
@@ -176,6 +177,10 @@ public class Utiles {
                     return encontrarPosicion(CicloControl.class, id);
                 case "clasedictada":
                     return encontrarPosicion(ClaseDictadaControl.class, id);
+                case "justificativo":
+                    return encontrarPosicion(JustificativoControl.class, id);   
+                case "asistencia":
+                    return encontrarPosicion(AsistenciaControl.class, id);                       
                 default:
                     throw new IllegalArgumentException("Tipo de objeto desconocido: " + tipoObj);
             }

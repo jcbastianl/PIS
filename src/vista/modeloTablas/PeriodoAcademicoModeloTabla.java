@@ -33,7 +33,7 @@ public class PeriodoAcademicoModeloTabla extends AbstractTableModel{
                         PeriodoAcademico e = getPeriodos().getInfo(rowIndex);
                         switch (columnIndex) {
                                 case 0:
-                                        return (e != null) ? e.getMesInicio()+ " " + e.getYearInicio() + " - " +e.getMesFin() + " " + e.getYearFin(): " ";
+                                        return (e != null) ? e.getMesInicio()+ " " + e.getYearInicio() + " - " +e.getMesFin() + " " + e.getYearFin(): " "+e.getModalidad();
                                 default:
                                         return null;
                         }

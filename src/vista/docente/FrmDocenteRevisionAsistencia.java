@@ -12,10 +12,6 @@ import javax.swing.JOptionPane;
 import modelo.Asistencia;
 import vista.modeloTablas.AsistenciaModeloTabla;
 
-
-
-
-
 /**
  *
  * @author mrbingus
@@ -180,7 +176,7 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
 
         btnRegistrarAsistencias.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnRegistrarAsistencias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
-        btnRegistrarAsistencias.setText("   GUARDAR REGISTRO");
+        btnRegistrarAsistencias.setText("MODIFICAR REGISTRO");
         btnRegistrarAsistencias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarAsistenciasActionPerformed(evt);
@@ -223,7 +219,12 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
+        try {
+            new FrmDocenteRevisionJustificante(Utiles.encontraridClase(tblAsistencias.getSelectedRow())).setVisible(true);
 
+        } catch (Exception e) {
+        }
+        dispose();
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExit1ActionPerformed
