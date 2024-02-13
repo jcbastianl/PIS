@@ -18,10 +18,10 @@ import modelo.Docente;
  *
  * @author mrbingus
  */
-public class CursaModeloTabla extends AbstractTableModel{
+public class EstudianteCursaModeloTabla extends AbstractTableModel{
     
     private DynamicList<Cursa>listaCursos;
-    private int variableColumnas = 5;
+    private int variableColumnas = 4;
 
     @Override
     public int getRowCount() {
@@ -37,19 +37,17 @@ public class CursaModeloTabla extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             Cursa d = getListaCursos().getInfo(rowIndex);
-            Docente o = new DocenteControl().all().getInfo(Utiles.encontrarPosicion("docente", d.getDocente()));
+            Docente o = new DocenteControl().all().getInfo(Utiles.encontrarPosicion("docente", d.getCiclo()));
             Ciclo cc = new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("ciclo", d.getCiclo()));
             
             switch (columnIndex) {
                 case 0:
                     return (d != null) ? d.getAsignatura().getNombre() : " ";
                 case 1:
-                    return (d != null) ? cc.getCiclo()+""+cc.getParalelo()  : " ";
-                case 2:
                     return (d != null) ? o.getNombre() +" "+o.getApellido() : " ";
-                case 3:
+                case 2:
                     return (d != null) ? Utiles.formaterarFecha(d.getFechaInicio()) : " ";
-                case 4:
+                case 3:
                     return (d != null) ? Utiles.formaterarFecha(d.getFechaFin()) : " ";                    
                 default:
                     return null;
@@ -65,12 +63,10 @@ public class CursaModeloTabla extends AbstractTableModel{
             case 0:
                 return "ASIGNATURA";
             case 1:
-                return "CICLO";
-            case 2:
                 return "DOCENTE"; 
-            case 3:
+            case 2:
                 return "INICIO"; 
-            case 4:
+            case 3:
                 return "FIN";             
             default:
                 return null;
