@@ -1,1 +1,1 @@
-{"controlador.TDA.listas.DynamicList":{"header":{"info":{"@class":"modelo.ClaseDictada","id":1,"tema":"Sentencias SQL","fecha":"2024-02-05 07:32:15.260 UTC","id_cursa":1}},"last":{"@reference":"..\/header"},"lenght":1}}
+{"controlador.TDA.listas.DynamicList":{"header":{"info":{"@class":"modelo.ClaseDictada","id":1,"tema":"Sentencias SQL","fecha":"2024-02-05 07:32:15.260 UTC","id_cursa":1},"next":{"info":{"@class":"modelo.ClaseDictada","id":2,"tema":"Pis hacer","fecha":"2024-02-14 14:56:18.769 UTC","id_cursa":1}}},"last":{"@reference":"..\/header\/next"},"lenght":2}}
