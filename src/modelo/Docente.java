@@ -10,6 +10,7 @@ package modelo;
  */
 public class Docente extends Persona {
     private String titulo;
+    private String preparacion;
     private Integer id;
 
     public Docente() {
@@ -55,7 +56,7 @@ public class Docente extends Persona {
         }else if(field.equalsIgnoreCase("dni")){
             return getDni().compareTo(p.getDni()) < 0;
         }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
+            return (getId().intValue() < p.getId().intValue());
         }
             case 1:
         if(field.equalsIgnoreCase("apellido")){
@@ -67,7 +68,7 @@ public class Docente extends Persona {
         }else if(field.equalsIgnoreCase("dni")){
             return getDni().compareTo(p.getDni()) > 0;
         }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() > p.getId().intValue());
+            return (getId().intValue() > p.getId().intValue());
         }   
         
         default:
@@ -76,11 +77,25 @@ public class Docente extends Persona {
         }
     } 
 
+    /**
+     * @return the preparacion
+     */
+    public String getPreparacion() {
+        return preparacion;
+    }
+
+    /**
+     * @param preparacion the preparacion to set
+     */
+    public void setPreparacion(String preparacion) {
+        this.preparacion = preparacion;
+    }
+    
+    
     @Override
     public String toString() {
         return getNombre() + " " + getApellido();
     }
-    
-    
+
     
 }

@@ -11,11 +11,10 @@ import java.util.Date;
  * @author jsbal
  */
 public class Justificativo {
-    private String motivo;
-    private Date fecha;
-    private String descripcion;
+
     private Integer id;
-    private Integer id_estudiante;
+    private String motivo;
+    private String descripcion;
     private Integer id_asistencia;
 
     public Justificativo() {
@@ -33,20 +32,6 @@ public class Justificativo {
      */
     public void setMotivo(String motivo) {
         this.motivo = motivo;
-    }
-
-    /**
-     * @return the fecha
-     */
-    public Date getFecha() {
-        return fecha;
-    }
-
-    /**
-     * @param fecha the fecha to set
-     */
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
 
     /**
@@ -78,20 +63,6 @@ public class Justificativo {
     }
 
     /**
-     * @return the id_estudiante
-     */
-    public Integer getId_estudiante() {
-        return id_estudiante;
-    }
-
-    /**
-     * @param id_estudiante the id_estudiante to set
-     */
-    public void setId_estudiante(Integer id_estudiante) {
-        this.id_estudiante = id_estudiante;
-    }
-
-    /**
      * @return the id_asistencia
      */
     public Integer getId_asistencia() {
@@ -104,6 +75,6 @@ public class Justificativo {
     public void setId_asistencia(Integer id_asistencia) {
         this.id_asistencia = id_asistencia;
     }
-    
-    
+
+
 }

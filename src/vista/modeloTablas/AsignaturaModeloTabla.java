@@ -25,7 +25,7 @@ public class AsignaturaModeloTabla extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4; // Cuatro columnas: nombre, fechaInicio, fechaFin, id
+        return 3; // Cuatro columnas: nombre, fechaInicio, fechaFin, id
     }
 
     @Override
@@ -36,10 +36,8 @@ public class AsignaturaModeloTabla extends AbstractTableModel {
                 case 0:
                     return (a != null) ? a.getNombre() : " ";
                 case 1:
-                    return (a != null) ? Utiles.formaterarFecha(a.getFechaInicio()) : " ";
+                    return (a != null) ? a.getCodigo() : " ";
                 case 2:
-                    return (a != null) ? Utiles.formaterarFecha(a.getFechaFin() ): " ";
-                case 3:
                     return (a != null) ? a.getId() : " ";
                 default:
                     return null;
@@ -55,10 +53,8 @@ public class AsignaturaModeloTabla extends AbstractTableModel {
             case 0:
                 return "NOMBRE";
             case 1:
-                return "FECHA INICIO";
+                return "CODIGO";
             case 2:
-                return "FECHA FIN";
-            case 3:
                 return "ID";
             default:
                 return null;

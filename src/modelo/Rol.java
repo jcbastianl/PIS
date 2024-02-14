@@ -11,6 +11,7 @@ package modelo;
 public class Rol {
         private Integer id;
         private String nombre;
+        private String descripcion;
 
         public Rol() {
         }
@@ -38,6 +39,20 @@ public class Rol {
         
         @Override
         public String toString() {
-                return nombre;
+                return getNombre() + getId();
         }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }

@@ -14,8 +14,10 @@ public class Persona {
     private String nombre;
     private String apellido;
     private String dni;
-    private Integer num_let;
-    private String rol;
+    private String telefono;
+    private Boolean isExtranjero;
+    private Integer rol;
+    private Integer cuenta;
 
     public Persona() {
     }
@@ -62,21 +64,6 @@ public class Persona {
         this.dni = dni;
     }
 
-    /**
-     * @return the num_let
-     */
-    public Integer getNum_let() {
-        return num_let;
-    }
-
-    /**
-     * @param num_let the num_let to set
-     */
-    public void setNum_let(Integer num_let) {
-        this.num_let = num_let;
-    }
-
-
     public Integer getId() {
         return id;
     }
@@ -85,17 +72,61 @@ public class Persona {
         this.id = id;
     }
 
+
+
+    /**
+     * @return the telefono
+     */
+    public String getTelefono() {
+        return telefono;
+    }
+
+    /**
+     * @param telefono the telefono to set
+     */
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    /**
+     * @return the isExtranjero
+     */
+    public Boolean getIsExtranjero() {
+        return isExtranjero;
+    }
+
+    /**
+     * @param isExtranjero the isExtranjero to set
+     */
+    public void setIsExtranjero(Boolean isExtranjero) {
+        this.isExtranjero = isExtranjero;
+    }
+
     /**
      * @return the rol
      */
-    public String getRol() {
+    public Integer getRol() {
         return rol;
     }
 
     /**
      * @param rol the rol to set
      */
-    public void setRol(String rol) {
+    public void setRol(Integer rol) {
         this.rol = rol;
+    }
+
+    /**
+     * @return the cuenta
+     */
+    public Integer getCuenta() {
+        return cuenta;
+    }
+
+    /**
+     * @param cuenta the cuenta to set
+     */
+    public void setCuenta(Integer cuenta) {
+        this.cuenta = cuenta;
     }
 }

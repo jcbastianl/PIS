@@ -3,10 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <!-- Conservando las líneas de la rama actual (HEAD) del usuario iTC -->
             <file>file:/C:/Users/Usuario%20iTC/Desktop/Repositorio%20Final/PIS/src/vista/admin/FrmAdmDocente.java</file>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/Repositorio%20Final/PIS/src/vista/admin/FrmAdmEstudiante.java</file>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/Repositorio%20Final/PIS/src/vista/login/FrmInicioSesion.java</file>
+=======
+<<<<<<< HEAD
+            <file>file:/C:/Users/leona/OneDrive/Documents/REPOSITORIO%20INBORRABLE/PIS/src/vista/login/FrmInicioSesion.java</file>
+=======
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/controlador/controlador.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/estudiante/FrmEstudiantePrincipal.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Matricula.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/estudiante/FrmEstudianteAsistencias.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/PeriodoAcademico.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/modeloTablas/EstudianteAsistenciaModeloTabla.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Horario.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Persona.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/controlador/ControlPruebas.java</file>
+>>>>>>> 22cbabe3e89eb3c14309ec13b2162591db73bc36
+>>>>>>> master
         </group>
     </open-files>
 </project-private>

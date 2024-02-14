@@ -22,7 +22,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
 
   private Boolean verificar() {
     
-    return (txtFechaInicio.getDate() != null && txtFechaFin.getDate() != null 
+    return (!txtCodigo.getText().trim().isEmpty()
             && txtNombre != null && !txtNombre.getText().trim().isEmpty());
 }
 
@@ -36,7 +36,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private void limpiar() {
         
         txtBusqueda.setText("");
-        
+        txtCodigo.setText("");
         txtNombre.setText("");
         
         tblAsignatura.clearSelection();
@@ -46,10 +46,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private void guardar() {
         if (verificar()) {
             asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
-            asignaturaControl.getAsignatura().setFechaInicio(txtFechaInicio.getDate());
-            asignaturaControl.getAsignatura().setFechaFin(txtFechaFin.getDate());
-           
-
+            asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
             if (asignaturaControl.persist()) {
                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
             } else {
@@ -63,10 +60,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private void modificar() {
         if (verificar()) {
             asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
-            asignaturaControl.getAsignatura().setFechaInicio(txtFechaInicio.getDate());
-            asignaturaControl.getAsignatura().setFechaFin(txtFechaFin.getDate());
-            
-
+            asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
             try {
                 Integer indiceAsignatura = Utiles.encontrarPosicion("asignatura", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
 
@@ -144,8 +138,6 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAsignatura = new javax.swing.JTable();
@@ -153,8 +145,6 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         cbxCriterioBusqueda = new javax.swing.JComboBox<>();
         cbxCriterioOrden = new javax.swing.JComboBox<>();
         txtBusqueda = new javax.swing.JTextField();
-        txtFechaInicio = new com.toedter.calendar.JDateChooser();
-        txtFechaFin = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -168,23 +158,18 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         btnOrdenar = new javax.swing.JButton();
         btnTipoOrden = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        txtCodigo = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(465, 570));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setMinimumSize(new java.awt.Dimension(455, 580));
-        jPanel1.setPreferredSize(new java.awt.Dimension(465, 570));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1280, 720));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Fecha Inicio:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, -1, 20));
-
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Fecha Fin:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, 20));
 
         txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,13 +205,23 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 460, 200));
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel6.setText("Nombres:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, 20));
+        jLabel6.setText("Codigo:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, 20));
 
-        cbxCriterioBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "FechaInicio", "FechaFin" }));
+        cbxCriterioBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Codigo" }));
+        cbxCriterioBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCriterioBusquedaActionPerformed(evt);
+            }
+        });
         jPanel1.add(cbxCriterioBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, 220, -1));
 
-        cbxCriterioOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "FechaInicio", "FechaFin" }));
+        cbxCriterioOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Codigo" }));
+        cbxCriterioOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCriterioOrdenActionPerformed(evt);
+            }
+        });
         jPanel1.add(cbxCriterioOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 450, 120, -1));
 
         txtBusqueda.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -235,8 +230,6 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txtBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 410, 220, -1));
-        jPanel1.add(txtFechaInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 220, -1));
-        jPanel1.add(txtFechaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 280, 220, -1));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -251,25 +244,26 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 800, 10));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1280, 10));
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("ASIGNATURAS");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 70, -1, -1));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("ADMINISTRAR");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 40, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 30, -1, -1));
 
-        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/HEADER.jpg"))); // NOI18N
+        HEADER.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/REDHEADER.png"))); // NOI18N
         HEADER.setText("jLabel7");
         HEADER.setAutoscrolls(true);
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 150));
+        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1290, 150));
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel13.setText("INGRESO DE DATOS:");
@@ -282,7 +276,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 190, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 190, 140, -1));
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
         btnModificar.setText("MODIFICAR");
@@ -291,7 +285,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
                 btnModificarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 140, -1));
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 240, 140, -1));
 
         btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
         btnBorrar.setText("DAR DE BAJA");
@@ -300,7 +294,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
                 btnBorrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 290, 140, -1));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 290, 140, -1));
 
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
         btnSalir.setText("       SALIR");
@@ -309,7 +303,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 130, -1));
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 240, 130, -1));
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
         btnCancelar.setText("CANCELAR");
@@ -318,7 +312,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 130, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 130, -1));
 
         btnOrdenar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconOrdenar.png"))); // NOI18N
         btnOrdenar.setText("ORDENAR");
@@ -338,15 +332,29 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         jLabel9.setText("ASIGNATURAS REGISTRADOS EN EL SISTEMA:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/icons8-shuffle-20.png"))); // NOI18N
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, 20, 20));
+        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, 220, -1));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel10.setText("Nombre:");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -367,8 +375,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         }
         
         txtNombre.setText(asignaturaControl.getAsignatura().getNombre());
-        txtFechaInicio.setDate(asignaturaControl.getAsignatura().getFechaInicio());
-        txtFechaFin.setDate(asignaturaControl.getAsignatura().getFechaFin());
+        txtCodigo.setText(asignaturaControl.getAsignatura().getCodigo());
     }//GEN-LAST:event_tblAsignaturaMouseClicked
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
@@ -428,6 +435,25 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (!txtNombre.getText().trim().isEmpty()) {
+       txtCodigo.setText(Utiles.generarCodigoAsignatura(
+               txtNombre.getText(), 
+               asignaturaControl.getListaAsignaturas().getLenght()+1));            
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe proporcionar el nombre de la asignatura");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cbxCriterioBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCriterioBusquedaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxCriterioBusquedaActionPerformed
+
+    private void cbxCriterioOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCriterioOrdenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxCriterioOrdenActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -477,9 +503,9 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private javax.swing.JRadioButton btnTipoOrden;
     private javax.swing.JComboBox<String> cbxCriterioBusqueda;
     private javax.swing.JComboBox<String> cbxCriterioOrden;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -489,8 +515,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblAsignatura;
     private javax.swing.JTextField txtBusqueda;
-    private com.toedter.calendar.JDateChooser txtFechaFin;
-    private com.toedter.calendar.JDateChooser txtFechaInicio;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

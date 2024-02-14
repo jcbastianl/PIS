@@ -4,31 +4,20 @@
  */
 package modelo;
 
+import controlador.TDA.listas.DynamicList;
+
 /**
  *
  * @author jsbal
  */
 public class Estudiante extends Persona {
 
-    private Double porcentajeAsistencias;
+    private String colegioProcedencia;
+    private String provinciaOrigen;
     private Integer id;
-    private Integer id_cursa;
+
 
     public Estudiante() {
-    }
-
-    /**
-     * @return the porcentajeAsistencias
-     */
-    public Double getPorcentajeAsistencias() {
-        return porcentajeAsistencias;
-    }
-
-    /**
-     * @param porcentajeAsistencias the porcentajeAsistencias to set
-     */
-    public void setPorcentajeAsistencias(Double porcentajeAsistencias) {
-        this.porcentajeAsistencias = porcentajeAsistencias;
     }
 
     /**
@@ -45,19 +34,6 @@ public class Estudiante extends Persona {
         this.id = id;
     }
 
-    /**
-     * @return the id_cursa
-     */
-    public Integer getId_cursa() {
-        return id_cursa;
-    }
-
-    /**
-     * @param id_cursa the id_cursa to set
-     */
-    public void setId_cursa(Integer id_cursa) {
-        this.id_cursa = id_cursa;
-    }
 
     public Boolean compare(Estudiante e, String field, Integer type) {
         switch (type) {
@@ -87,10 +63,39 @@ public class Estudiante extends Persona {
         return null;
     }
 
+    /**
+     * @return the colegioProcedencia
+     */
+    public String getColegioProcedencia() {
+        return colegioProcedencia;
+    }
+
+    /**
+     * @param colegioProcedencia the colegioProcedencia to set
+     */
+    public void setColegioProcedencia(String colegioProcedencia) {
+        this.colegioProcedencia = colegioProcedencia;
+    }
+
+    /**
+     * @return the provinciaOrigen
+     */
+    public String getProvinciaOrigen() {
+        return provinciaOrigen;
+    }
+
+    /**
+     * @param provinciaOrigen the provinciaOrigen to set
+     */
+    public void setProvinciaOrigen(String provinciaOrigen) {
+        this.provinciaOrigen = provinciaOrigen;
+    }
+
+
     @Override
     public String toString() {
         return getNombre()+" "+getApellido();
-    }
+    }    
 
-    
+   
 }

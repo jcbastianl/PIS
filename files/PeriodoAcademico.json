@@ -1,0 +1,30 @@
+{
+    "controlador.TDA.listas.DynamicList": {
+        "header": {
+            "info": {
+                "@class": "modelo.PeriodoAcademico",
+                "id": 1,
+                "mesInicio": "OCTUBRE",
+                "mesFin": "MARZO",
+                "yearInicio": 2023,
+                "yearFin": 2024,
+                "modalidad": "PRESENCIAL"
+            },
+            "next": {
+                "info": {
+                    "@class": "modelo.PeriodoAcademico",
+                    "id": 2,
+                    "mesInicio": "ABRIL",
+                    "mesFin": "SEPTIEMBRE",
+                    "yearInicio": 2024,
+                    "yearFin": 2024,
+                    "modalidad": "PRESENCIAL"
+                }
+            }
+        },
+        "last": {
+            "@reference": "..\/header\/next"
+        },
+        "lenght": 2
+    }
+}

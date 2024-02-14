@@ -20,14 +20,22 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
     private EstudianteControl estudianteControl = new EstudianteControl();
     private EstudianteModeloTabla modelo = new EstudianteModeloTabla();
-   
 
     private CuentaControl cuentaControl = new CuentaControl();
-    
+
     private Boolean verificar() {
         return (!(txtApellido.getText().trim().isEmpty())
                 && !(txtNombre.getText().trim().isEmpty())
+                && !txtColegio.getText().trim().isEmpty()
+                && !txtProvincia.getText().trim().isEmpty()
+                && !txtTelefono.getText().trim().isEmpty()
                 && !(txtDni.getText().trim().isEmpty()));
+    }
+
+    private Boolean verificarDatosCuenta() {
+        return (!(txtCorreo.getText().trim().isEmpty())
+                && !(txtClaveUno.getText().trim().isEmpty())
+                && !(txtClaveDos.getText().trim().isEmpty()));
     }
 
     public void cargarTabla() {
@@ -41,7 +49,13 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         txtBusqueda.setText("");
         txtDni.setText("");
         txtNombre.setText("");
-
+        txtTelefono.setText("");
+        txtColegio.setText("");
+        txtProvincia.setText("");
+        txtCorreo.setText("");
+        txtClaveUno.setText("");
+        txtClaveDos.setText("");
+        btnEstadoExtranjero.setSelected(false);
         tblEstudiante.clearSelection();
         cargarTabla();
     }
@@ -51,30 +65,41 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
             estudianteControl.getEstudiante().setNombre(txtNombre.getText());
             estudianteControl.getEstudiante().setApellido(txtApellido.getText());
             estudianteControl.getEstudiante().setDni(txtDni.getText());
-            estudianteControl.getEstudiante().setRol("ESTUDIANTE");
-
+            estudianteControl.getEstudiante().setRol(1);
+            estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
+            estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
+            estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
+            estudianteControl.getEstudiante().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
             cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
             if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
                 cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
+                cuentaControl.getCuenta().setPersona(estudianteControl.getEstudiante());
+                cuentaControl.getCuenta().setEstado(true);
+                if (verificarDatosCuenta()) {
+                    if (estudianteControl.persist()) {
+
+                        if (cuentaControl.persist()) {
+                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al registrarse");
+                        }
+
+                        limpiar();
+                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Las claves no coinciden");
             }
 
-            cuentaControl.getCuenta().setPersona(estudianteControl.getEstudiante());
-            
-            
-            if (estudianteControl.persist()) {
-                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
-                if (cuentaControl.persist()) {
-                    JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error al registrarse");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar");
-            }
             estudianteControl.setEstudiante(null);
-            limpiar();
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Rellena todos los campos");
         }
     }
 
@@ -83,7 +108,9 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
             estudianteControl.getEstudiante().setNombre(txtNombre.getText());
             estudianteControl.getEstudiante().setApellido(txtApellido.getText());
             estudianteControl.getEstudiante().setDni(txtDni.getText());
-
+            estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
+            estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
+            estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
             try {
                 Integer indiceEstudiante = Utiles.encontrarPosicion("docente", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
 
@@ -98,15 +125,18 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
             estudianteControl.setEstudiante(null);
             limpiar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Rellena todos los campos");
         }
     }
 
     private void borrar() {
         try {
-            Integer indiceDocente = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
+            Integer indiceEstudiante = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
 
             if (tblEstudiante.getSelectedRow() > -1) {
-                if (estudianteControl.remove(indiceDocente)) {
+                new CuentaControl().remove(estudianteControl.getListaEstudiantes().getInfo(indiceEstudiante).getCuenta());
+                if (estudianteControl.remove(indiceEstudiante)) {
                     JOptionPane.showMessageDialog(null, "Se borro el elemento");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
@@ -143,7 +173,6 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         tblEstudiante.updateUI();
     }
 
-  
     /**
      * Creates new form frmDocente
      */
@@ -179,22 +208,29 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         HEADER = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        btnBorrar = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
-        btnGuardar = new javax.swing.JButton();
-        btnSalir = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
         btnTipoOrden = new javax.swing.JRadioButton();
         btnOrdenar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        btnGuardar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtClaveUno = new javax.swing.JTextField();
         txtClaveDos = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        btnEstadoExtranjero = new javax.swing.JRadioButton();
+        txtColegio = new javax.swing.JTextField();
+        txtProvincia = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(465, 570));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -208,17 +244,32 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 60, 20));
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("DNI:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, 40, 20));
+        jLabel4.setText("Provincia:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 250, 70, 20));
 
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombreKeyTyped(evt);
             }
         });
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 280, -1));
-        jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 280, -1));
-        jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 280, -1));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, 230, -1));
+
+        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 230, -1));
+
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 230, -1));
 
         jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -284,25 +335,25 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 800, 10));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1280, 10));
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("ESTUDIANTES");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 80, -1, -1));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Arial", 0, 36)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("ADMINISTRAR");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 40, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 40, -1, -1));
 
-        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/HEADER.jpg"))); // NOI18N
+        HEADER.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/REDHEADER.png"))); // NOI18N
         HEADER.setText("jLabel7");
         HEADER.setAutoscrolls(true);
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 150));
+        jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 150));
 
         jLabel13.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel13.setText("INGRESO DE DATOS:");
@@ -311,46 +362,6 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel14.setText("INGRESO DE DATOS:");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, 20));
-
-        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
-        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 50, -1));
-
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 250, 50, -1));
-
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 200, 50, -1));
-
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 250, 40, -1));
-
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 200, 40, -1));
 
         btnTipoOrden.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         btnTipoOrden.setText("Descendente");
@@ -370,42 +381,117 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         jLabel9.setText("CURSOS REGISTRADOS EN EL SISTEMA:");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, -1, 20));
 
-        jLabel15.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel15.setText("CUENTA:");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 180, -1, 20));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
+        btnGuardar.setText("    GUARDAR");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 200, 140, -1));
+
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconModificar.png"))); // NOI18N
+        btnModificar.setText("MODIFICAR");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 250, 140, -1));
+
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconBorrar.png"))); // NOI18N
+        btnBorrar.setText("DAR DE BAJA");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 300, 140, -1));
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/iconCancelar.png"))); // NOI18N
+        btnCancelar.setText("   CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 350, 140, -1));
+
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconSalir.png"))); // NOI18N
+        btnSalir.setText("           SALIR");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 400, 140, -1));
+
+        jLabel16.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel16.setText("CUENTA:");
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 190, -1, 20));
 
         jLabel10.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel10.setText("Nombre de usuario:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 210, -1, 20));
-        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 230, 230, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 220, -1, 20));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 240, 230, -1));
 
         jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel11.setText("Contraseña (Repetir):");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 260, -1, 20));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 270, -1, 20));
 
         txtClaveUno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtClaveUnoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtClaveUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 280, 230, -1));
+        txtClaveUno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtClaveUnoKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtClaveUno, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 290, 230, -1));
 
         txtClaveDos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtClaveDosActionPerformed(evt);
             }
         });
-        jPanel1.add(txtClaveDos, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 310, 230, -1));
+        jPanel1.add(txtClaveDos, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 320, 230, -1));
+        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, 230, -1));
+
+        jLabel15.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel15.setText("Teléfono:");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, -1, 20));
+
+        btnEstadoExtranjero.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        btnEstadoExtranjero.setText("Usuario Extranjero");
+        btnEstadoExtranjero.setContentAreaFilled(false);
+        btnEstadoExtranjero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstadoExtranjeroActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEstadoExtranjero, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 280, -1, -1));
+        jPanel1.add(txtColegio, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 220, 220, -1));
+        jPanel1.add(txtProvincia, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 250, 220, -1));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setText("DNI:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, 40, 20));
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel12.setText("Colegio:");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 50, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
         );
 
         pack();
@@ -427,49 +513,15 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         txtApellido.setText(estudianteControl.getEstudiante().getApellido());
         txtNombre.setText(estudianteControl.getEstudiante().getNombre());
         txtDni.setText(estudianteControl.getEstudiante().getDni());
+        txtTelefono.setText(estudianteControl.getEstudiante().getTelefono());
+        txtProvincia.setText(estudianteControl.getEstudiante().getProvinciaOrigen());
+        txtColegio.setText(estudianteControl.getEstudiante().getColegioProcedencia());
 
     }//GEN-LAST:event_tblEstudianteMouseClicked
 
     private void txtBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBusquedaKeyPressed
-
-    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
-        // TODO add your handling code here:
-        try {
-            borrar();
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnBorrarActionPerformed
-
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
-        try {
-            modificar();
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        try {
-            guardar();
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
-        try {
-            limpiar();
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
         try {
@@ -483,17 +535,18 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxCriterioBusquedaActionPerformed
 
+    public void generarUser() {
+        txtCorreo.setText(Utiles.crearNombreUser(txtNombre.getText(), txtApellido.getText()));
 
-    private void txtClaveUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveUnoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtClaveUnoActionPerformed
+    }
 
-    private void txtClaveDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveDosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtClaveDosActionPerformed
+    public void rellenarClaves() {
+        txtClaveUno.setText(txtDni.getText());
+        txtClaveDos.setText(txtClaveUno.getText());
+    }
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-
+        generarUser();
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
@@ -503,6 +556,73 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtBusquedaKeyTyped
 
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+            guardar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+        try {
+            modificar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+        try {
+            borrar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        try {
+            limpiar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void txtClaveUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveUnoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveUnoActionPerformed
+
+    private void txtClaveDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveDosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveDosActionPerformed
+
+    private void btnEstadoExtranjeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadoExtranjeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEstadoExtranjeroActionPerformed
+
+    private void txtApellidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtApellidoKeyPressed
+
+    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
+        // TODO add your handling code here:
+        generarUser();
+    }//GEN-LAST:event_txtApellidoKeyTyped
+
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        rellenarClaves();
+    }//GEN-LAST:event_txtDniKeyTyped
+
+    private void txtClaveUnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClaveUnoKeyTyped
+        // TODO add your handling code here:
+        txtClaveDos.setText(txtClaveUno.getText());
+    }//GEN-LAST:event_txtClaveUnoKeyTyped
 
     /**
      * @param args the command line arguments
@@ -546,6 +666,7 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     private javax.swing.JLabel HEADER;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JRadioButton btnEstadoExtranjero;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnOrdenar;
@@ -555,11 +676,14 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbxCriterioOrden;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -572,8 +696,11 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     private javax.swing.JTextField txtBusqueda;
     private javax.swing.JTextField txtClaveDos;
     private javax.swing.JTextField txtClaveUno;
+    private javax.swing.JTextField txtColegio;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDni;
     private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtProvincia;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

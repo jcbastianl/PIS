@@ -10,6 +10,7 @@ import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
 import modelo.Estudiante;
 import java.lang.reflect.Field;
+import modelo.Matricula;
 /**
  *
  * @author jsbal
@@ -134,5 +135,6 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
             return null;
         }
     }    
+    
 }
 

@@ -13,13 +13,12 @@ import java.util.Date;
 public class Matricula {
 
     private Date fechaRegistro;
-    private Integer numero;
+    private Integer codigo;
     private Integer id;
-//    private Integer id_cursa;
-    private Cursa cursa;
-    //private Integer id_estudiante;
-    private Estudiante estudiante;
-    private String estadoMatricula;
+    private Integer cursa;
+    private Integer estudiante;
+    private Boolean estadoMatricula;
+    private Integer idPeriodoAcademico;
 
     public Matricula() {
     }
@@ -39,19 +38,6 @@ public class Matricula {
         this.fechaRegistro = fechaRegistro;
     }
 
-    /**
-     * @return the numero
-     */
-    public Integer getNumero() {
-        return numero;
-    }
-
-    /**
-     * @param numero the numero to set
-     */
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
 
     /**
      * @return the id
@@ -66,69 +52,99 @@ public class Matricula {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
-    }
-
     
-    /**
-     * @return the estadoMatricula
-     */
-    public String getEstadoMatricula() {
-        return estadoMatricula;
-    }
-
-    /**
-     * @param estadoMatricula the estadoMatricula to set
-     */
-    public void setEstadoMatricula(String estadoMatricula) {
-        this.estadoMatricula = estadoMatricula;
-    }
-
-    public Cursa getCursa() {
-        return cursa;
-    }
-
-    public void setCursa(Cursa cursa) {
-        this.cursa = cursa;
-    }
-
+    
 
     public Boolean compare(Matricula p, String field, Integer type){
         switch (type) {
             case 0:
-        if(field.equalsIgnoreCase("apellido")){
-            return estudiante.getApellido().compareTo(p.getEstudiante().getApellido()) < 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) < 0;
-        }else if(field.equalsIgnoreCase("fecharegistro")){
-            return fechaRegistro.compareTo(p.getFechaRegistro()) < 0;
-        }else if(field.equalsIgnoreCase("estadomatricula")){
-            return estadoMatricula.compareTo(p.getEstadoMatricula()) < 0;
+        if(field.equalsIgnoreCase("fecharegistro")){
+            return getFechaRegistro().compareTo(p.getFechaRegistro()) < 0;
         }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() < p.getId().intValue());
+            return (getId().intValue() < p.getId().intValue());
         }
             case 1:
-        if(field.equalsIgnoreCase("apellido")){
-            return estudiante.getApellido().compareTo(p.getEstudiante().getApellido()) > 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return estudiante.getNombre().compareTo(p.getEstudiante().getNombre()) > 0;
-        }else if(field.equalsIgnoreCase("fecharegistro")){
-            return fechaRegistro.compareTo(p.getFechaRegistro()) > 0;
-        }else if(field.equalsIgnoreCase("estadomatricula")){
-            return estadoMatricula.compareTo(p.getEstadoMatricula()) > 0;
+        if(field.equalsIgnoreCase("fecharegistro")){
+            return getFechaRegistro().compareTo(p.getFechaRegistro()) > 0;
         }else if(field.equalsIgnoreCase("id")){
-            return (id.intValue() > p.getId().intValue());
-        } 
+            return (getId().intValue() < p.getId().intValue());
+        }
         
         default:
         return null;
 
         }
     }      
+
+    /**
+     * @return the codigo
+     */
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    /**
+     * @param codigo the codigo to set
+     */
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+    /**
+     * @return the idPeriodoAcademico
+     */
+    public Integer getIdPeriodoAcademico() {
+        return idPeriodoAcademico;
+    }
+
+    /**
+     * @param idPeriodoAcademico the idPeriodoAcademico to set
+     */
+    public void setIdPeriodoAcademico(Integer idPeriodoAcademico) {
+        this.idPeriodoAcademico = idPeriodoAcademico;
+    }
+
+
+
+    /**
+     * @return the estadoMatricula
+     */
+    public Boolean getEstadoMatricula() {
+        return estadoMatricula;
+    }
+
+    /**
+     * @param estadoMatricula the estadoMatricula to set
+     */
+    public void setEstadoMatricula(Boolean estadoMatricula) {
+        this.estadoMatricula = estadoMatricula;
+    }
+
+    /**
+     * @return the cursa
+     */
+    public Integer getCursa() {
+        return cursa;
+    }
+
+    /**
+     * @param cursa the cursa to set
+     */
+    public void setCursa(Integer cursa) {
+        this.cursa = cursa;
+    }
+
+    /**
+     * @return the estudiante
+     */
+    public Integer getEstudiante() {
+        return estudiante;
+    }
+
+    /**
+     * @param estudiante the estudiante to set
+     */
+    public void setEstudiante(Integer estudiante) {
+        this.estudiante = estudiante;
+    }
 }

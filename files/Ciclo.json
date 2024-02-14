@@ -1,0 +1,1 @@
+{"controlador.TDA.listas.DynamicList":{"header":{"info":{"@class":"modelo.Ciclo","id":1,"ciclo":1,"paralelo":"A"},"next":{"info":{"@class":"modelo.Ciclo","id":2,"ciclo":2,"paralelo":"A"},"next":{"info":{"@class":"modelo.Ciclo","id":3,"ciclo":3,"paralelo":"A"}}}},"last":{"@reference":"..\/header\/next\/next"},"lenght":3}}

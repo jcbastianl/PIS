@@ -39,7 +39,7 @@ public class EstudianteModeloTabla extends AbstractTableModel {
                 case 2:
                     return (e != null) ? e.getDni() : " ";
                 case 3:
-                    return (e != null) ? e.getId() : " ";
+                    return (e != null) ? e.getProvinciaOrigen() : " ";
                 default:
                     return null;
             }
@@ -58,7 +58,7 @@ public class EstudianteModeloTabla extends AbstractTableModel {
             case 2:
                 return "DNI";
             case 3:
-                return "ID";                
+                return "CIUDAD";                
             default:
                 return null;
         }

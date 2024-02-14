@@ -62,13 +62,13 @@ public class frmAsistencia extends javax.swing.JFrame {
         private void guardar() throws EmptyException {
                 for (int i = 0; i < tblLista.getSelectedRowCount(); i++) {
                         Estudiante aux = controlE.getListaEstudiantes().getInfo(i);
-                        controlAsis.getAsistencia().setEstudiante(aux);
-                        String texto = String.valueOf(cbxEstadoAsistencia.getSelectedItem());
-                        controlAsis.getAsistencia().getEstadoAsistencia().setNombre(texto);
-                        controlAsis.getAsistencia().getClaseDictada().setTema(txtTema.getText().trim());
-                        controlAsis.getAsistencia().setHorario((Horario) cbxHorario.getSelectedItem());
-                        controlAsis.getAsistencia().setFecha(txtFecha.getDate());
-                        controlAsis.getAsistencia().getHorario().setFecha(txtFecha.getDate());
+//                        controlAsis.getAsistencia().setEstudiante(aux);
+//                        String texto = String.valueOf(cbxEstadoAsistencia.getSelectedItem());
+//                        controlAsis.getAsistencia().getEstadoAsistencia().setNombre(texto);
+//                        controlAsis.getAsistencia().getClaseDictada().setTema(txtTema.getText().trim());
+//                        controlAsis.getAsistencia().setHorario((Horario) cbxHorario.getSelectedItem());
+//                        controlAsis.getAsistencia().setFecha(txtFecha.getDate());
+//                        controlAsis.getAsistencia().getHorario().setFecha(txtFecha.getDate());
                         if (controlAsis.persist()) {
                                 JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                         } else {

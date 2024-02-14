@@ -4,6 +4,8 @@
  */
 package modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author jsbal
@@ -11,8 +13,9 @@ package modelo;
 public class ClaseDictada {
     private Integer id;
     private String tema;
+    private Date fecha;
     private Integer id_cursa;
-    private Integer id_asignatura;
+   
 
     public ClaseDictada() {
     }
@@ -60,18 +63,20 @@ public class ClaseDictada {
     }
 
     /**
-     * @return the id_asignatura
+     * @return the fecha
      */
-    public Integer getId_asignatura() {
-        return id_asignatura;
+    public Date getFecha() {
+        return fecha;
     }
 
     /**
-     * @param id_asignatura the id_asignatura to set
+     * @param fecha the fecha to set
      */
-    public void setId_asignatura(Integer id_asignatura) {
-        this.id_asignatura = id_asignatura;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
+
+
     
     
 }
