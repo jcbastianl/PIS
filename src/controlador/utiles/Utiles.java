@@ -23,9 +23,7 @@ import modelo.Asistencia;
 import modelo.ClaseDictada;
 import modelo.Cursa;
 import modelo.Estudiante;
-import modelo.Matricula;
-
-public class Utiles {
+import modelo.Matricula;public class Utiles {
 
     //CMETODO PARA VALIDAD CEDULAS 
     public static boolean validadorDeCedula(String cedula) {
