@@ -5,8 +5,12 @@
         <group>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/controlador/controlador.java</file>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/estudiante/FrmEstudiantePrincipal.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Matricula.java</file>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/estudiante/FrmEstudianteAsistencias.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/PeriodoAcademico.java</file>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/vista/modeloTablas/EstudianteAsistenciaModeloTabla.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Horario.java</file>
+            <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/modelo/Persona.java</file>
             <file>file:/C:/Users/Usuario%20iTC/Desktop/PIS3RO/PIS/src/controlador/ControlPruebas.java</file>
         </group>
     </open-files>

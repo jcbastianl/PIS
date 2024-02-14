@@ -283,6 +283,14 @@ import modelo.Matricula;public class Utiles {
             return "CANCELADO";
         }
     }
+    
+    public static String traducirEstadoAsistenciaString(Boolean i) {
+        if (i) {
+            return "PRESENTE";
+        } else {
+            return "AUSENTE";
+        }
+    }
 
     public static Integer traducirEstadoIndice(Boolean i) {
         if (i) {
