@@ -20,7 +20,7 @@ public class EstudianteAsistenciaModeloTabla extends AbstractTableModel {
         private DynamicList<Asistencia> asistencias;
         private Integer estu;
         private final String[] columnNames = {"TEMA CLASE", "ESTADO", "FECHA"};
-        private final Class[] columnClasses = {String.class, Boolean.class, Date.class};
+        private final Class[] columnClasses = {String.class, String.class, Date.class};
 
         @Override
         public int getRowCount() {
@@ -65,7 +65,7 @@ public class EstudianteAsistenciaModeloTabla extends AbstractTableModel {
                                 case 0:
                                         return clasedic.getTema();
                                 case 1:
-                                        return asistencia.getEstadoAsistencia();
+                                        return Utiles.traducirEstadoAsistenciaString(asistencia.getEstadoAsistencia());
                                 case 2:
                                         return clasedic.getFecha();
                                 default:
