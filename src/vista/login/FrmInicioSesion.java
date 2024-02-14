@@ -4,17 +4,15 @@
  */
 package vista.login;
 
-import controlador.TDA.listas.Exception.EmptyException;
+
 import controlador.clases.CuentaControl;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Docente;
+import modelo.Estudiante;
 import modelo.Persona;
 import vista.admin.FrmAdmPrincipal;
 import vista.docente.FrmDocentePrincipal;
-import vista.docente.frmAsistencia;
-import vista.estudiante.frmEstudiante;
+import vista.estudiante.FrmEstudiantePrincipal;
 
 /**
  *
@@ -62,6 +60,8 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             new FrmDocentePrincipal((Docente)persona).setVisible(true);
             dispose();
         } else {
+            new FrmEstudiantePrincipal((Estudiante)persona).setVisible(true);
+            dispose();
         }
     
     }
@@ -99,12 +99,9 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         HEADER = new javax.swing.JLabel();
-        btnEstudent = new javax.swing.JButton();
-        btnDocente = new javax.swing.JButton();
         btnAdmin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setMinimumSize(new java.awt.Dimension(800, 600));
@@ -176,22 +173,6 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         HEADER.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.add(HEADER, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 1280, 170));
 
-        btnEstudent.setText("Estudiante");
-        btnEstudent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEstudentActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEstudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 280, -1, -1));
-
-        btnDocente.setText("Docente");
-        btnDocente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDocenteActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 310, -1, -1));
-
         btnAdmin.setText("ADMIN");
         btnAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,24 +208,6 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         new FrmAdmPrincipal().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
-
-    private void btnDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDocenteActionPerformed
-        // TODO add your handling code here:
-        try {
-         new frmAsistencia().setVisible(true);   
-        } catch (Exception e) {
-        }
-        
-    }//GEN-LAST:event_btnDocenteActionPerformed
-
-    private void btnEstudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstudentActionPerformed
-            try {
-                    // TODO add your handling code here:
-                    new frmEstudiante().setVisible(true);
-            } catch (EmptyException ex) {
-                    Logger.getLogger(FrmInicioSesion.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }//GEN-LAST:event_btnEstudentActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,8 +247,6 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel HEADER;
     private javax.swing.JButton btnAdmin;
-    private javax.swing.JButton btnDocente;
-    private javax.swing.JButton btnEstudent;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
