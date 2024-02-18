@@ -38,7 +38,7 @@ public class controlador {
 
         //new FrmDocenteAsignaciones(new CursaControl().all().getInfo(1)).setVisible(true);
         
-        new FrmDocentePrincipal(new DocenteControl().getListaDocentes().getInfo(2)).setVisible(true);
+        new FrmDocentePrincipal(new DocenteControl().getListaDocentes().getInfo(0)).setVisible(true);
 //        JustificativoControl n = new JustificativoControl();
 //        n.getJustificativo().setDescripcion("Falte porque jugaba el madrid");
 //        n.getJustificativo().setMotivo("madrid vs barce");

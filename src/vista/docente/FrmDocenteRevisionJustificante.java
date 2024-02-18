@@ -41,7 +41,8 @@ public class FrmDocenteRevisionJustificante extends javax.swing.JFrame {
         }
 
         try {
-            justificativoControl.setJustificativo(justificativoControl.getListaJustificativos().getInfo(Utiles.encontrarPosicion("justificativo", asistenciaControl.getAsistencia().getId_justificativo())));
+            
+            justificativoControl.setJustificativo(Utiles.recuperarJustificativodeAsistencia(asistenciaControl.getAsistencia().getId()));
 
         } catch (Exception e) {
             System.out.println("3" + e.getMessage());

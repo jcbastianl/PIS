@@ -88,8 +88,6 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         HEADER = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        lblTemaClase = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAsistencias = new javax.swing.JTable();
         txtTema = new javax.swing.JTextField();
@@ -137,17 +135,6 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1280, 10));
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setLayout(new java.awt.GridBagLayout());
-
-        lblTemaClase.setBackground(new java.awt.Color(255, 255, 255));
-        lblTemaClase.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        lblTemaClase.setForeground(new java.awt.Color(51, 51, 51));
-        lblTemaClase.setText("NUEVA CLASE");
-        jPanel3.add(lblTemaClase, new java.awt.GridBagConstraints());
-
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 1280, 40));
 
         tblAsistencias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -279,9 +266,7 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTemaClase;
     private javax.swing.JTable tblAsistencias;
     private com.toedter.calendar.JDateChooser txtFecha;
     private javax.swing.JTextField txtTema;

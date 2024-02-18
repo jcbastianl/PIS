@@ -15,7 +15,7 @@ import vista.estudiante.FrmEstudiantePrincipal;
 public class ControlPruebas {
         public static void main(String[] args) throws EmptyException {
                 //new FrmDocentePrincipal(new DocenteControl().getListaDocentes().getInfo(2)).setVisible(true);
-                new FrmEstudiantePrincipal(new EstudianteControl().getListaEstudiantes().getInfo(0)).setVisible(true);
+                new FrmEstudiantePrincipal(new EstudianteControl().getListaEstudiantes().getInfo(1)).setVisible(true);
                 //new FrmEstudianteAsistencias(new EstudianteControl().getListaEstudiantes().getInfo(1).getId(), "Base Datos").setVisible(true);
         }
 }

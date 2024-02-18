@@ -16,7 +16,6 @@ public class Asistencia {
     private Boolean estadoAsistencia;
     private Integer id_estudiante;
     private Integer id_claseDictada;
-    private Integer id_justificativo;
 
     public Asistencia() {
     }
@@ -75,20 +74,6 @@ public class Asistencia {
      */
     public void setId_claseDictada(Integer id_claseDictada) {
         this.id_claseDictada = id_claseDictada;
-    }
-
-    /**
-     * @return the id_justificativo
-     */
-    public Integer getId_justificativo() {
-        return id_justificativo;
-    }
-
-    /**
-     * @param id_justificativo the id_justificativo to set
-     */
-    public void setId_justificativo(Integer id_justificativo) {
-        this.id_justificativo = id_justificativo;
     }
 
     @Override
