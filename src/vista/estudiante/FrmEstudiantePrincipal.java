@@ -4,10 +4,12 @@
  */
 package vista.estudiante;
 
+import controlador.clases.AsignaturaControl;
 import vista.docente.*;
 import controlador.clases.CursaControl;
 import controlador.clases.EstudianteControl;
 import controlador.utiles.Utiles;
+import modelo.Cursa;
 import modelo.Estudiante;
 import vista.modeloTablas.CursaModeloTabla;
 import vista.modeloTablas.EstudianteCursaModeloTabla;
@@ -19,11 +21,10 @@ import vista.modeloTablas.EstudianteCursaModeloTabla;
 public class FrmEstudiantePrincipal extends javax.swing.JFrame {
 
     EstudianteCursaModeloTabla modelo = new EstudianteCursaModeloTabla();
-    CursaControl cursaControl = new CursaControl();
     Estudiante estudiante;
 
     /**
-         * @param estu
+     * @param estu
      */
     public FrmEstudiantePrincipal(Estudiante estu) {
         initComponents();
@@ -34,7 +35,7 @@ public class FrmEstudiantePrincipal extends javax.swing.JFrame {
 
     private void cargarTablua() {
         try {
-            modelo.setListaCursos(Utiles.recuperarCursasDocente(estudiante.getId()));
+            modelo.setListaCursos(Utiles.recuperarCursasEstudiante(estudiante.getId()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -161,8 +162,11 @@ public class FrmEstudiantePrincipal extends javax.swing.JFrame {
 
     private void btnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccederActionPerformed
         // TODO add your handling code here:
+        Cursa c;
+
         try {
-            new FrmEstudianteAsistencias(estudiante.getId(), (String) tblCursos.getValueAt(tblCursos.getSelectedRow(), 0)).setVisible(true);
+            c = Utiles.recuperarCursasEstudiante(estudiante.getId()).getInfo(tblCursos.getSelectedRow());
+            new FrmEstudianteAsistencias(estudiante.getId(), c.getId(), c.getAsignatura().getNombre()).setVisible(true);
             dispose();
         } catch (Exception e) {
             System.out.println(e.getMessage());

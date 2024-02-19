@@ -23,7 +23,10 @@ import modelo.Asistencia;
 import modelo.ClaseDictada;
 import modelo.Cursa;
 import modelo.Estudiante;
-import modelo.Matricula;public class Utiles {
+import modelo.Justificativo;
+import modelo.Matricula;
+
+public class Utiles {
 
     //CMETODO PARA VALIDAD CEDULAS 
     public static boolean validadorDeCedula(String cedula) {
@@ -176,9 +179,9 @@ import modelo.Matricula;public class Utiles {
                 case "clasedictada":
                     return encontrarPosicion(ClaseDictadaControl.class, id);
                 case "justificativo":
-                    return encontrarPosicion(JustificativoControl.class, id);   
+                    return encontrarPosicion(JustificativoControl.class, id);
                 case "asistencia":
-                    return encontrarPosicion(AsistenciaControl.class, id);                       
+                    return encontrarPosicion(AsistenciaControl.class, id);
                 default:
                     throw new IllegalArgumentException("Tipo de objeto desconocido: " + tipoObj);
             }
@@ -283,7 +286,7 @@ import modelo.Matricula;public class Utiles {
             return "CANCELADO";
         }
     }
-    
+
     public static String traducirEstadoAsistenciaString(Boolean i) {
         if (i) {
             return "PRESENTE";
@@ -327,16 +330,16 @@ import modelo.Matricula;public class Utiles {
     public static Integer encontraridCursa(Integer u) throws Exception {
         return new CursaControl().getListaCursas().getInfo(u).getId();
     }
-    
+
     public static Integer encontraridClase(Integer u) throws Exception {
         return new ClaseDictadaControl().getListaClases().getInfo(u).getId();
-    }    
+    }
 
     public static DynamicList<Cursa> recuperarCursasDocente(Integer id) throws Exception {
         CursaControl cc = new CursaControl();
         DynamicList<Cursa> aux = new DynamicList<>();
         for (int i = 0; i < cc.all().getLenght(); i++) {
-            if (cc.all().getInfo(i).getDocente().equals(id)) { // Corregir aquí
+            if (cc.all().getInfo(i).getDocente().equals(id)) {
                 aux.add(cc.all().getInfo(i));
             }
         }
@@ -347,7 +350,7 @@ import modelo.Matricula;public class Utiles {
         ClaseDictadaControl cd = new ClaseDictadaControl();
         DynamicList<ClaseDictada> aux = new DynamicList<>();
         for (int i = 0; i < cd.all().getLenght(); i++) {
-            if (cd.all().getInfo(i).getId_cursa().equals(id)) { // Corregir aquí
+            if (cd.all().getInfo(i).getId_cursa().equals(id)) {
                 aux.add(cd.all().getInfo(i));
             }
         }
@@ -404,5 +407,65 @@ import modelo.Matricula;public class Utiles {
         }
         return asistencias;
     }
+
+    public static Justificativo recuperarJustificativodeAsistencia(Integer k) {
+        JustificativoControl jc = new JustificativoControl();
+        for (int i = 0; i < jc.getListaJustificativos().getLenght(); i++) {
+            try {
+                if (jc.getListaJustificativos().getInfo(i).getId_asistencia().equals(k)) {
+                    return jc.getListaJustificativos().getInfo(i);
+                }
+            } catch (Exception e) {
+            }
+        }
+        return null;
+
+    }
+
+    public static DynamicList<Matricula> recuperarMatriculasEstudiante(Integer es) {
+        MatriculaControl mc = new MatriculaControl();
+        DynamicList<Matricula> aux = new DynamicList<>();
+        for (int i = 0; i < mc.getListaMatriculas().getLenght(); i++) {
+            try {
+                if (mc.getListaMatriculas().getInfo(i).getEstudiante().equals(es)) {
+                    aux.add(mc.getListaMatriculas().getInfo(i));
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<Cursa> recuperarCursasEstudiante(Integer id) throws Exception {
+        DynamicList<Matricula> matri = recuperarMatriculasEstudiante(id);
+        CursaControl cc = new CursaControl();
+        DynamicList<Cursa>aux = new DynamicList<>();
+        for (int i = 0; i < matri.getLenght(); i++) {
+            for (int j = 0; j < cc.getListaCursas().getLenght(); j++) {
+                if (cc.getListaCursas().getInfo(id).getId().equals(matri.getInfo(i).getCursa())) {
+                    aux.add(cc.getListaCursas().getInfo(j));
+                }
+            }
+        }
+        return aux;
+    }
+    
+    public static DynamicList<Asistencia> recuperarAsistenciasEstudiante(Integer id, Integer cursa) throws Exception {
+        AsistenciaControl ac = new AsistenciaControl();
+        DynamicList<Asistencia> aux = new DynamicList<>();
+
+        for (int i = 0; i < ac.getListaEstadoAsistencia().getLenght(); i++) {
+            Asistencia a = ac.getListaEstadoAsistencia().getInfo(i);
+            ClaseDictadaControl cdc = new ClaseDictadaControl();
+            ClaseDictada c = cdc.getListaClases().getInfo(Utiles.encontrarPosicion("clasedictada", a.getId_claseDictada()));
+            if (a.getId_estudiante().equals(id) && c.getId_cursa().equals(cursa)){
+                aux.add(a);
+            }
+        }
+        return aux;
+    }
+
+
 
 }
