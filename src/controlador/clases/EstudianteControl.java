@@ -4,9 +4,11 @@
  */
 package controlador.clases;
 
-import controlador.DAO.DaoImplement;
-import controlador.TDA.listas.DynamicList;
-import controlador.TDA.listas.Exception.EmptyException;
+
+
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
+import controlador.ed.listas.NodoLista;
 import controlador.utiles.Utiles;
 import modelo.Estudiante;
 import java.lang.reflect.Field;
@@ -15,21 +17,21 @@ import modelo.Matricula;
  *
  * @author jsbal
  */
-public class EstudianteControl extends DaoImplement<Estudiante> {
-    
-    private DynamicList<Estudiante> listaEstudiantes;
+public class EstudianteControl extends AdaptadorDao<Estudiante> {
+
+    private ListaEnlazada<Estudiante> listaEstudiantes;
     private Estudiante estudiante;
 
     public EstudianteControl() {
         super(Estudiante.class);
     }
 
-    public DynamicList<Estudiante> getListaEstudiantes() {
-        listaEstudiantes = all();
+    public ListaEnlazada<Estudiante> getListaEstudiantes() {
+        listaEstudiantes = listar();
         return listaEstudiantes;
     }
 
-    public void setListaEstudiantes(DynamicList<Estudiante> listaEstudiantes) {
+    public void setListaEstudiantes(ListaEnlazada<Estudiante> listaEstudiantes) {
         this.listaEstudiantes = listaEstudiantes;
     }
 
@@ -45,96 +47,84 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
     }
 
     public Boolean persist() {
-        estudiante.setId(all().getLenght() + 1);
-        return persist(estudiante);
-    }
-
-    public DynamicList<Estudiante> shellsort( Integer tipo, String field) throws EmptyException, Exception {
-
-        if (tipo == 0) {
-            tipo = 1;
-        } else {
-            tipo = 0;
-        }
-
-        int longitudLista = getListaEstudiantes().getLenght();
-        Estudiante[] arrEstudiantes = getListaEstudiantes().toArray();
-
-        int tamanoPedazo = longitudLista / 2;
-
-        while (tamanoPedazo > 0) {
-            for (int i = tamanoPedazo; i < longitudLista; i++) {
-                Estudiante temp = arrEstudiantes[i];
-                int j = i;
-
-                while (j >= tamanoPedazo && arrEstudiantes[j - tamanoPedazo].compare(temp, field, tipo)) {
-                    arrEstudiantes[j] = arrEstudiantes[j - tamanoPedazo];
-                    j -= tamanoPedazo;
-                }
-
-                arrEstudiantes[j] = temp;
-            }
-
-            tamanoPedazo = tamanoPedazo / 2;
-        }
-        return getListaEstudiantes().toList(arrEstudiantes);
-    }
-
-    public DynamicList<Estudiante> busquedaLineal(String texto, String criterio) {
-        DynamicList<Estudiante> lista = new DynamicList<>();
         try {
-            Estudiante[] aux = shellsort(0, criterio).toArray();
-            lista.removerAll();
+            estudiante.setId(getListaEstudiantes().size() + 1);
+            return guardar(estudiante) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-            for (Estudiante e : aux) {
-                Field atributo = Utiles.getField(Estudiante.class, criterio);
+    public ListaEnlazada<Estudiante> shellsort(Integer tipo, String field, ListaEnlazada<Estudiante> listaEstudiantes1) {
+        try {
+            return shellsort(tipo, field, getListaEstudiantes());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-                if (atributo != null) {
-                    atributo.setAccessible(true);
-                    Object valor = atributo.get(e);
+   public ListaEnlazada<Estudiante> busquedaLineal(String texto, String criterio) {
+    ListaEnlazada<Estudiante> lista = new ListaEnlazada<>();
+    try {
+        ListaEnlazada<Estudiante> aux = shellsort(0, criterio, getListaEstudiantes());
+        NodoLista<Estudiante> nodo = aux.getCabecera();
+        listaEstudiantes.deleteAll();
 
-                    if (valor.toString().toLowerCase().contains(texto.toLowerCase())) {
-                        lista.add(e);
-                    }
+        while (nodo != null) {
+            Field atributo = Utiles.getField(Estudiante.class, criterio);
+            if (atributo != null) {
+                atributo.setAccessible(true);
+                Object valor = atributo.get(nodo.getInfo());
+                if (valor != null && valor.toString().toLowerCase().contains(texto.toLowerCase())) {
+                    lista.insertar(nodo.getInfo());
                 }
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            nodo = nodo.getSig();
         }
-        return lista;
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
     }
-    
-    public DynamicList<Estudiante> busquedaBinaria(String texto, String criterio) {
-        DynamicList<Estudiante> lista = new DynamicList<>();
-        int fin = getListaEstudiantes().getLenght() - 1;
+    return lista;
+}
+
+
+    public ListaEnlazada<Estudiante> busquedaBinaria(String texto, String criterio) {
+        ListaEnlazada<Estudiante> lista = new ListaEnlazada<>();
+        int fin = getListaEstudiantes().size() - 1;
         int mitad = fin / 2;
         Field nombreAtributo = Utiles.getField(Estudiante.class, criterio);
         nombreAtributo.setAccessible(true);
+
         try {
-            Estudiante[] aux = shellsort(0, criterio).toArray();
-            Object getterAtributo = nombreAtributo.get(aux[mitad]);
-            lista.removerAll();
-            if (getterAtributo != null) {
-                if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
-                    for (int i = 0; i <= mitad; i++) {
-                        if (nombreAtributo.get(aux[i]).toString().toLowerCase().contains(texto.toLowerCase())) {
-                            lista.add(aux[i]);
+            ListaEnlazada<Estudiante> aux = shellsort(0, criterio, getListaEstudiantes());
+            NodoLista<Estudiante> nodo = aux.getCabecera();
+            listaEstudiantes.deleteAll();
+
+            while (nodo != null) {
+                Object getterAtributo = nombreAtributo.get(nodo.getInfo());
+                if (getterAtributo != null) {
+                    if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
+                        for (int i = 0; i <= mitad; i++) {
+                            if (nombreAtributo.get(nodo.getInfo()).toString().toLowerCase().contains(texto.toLowerCase())) {
+                                lista.insertar(nodo.getInfo());
+                            }
                         }
-                    }
-                } else {
-                    for (int j = mitad + 1; j <= fin; j++) {
-                        if (nombreAtributo.get(aux[j]).toString().toLowerCase().contains(texto.toLowerCase())) {
-                            lista.add(aux[j]);
+                    } else {
+                        for (int j = mitad + 1; j <= fin; j++) {
+                            if (nombreAtributo.get(nodo.getInfo()).toString().toLowerCase().contains(texto.toLowerCase())) {
+                                lista.insertar(nodo.getInfo());
+                            }
                         }
                     }
                 }
+                nodo = nodo.getSig();
             }
             return lista;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
-    }    
-    
+    }
 }
-

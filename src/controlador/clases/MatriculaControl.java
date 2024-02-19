@@ -4,9 +4,11 @@
  */
 package controlador.clases;
 
-import controlador.DAO.DaoImplement;
-import controlador.TDA.listas.DynamicList;
-import controlador.TDA.listas.Exception.EmptyException;
+
+
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
+import controlador.ed.listas.NodoLista;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -16,21 +18,22 @@ import modelo.Matricula;
  *
  * @author mrbingus
  */
-public class MatriculaControl extends DaoImplement<Matricula> {
 
-    private DynamicList<Matricula> listaMatriculas;
+    public class MatriculaControl extends AdaptadorDao<Matricula> {
+
+    private ListaEnlazada<Matricula> listaMatriculas;
     private Matricula matricula;
 
     public MatriculaControl() {
         super(Matricula.class);
     }
 
-    public DynamicList<Matricula> getListaMatriculas() {
-        listaMatriculas = all();
+    public ListaEnlazada<Matricula> getListaMatriculas() {
+        listaMatriculas = listar();
         return listaMatriculas;
     }
 
-    public void setListaMatriculas(DynamicList<Matricula> listaMatriculas) {
+    public void setListaMatriculas(ListaEnlazada<Matricula> listaMatriculas) {
         this.listaMatriculas = listaMatriculas;
     }
 
@@ -46,100 +49,43 @@ public class MatriculaControl extends DaoImplement<Matricula> {
     }
 
     public Boolean persist() {
-        matricula.setId(all().getLenght() + 1);
-        return persist(matricula);
-    }
-
-    public DynamicList<Matricula> shellsort(Integer tipo, String field) throws EmptyException, Exception {
-        if (tipo == 0) {
-            tipo = 1;
-        } else {
-            tipo = 0;
-        }
-
-        int longitudLista = getListaMatriculas().getLenght();
-        Matricula[] arrCensadores = getListaMatriculas().toArray();
-
-        int tamanoPedazo = longitudLista / 2;
-
-        while (tamanoPedazo > 0) {
-            for (int i = tamanoPedazo; i < longitudLista; i++) {
-                Matricula temp = arrCensadores[i];
-                int j = i;
-
-                while (j >= tamanoPedazo && arrCensadores[j - tamanoPedazo].compare(temp, field, tipo)) {
-                    arrCensadores[j] = arrCensadores[j - tamanoPedazo];
-                    j -= tamanoPedazo;
-                }
-
-                arrCensadores[j] = temp;
-            }
-
-            tamanoPedazo = tamanoPedazo / 2;
-        }
-        return getListaMatriculas().toList(arrCensadores);
-    }
-
-    public DynamicList<Matricula> busquedaLineal(String texto, String criterio) {
-        //System.out.println("Estas usando busqueda lineal");
-        DynamicList<Matricula> lista = new DynamicList<>();
         try {
-            Matricula[] aux = shellsort(0, criterio).toArray();
-            lista.removerAll();
+            matricula.setId(getListaMatriculas().getLength() + 1);
+            return guardar(matricula) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-            for (Matricula p : aux) {
+    public ListaEnlazada<Matricula> shellsort(Integer tipo, String field, ListaEnlazada<Matricula> listaMatriculas1) {
+        try {
+            return shellsort(tipo, field, getListaMatriculas());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ListaEnlazada<Matricula> busquedaLineal(String texto, String criterio) {
+        ListaEnlazada<Matricula> lista = new ListaEnlazada<>();
+        try {
+            ListaEnlazada<Matricula> aux = shellsort(0, criterio, getListaMatriculas());
+            NodoLista<Matricula> nodo = aux.getCabecera();
+            while (nodo != null) {
                 Field nombreAtributo = Utiles.getField(Matricula.class, criterio);
-
                 if (nombreAtributo != null) {
                     nombreAtributo.setAccessible(true);
-                    Object getter = nombreAtributo.get(p);
-
-                    if (criterio == "fecharegistro") {
-                        if (Utiles.formaterarFecha((Date)getter).contains(texto.toLowerCase())) {
-                            lista.add(p);
-                        }
-                    }
-
-                    if (getter.toString().toLowerCase().contains(texto.toLowerCase())) {
-                        lista.add(p);
+                    Object getter = nombreAtributo.get(nodo.getInfo());
+                    if (getter != null && getter.toString().toLowerCase().contains(texto.toLowerCase())) {
+                        lista.insertar(nodo.getInfo());
                     }
                 }
+                nodo = nodo.getSig();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return lista;
     }
-    
-//    public DynamicList<Matricula> busquedaBinaria(String texto, String criterio) {
-//        DynamicList<Matricula> lista = new DynamicList<>();
-//        int fin = getListaMatriculas().getLenght() - 1;
-//        int mitad = fin / 2;
-//        Field nombreAtributo = Utiles.getField(Matricula.class, criterio);
-//        nombreAtributo.setAccessible(true);
-//        try {
-//            Matricula[] aux = shellsort(0, criterio).toArray();
-//            Object getterAtributo = nombreAtributo.get(aux[mitad]);
-//            lista.removerAll();
-//            if (getterAtributo != null) {
-//                if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
-//                    for (int i = 0; i <= mitad; i++) {
-//                        if (nombreAtributo.get(aux[i]).toString().toLowerCase().contains(texto.toLowerCase())) {
-//                            lista.add(aux[i]);
-//                        }
-//                    }
-//                } else {
-//                    for (int j = mitad + 1; j <= fin; j++) {
-//                        if (nombreAtributo.get(aux[j]).toString().toLowerCase().contains(texto.toLowerCase())) {
-//                            lista.add(aux[j]);
-//                        }
-//                    }
-//                }
-//            }
-//            return lista;
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            return null;
-//        }
-//    }   
 }

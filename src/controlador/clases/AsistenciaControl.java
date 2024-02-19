@@ -6,47 +6,75 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import modelo.Asistencia;
 
 /**
  *
  * @author Usuario iTC
  */
-public class AsistenciaControl extends DaoImplement<Asistencia> {
+public class AsistenciaControl extends AdaptadorDao<Asistencia> {
 
-        private DynamicList<Asistencia> listAT = new DynamicList<>();
-        private Asistencia asistencia = new Asistencia();
+    private ListaEnlazada<Asistencia> listaAsistencias;
+    private Asistencia asistencia;
 
-        public AsistenciaControl() {
-                super(Asistencia.class);
-        }
+    public AsistenciaControl() {
+        super(Asistencia.class);
+    }
 
-        public AsistenciaControl(Asistencia asistencia, Class<Asistencia> clazz) {
-                super(clazz);
-                this.asistencia = asistencia;
-        }
+    public ListaEnlazada<Asistencia> getListaAsistencias() {
+        listaAsistencias = listar();
+        return listaAsistencias;
+    }
 
-        public DynamicList<Asistencia> getListaEstadoAsistencia() {
-                listAT = all();
-                return listAT;
-        }
+    public void setListaAsistencias(ListaEnlazada<Asistencia> listaAsistencias) {
+        this.listaAsistencias = listaAsistencias;
+    }
 
-        public void setListAT(DynamicList<Asistencia> listAT) {
-                this.listAT = listAT;
+    public Asistencia getAsistencia() {
+        if (asistencia == null) {
+            asistencia = new Asistencia();
         }
+        return asistencia;
+    }
 
-        public Asistencia getAsistencia() {
-                if (asistencia == null) {
-                        asistencia = new Asistencia();
-                }
-                return asistencia;
-        }
+    public void setAsistencia(Asistencia asistencia) {
+        this.asistencia = asistencia;
+    }
 
-        public void setAsistencia(Asistencia asistencia) {
-                this.asistencia = asistencia;
+    public Boolean persist() {
+        try {
+            asistencia.setId(getListaAsistencias().getLength() + 1);
+            return guardar(asistencia) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        public Boolean persist() {
-                asistencia.setId(all().getLenght() + 1);
-                return persist(asistencia);
+    }
+
+    public ListaEnlazada<Asistencia> shellsortAsistencia(Integer tipo, String field) {
+        try {
+            return shellsort(tipo, field, getListaAsistencias());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+    }
+
+    // Métodos de búsqueda lineal y binaria omitidos por brevedad
+
+    private ListaEnlazada<Asistencia> shellsort(Integer tipo, String field, ListaEnlazada<Asistencia> listaAsistencias) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public ListaEnlazada<Asistencia> all() {
+    try {
+        return listar();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+
 }

@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Deprecated()
 public class DaoImplement<T> implements DaoInterface<T> {
 
     private Class<T> clazz;

@@ -4,17 +4,23 @@
  */
 package modelo;
 
+
+
 /**
  *
  * @author jsbal
  */
 public class Cuenta {
+   
     private Integer id;
+    
+   
     private String correo;
     private String contraseña;
 //    private Integer id_persona ;
-    private Persona persona;
+    private Docente docente;
     private Boolean estado;
+    
 
     public Cuenta() {
     }
@@ -62,30 +68,28 @@ public class Cuenta {
     }
 
 
-    public Boolean compare(Cuenta p, String field, Integer type){
-        switch (type) {
-            case 0:
-        if(field.equalsIgnoreCase("apellido")){
-            return getPersona().getApellido().compareTo(p.getPersona().getApellido()) < 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getPersona().getNombre().compareTo(p.getPersona().getNombre()) < 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (getId().intValue() < p.getId().intValue());
-        }
-            case 1:
-        if(field.equalsIgnoreCase("apellido")){
-            return getPersona().getApellido().compareTo(p.getPersona().getApellido()) > 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getPersona().getNombre().compareTo(p.getPersona().getNombre()) > 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (getId().intValue() < p.getId().intValue());
-        }  
-        
+   public Boolean compare(Cuenta p, String field, Integer type) {
+    switch (type) {
+        case 0:
+            if (field.equalsIgnoreCase("correo")) {
+                return this.correo.compareTo(p.getCorreo()) < 0;
+            } else if (field.equalsIgnoreCase("id")) {
+                return (this.id < p.getId());
+            }
+            break;
+        case 1:
+            if (field.equalsIgnoreCase("correo")) {
+                return this.correo.compareTo(p.getCorreo()) > 0;
+            } else if (field.equalsIgnoreCase("id")) {
+                return (this.id > p.getId());
+            }
+            break;
         default:
-        return null;
+            return null;
+    }
+    return null;
+}
 
-        }
-    } 
 
     /**
      * @return the estado
@@ -101,13 +105,16 @@ public class Cuenta {
         this.estado = estado;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public Docente getDocente() {
+        return docente;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
+    public void setDocente(Docente docente) {
+    this.docente = docente;
+}
+
+
+    
 
 
     

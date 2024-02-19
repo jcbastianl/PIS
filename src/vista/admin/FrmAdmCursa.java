@@ -8,8 +8,14 @@ import controlador.clases.AsignaturaControl;
 import controlador.clases.CicloControl;
 import controlador.clases.CursaControl;
 import controlador.clases.DocenteControl;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Asignatura;
+import modelo.Ciclo;
+import modelo.Cursa;
+import modelo.Docente;
 import vista.modeloTablas.CicloModeloTabla;
 import vista.modeloTablas.CursaModeloTabla;
 import vista.utiles.UtilVista;
@@ -34,15 +40,24 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 && !(cbxCiclo.getSelectedIndex() == -1));
     }
 
-    public void cargarTablas() {
-        modelo.setListaCursos(cursaControl.getListaCursas());
+ private void cargarTablas() {
+    try {
+        // Obtener la lista de cursas
+        ListaEnlazada<Cursa> listaCursas = cursaControl.getListaCursas();
+
+        // Establecer la lista de cursas en el modelo de la tabla
+        modelo.setListaCursos(listaCursas);
+
+        // Establecer el modelo de la tabla y actualizar la interfaz de usuario
         tblCursa.setModel(modelo);
         tblCursa.updateUI();
-
-        modeloCiclo.setListaCiclos(cicloControl.getCiclos());
-        tblCiclos.setModel(modeloCiclo);
-        tblCiclos.updateUI();
+    } catch (Exception e) {
+        // Manejar cualquier excepción que pueda ocurrir al cargar los datos
+        JOptionPane.showMessageDialog(null, "Error al cargar las cursas: " + e.getMessage());
+        e.printStackTrace();
     }
+}
+
 
     public void cargarCombo() {
         try {
@@ -68,63 +83,87 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         tblCursa.clearSelection();
     }
 
-    public void guardar() throws Exception {
-        if (verificar()) {
-            try {
-                cicloControl.setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
-                cursaControl.getCursa().setFechaFin(txtFechaFin.getDate());
-                cursaControl.getCursa().setFechaInicio(txtFechaInicio.getDate());
-                cursaControl.getCursa().setAsignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()));
-                cursaControl.getCursa().setDocente(Utiles.encontraridDocente(cbxDocente.getSelectedIndex()));
-                cursaControl.getCursa().setCiclo(Utiles.encontraridCiclo(cbxCiclo.getSelectedIndex()));
-            } catch (Exception e) {
+  private void guardar() {
+    if (verificar()) {
+        try {
+       
+            Cursa cursa = new Cursa();
+            cursa.setFechaFin(txtFechaFin.getDate());
+            cursa.setFechaInicio(txtFechaInicio.getDate());
 
-            }
-            if (cursaControl.persist()) {
+            Docente docenteSeleccionado = (Docente) cbxDocente.getSelectedItem();
+            int idDocente = docenteSeleccionado.getId();
 
+          
+            cursa.setDocenteId(idDocente);
+
+            
+            Asignatura asignaturaSeleccionada = (Asignatura) cbxAsignatura.getSelectedItem();
+            int idAsignatura = asignaturaSeleccionada.getId();
+
+            Ciclo cicloSeleccionado = (Ciclo) cbxCiclo.getSelectedItem();
+            int idCiclo = cicloSeleccionado.getId();
+
+            
+            cursa.setAsignaturaId(idAsignatura);
+            cursa.setCicloId(idCiclo);
+
+            
+            AdaptadorDao<Cursa> adaptadorDao = new AdaptadorDao<>(Cursa.class);
+
+            
+            Integer idGenerado = adaptadorDao.guardar(cursa);
+
+            if (idGenerado != -1) {
                 limpiar();
-                JOptionPane.showMessageDialog(null, "Se guardo todo");
-
+                JOptionPane.showMessageDialog(null, "Se guardó correctamente");
             } else {
-                JOptionPane.showMessageDialog(null, "No se guardo");
+                JOptionPane.showMessageDialog(null, "No se pudo guardar la cursa");
             }
-            cursaControl.setCursa(null);
-            cicloControl.setCiclo(null);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Campos vacios");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
         }
-
+    } else {
+        JOptionPane.showMessageDialog(null, "Completa los campos requeridos para la cursa");
     }
+}
+
+
+
+
+
+
 
     public void modificar() {
-        if (verificar()) {
-            try {
-                cursaControl.getCursa().setFechaFin(txtFechaFin.getDate());
-                cursaControl.getCursa().setFechaInicio(txtFechaInicio.getDate());
-                cursaControl.getCursa().setAsignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()));
-                cursaControl.getCursa().setDocente(Utiles.encontraridDocente(cbxDocente.getSelectedIndex()));
-                cursaControl.getCursa().setCiclo(Utiles.encontraridCiclo(cbxCiclo.getSelectedIndex()));
-            } catch (Exception e) {
-            }
+    if (verificar()) {
+        try {
+            Cursa cursa = new Cursa();
+            cursa.setFechaInicio(txtFechaInicio.getDate());
+            cursa.setFechaFin(txtFechaFin.getDate());
+            
+            Asignatura asignaturaSeleccionada = (Asignatura) cbxAsignatura.getSelectedItem();
+            cursa.setAsignaturaId(asignaturaSeleccionada.getId());
+            
+            Docente docenteSeleccionado = (Docente) cbxDocente.getSelectedItem();
+            cursa.setDocenteId(docenteSeleccionado.getId());
+            
+            Ciclo cicloSeleccionado = (Ciclo) cbxCiclo.getSelectedItem();
+            cursa.setCicloId(cicloSeleccionado.getId());
 
-            try {
-                posicion = Utiles.encontrarPosicion("cursa", modelo.getListaCursos().getInfo(tblCursa.getSelectedRow()).getId());
+            // Suponiendo que cursaControl es una instancia de la clase que maneja la lógica de negocio de Cursa
+            cursaControl.modificar(cursa);
 
-                if (cursaControl.merge(cursaControl.getCursa(), posicion)) {
-                    JOptionPane.showMessageDialog(null, "Se modifico");
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se modifico");
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Campos vacios");
+            JOptionPane.showMessageDialog(null, "Modificación exitosa");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar la cursa: " + e.getMessage());
         }
-        cursaControl.setCursa(null);
-        limpiar();
+    } else {
+        JOptionPane.showMessageDialog(null, "Por favor, completa todos los campos");
     }
+
+    limpiar();
+}
+
 
     public void borrar() {
         if (tblCursa.getSelectedRow() > -1) {
@@ -154,32 +193,46 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     }
 
     private void ordenar() {
-        int t = 0;
-        if (btnTipoOrden.isSelected()) {
-            t = 1;
-        }
+        int tipo = btnTipoOrden.isSelected() ? 1 : 0; // Determinar el tipo de orden
+        String criterioOrden = btnTipoOrden.getActionCommand().toString().toLowerCase(); // Obtener el criterio de orden
+
         try {
-            modelo.setListaCursos(cursaControl.shellsort(t, cbxCriterioOrdenar.getSelectedItem().toString().toLowerCase()));
+            // Obtener la lista de cursos ordenada utilizando el método shellsort de CursaControl
+            ListaEnlazada<Cursa> listaOrdenada = cursaControl.shellsort(tipo, criterioOrden, cursaControl.getListaCursas());
+
+            // Actualizar el modelo de la tabla con la lista ordenada
+            modelo.setListaCursos(listaOrdenada);
+            tblCursa.setModel(modelo);
+            tblCursa.updateUI();
         } catch (Exception e) {
-            System.out.println("Error al ordenar " + e.getMessage() + "");
+            System.out.println("Error al ordenar: " + e.getMessage());
         }
-        tblCursa.setModel(modelo);
-        tblCursa.updateUI();
     }
 
     private void guardarCiclo() {
         if (!(txtLetra.getText().trim().isEmpty())
                 && !(txtCiclo.getText().trim().isEmpty())
                 && (txtLetra.getText().length() == 1)) {
-            cicloControl.getCiclo().setCiclo(Integer.parseInt(txtCiclo.getText()));
-            cicloControl.getCiclo().setParalelo(txtLetra.getText());
-            if (cicloControl.persist()) {
+            Ciclo ciclo = new Ciclo();
+            ciclo.setCiclo(Integer.parseInt(txtCiclo.getText()));
+            ciclo.setParalelo(txtLetra.getText());
 
-                JOptionPane.showMessageDialog(null, "Se guardo el ciclo");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se guardo el ciclo");
+            try {
+                // Guardar en la base de datos utilizando AdaptadorDao
+                AdaptadorDao<Ciclo> adaptadorDao = new AdaptadorDao<>(Ciclo.class);
+                Integer idGenerado = adaptadorDao.guardar(ciclo);
+
+                if (idGenerado != -1) {
+                    JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                    limpiar();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error al guardar el ciclo: " + e.getMessage());
+                e.printStackTrace();
             }
-            limpiar();
         } else {
             JOptionPane.showMessageDialog(null, "No hay suficientes datos para un nuevo Ciclo");
         }
@@ -279,6 +332,11 @@ public class FrmAdmCursa extends javax.swing.JFrame {
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, 20));
 
         cbxDocente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxDocente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxDocenteActionPerformed(evt);
+            }
+        });
         jPanel1.add(cbxDocente, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 220, -1));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/recursos/IconGuardar.png"))); // NOI18N
@@ -533,9 +591,9 @@ public class FrmAdmCursa extends javax.swing.JFrame {
             cursaControl.setCursa(modelo.getListaCursos().getInfo(tblCursa.getSelectedRow()));
             txtFechaFin.setDate(cursaControl.getCursa().getFechaFin());
             txtFechaInicio.setDate(cursaControl.getCursa().getFechaInicio());
-            cbxCiclo.setSelectedIndex(cursaControl.getCursa().getCiclo());
+            cbxCiclo.setSelectedIndex(cursaControl.getCursa().getCiclo().getId());
             cbxAsignatura.setSelectedIndex(cursaControl.getCursa().getAsignatura().getId() - 1);
-            cbxDocente.setSelectedIndex(Utiles.encontrarPosicion("docente", cursaControl.getCursa().getDocente()));
+            cbxDocente.setSelectedIndex(Utiles.encontrarPosicion("docente", cursaControl.getCursa().getDocente().getId()));
             cbxCiclo.setEnabled(false);
             //System.out.println(Utiles.encontrarPosicion("cursa", modelo.getListaCursos().getInfo(tblCursa.getSelectedRow()).getId()));
         } catch (Exception e) {
@@ -577,6 +635,10 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     private void cbxCriterioOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCriterioOrdenarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxCriterioOrdenarActionPerformed
+
+    private void cbxDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxDocenteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxDocenteActionPerformed
 
     /**
      * @param args the command line arguments

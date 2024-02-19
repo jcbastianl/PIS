@@ -5,6 +5,11 @@
 package modelo;
 
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 
 /**
  *
@@ -12,7 +17,11 @@ import java.util.Date;
  */
 public class Asistencia {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id_asistencia;
+    
+    @Basic
     private Boolean estadoAsistencia;
     private Integer id_estudiante;
     private Integer id_claseDictada;
@@ -25,14 +34,14 @@ public class Asistencia {
      * @return the id
      */
     public Integer getId() {
-        return id;
+        return id_asistencia;
     }
 
     /**
      * @param id the id to set
      */
     public void setId(Integer id) {
-        this.id = id;
+        this.id_asistencia = id;
     }
 
     /**

@@ -13,11 +13,18 @@ import controlador.clases.EstadoAsistenciaControl;
 import controlador.clases.EstudianteControl;
 import controlador.clases.HorarioControl;
 import controlador.clases.PeriodoAcademicoControl;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import modelo.Asignatura;
+import modelo.Ciclo;
+import modelo.Cursa;
+import modelo.Docente;
+import modelo.PeriodoAcademico;
 
 /**
  *
@@ -25,53 +32,66 @@ import javax.swing.JTextField;
  */
 public class UtilVista {
 
-    public static void cargarcomboBoxPeriodos(JComboBox cbx) throws EmptyException {
-        PeriodoAcademicoControl cc = new PeriodoAcademicoControl();
-        cbx.removeAllItems();
-        for (Integer i = 0; i < cc.getListaPeriodos().getLenght(); i++) {
-            cbx.addItem(cc.getListaPeriodos().getInfo(i));
-        }
-    }        
-    
-    public static void cargarcomboBoxCiclos(JComboBox cbx) throws EmptyException {
-        CicloControl cc = new CicloControl();
-        cbx.removeAllItems();
-        for (Integer i = 0; i < cc.getCiclos().getLenght(); i++) {
-            cbx.addItem(cc.getCiclos().getInfo(i));
-        }
-    }    
-    
-    public static void cargarcomboBoxDocente(JComboBox cbx) throws EmptyException {
-        DocenteControl dc = new DocenteControl();
-        cbx.removeAllItems();
-        for (Integer i = 0; i < dc.getListaDocentes().getLenght(); i++) {
-            cbx.addItem(dc.getListaDocentes().getInfo(i));
-        }
+    public static void cargarcomboBoxPeriodos(JComboBox cbx) throws EmptyException, PosicionException {
+    PeriodoAcademicoControl cc = new PeriodoAcademicoControl();
+    cbx.removeAllItems();
+    ListaEnlazada<PeriodoAcademico> listaPeriodos = cc.getListaPeriodos();
+    for (int i = 0; i < listaPeriodos.size(); i++) {
+        PeriodoAcademico periodo = listaPeriodos.obtenerElementoEnPosicion(i);
+        cbx.addItem(periodo);
     }
+}   
+    
+    public static void cargarcomboBoxCiclos(JComboBox cbx) throws EmptyException, PosicionException {
+    CicloControl cc = new CicloControl();
+    cbx.removeAllItems();
+    ListaEnlazada<Ciclo> listaCiclos = cc.getCiclos();
+    for (int i = 0; i < listaCiclos.size(); i++) {
+        Ciclo ciclo = listaCiclos.obtenerElementoEnPosicion(i);
+        cbx.addItem(ciclo);
+    }
+}
+    
+    public static void cargarcomboBoxDocente(JComboBox cbx) throws PosicionException {
+    DocenteControl dc = new DocenteControl();
+    cbx.removeAllItems();
+    ListaEnlazada<Docente> listaDocentes = dc.getListaDocentes();
+    for (int i = 0; i < listaDocentes.size(); i++) {
+        Docente docente = listaDocentes.obtenerElementoEnPosicion(i);
+        cbx.addItem(docente);
+    }
+}
 
-    public static void cargarcomboBoxEstudiante(JComboBox cbx) throws EmptyException {
+    
+    public static void cargarcomboBoxEstudiante(JComboBox cbx) throws EmptyException, PosicionException {
         EstudianteControl ec = new EstudianteControl();
         cbx.removeAllItems();
-        for (Integer i = 0; i < ec.getListaEstudiantes().getLenght(); i++) {
+        for (Integer i = 0; i < ec.getListaEstudiantes().getLength(); i++) {
             cbx.addItem(ec.getListaEstudiantes().getInfo(i));
         }
     }
 
-    public static void cargarcomboBoxCursa(JComboBox cbx) throws EmptyException {
-        CursaControl curc = new CursaControl();
-        cbx.removeAllItems();
-        for (Integer i = 0; i < curc.getListaCursas().getLenght(); i++) {
-            cbx.addItem(curc.getListaCursas().getInfo(i));
-        }
-    }
+   public static void cargarcomboBoxCursa(JComboBox cbx) throws PosicionException, EmptyException {
+    CursaControl cursaControl = new CursaControl();
+    cbx.removeAllItems();
+    ListaEnlazada<Cursa> listaCursas = cursaControl.getListaCursas();
 
-    public static void cargarcomboBoxAsignatura(JComboBox cbx) throws EmptyException {
-        AsignaturaControl curc = new AsignaturaControl();
-        cbx.removeAllItems();
-        for (Integer i = 0; i < curc.getListaAsignaturas().getLenght(); i++) {
-            cbx.addItem(curc.getListaAsignaturas().getInfo(i));
-        }
+    for (int i = 0; i < listaCursas.size(); i++) {
+        Cursa cursa = listaCursas.obtenerElementoEnPosicion(i);
+        cbx.addItem(cursa);
     }
+}
+
+    public static void cargarcomboBoxAsignatura(JComboBox cbx) throws EmptyException, PosicionException {
+    AsignaturaControl curc = new AsignaturaControl();
+    cbx.removeAllItems();
+    ListaEnlazada<Asignatura> listaAsignaturas = curc.getListaAsignaturas();
+    for (int i = 0; i < listaAsignaturas.size(); i++) {
+        Asignatura asignatura = listaAsignaturas.obtenerElementoEnPosicion(i);
+        cbx.addItem(asignatura);
+    }
+}
+
 
     public static void cargarcomboBoxHorario(JComboBox cbx) throws EmptyException {
         HorarioControl curc = new HorarioControl();

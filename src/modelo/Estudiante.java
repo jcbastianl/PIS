@@ -4,35 +4,44 @@
  */
 package modelo;
 
-import controlador.TDA.listas.DynamicList;
+
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author jsbal
  */
-public class Estudiante extends Persona {
-
+public class Estudiante  {
+   
     private String colegioProcedencia;
     private String provinciaOrigen;
+    private String nombre;
+    private String apellido;
+    private String dni;
+    private String telefono;
+    private Integer rol;
+    
     private Integer id;
+    private Cuenta cuenta;
 
 
     public Estudiante() {
+        
     }
 
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
+    public Cuenta getCuenta() {
+        return cuenta;
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
+
+   
+   
 
 
     public Boolean compare(Estudiante e, String field, Integer type) {
@@ -44,8 +53,8 @@ public class Estudiante extends Persona {
                     return getApellido().compareTo(e.getApellido()) < 0;
                 } else if (field.equalsIgnoreCase("dni")) {
                     return getDni().compareTo(e.getDni()) < 0;
-                } else if (field.equalsIgnoreCase("id")) {
-                    return getId().compareTo(e.getId()) < 0;
+                 
+                    
                 }
                 break;
             case 1: // Descendente
@@ -55,42 +64,84 @@ public class Estudiante extends Persona {
                     return getApellido().compareTo(e.getApellido()) > 0;
                 } else if (field.equalsIgnoreCase("dni")) {
                     return getDni().compareTo(e.getDni()) > 0;
-                } else if (field.equalsIgnoreCase("id")) {
-                    return getId().compareTo(e.getId()) > 0;
+               
                 }
                 break;
         }
         return null;
     }
 
-    /**
-     * @return the colegioProcedencia
-     */
+   
+
+
     public String getColegioProcedencia() {
         return colegioProcedencia;
-    }
+    }    
 
-    /**
-     * @param colegioProcedencia the colegioProcedencia to set
-     */
     public void setColegioProcedencia(String colegioProcedencia) {
         this.colegioProcedencia = colegioProcedencia;
     }
 
-    /**
-     * @return the provinciaOrigen
-     */
     public String getProvinciaOrigen() {
         return provinciaOrigen;
     }
 
-    /**
-     * @param provinciaOrigen the provinciaOrigen to set
-     */
     public void setProvinciaOrigen(String provinciaOrigen) {
         this.provinciaOrigen = provinciaOrigen;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public Integer getRol() {
+        return rol;
+    }
+
+    public void setRol(Integer rol) {
+        this.rol = rol;
+    }
+
+    
+
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @return the colegioProcedencia
+     */
+    public void setId(Integer id) {   
+        this.id = id;
+    }
 
     @Override
     public String toString() {

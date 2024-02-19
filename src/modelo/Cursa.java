@@ -8,6 +8,12 @@ import controlador.TDA.listas.DynamicList;
 import controlador.clases.CicloControl;
 import controlador.utiles.Utiles;
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -15,9 +21,13 @@ import java.util.Date;
  */
 public class Cursa {
 
+    
     private Integer id;
-    private Integer ciclo;
-    private Integer docente;
+    private Integer docenteId;
+    private Integer asignaturaId;
+    private Integer cicloId;
+    private Ciclo ciclo;
+    private Docente docente;
     private Asignatura asignatura;
     private Date fechaInicio;
     private Date fechaFin;
@@ -59,17 +69,9 @@ public class Cursa {
         }
     }
 
-    @Override
-    public String toString() {
-        try {
-            return getAsignatura() + " " + new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("cursa", getCiclo())).toString();
+   
 
-        } catch (Exception e) {
-            System.out.println("error desde modelo cursa " + e.getMessage());
-            return "algo malo paso";
-        }
-
-    }
+    
 
     /**
      * @return the fechaInicio
@@ -102,16 +104,7 @@ public class Cursa {
     /**
      * @return the ciclo
      */
-    public Integer getCiclo() {
-        return ciclo;
-    }
-
-    /**
-     * @param ciclo the ciclo to set
-     */
-    public void setCiclo(Integer ciclo) {
-        this.ciclo = ciclo;
-    }
+    
 
     /**
      * @return the asignatura
@@ -127,18 +120,47 @@ public class Cursa {
         this.asignatura = asignatura;
     }
 
-    /**
-     * @return the docente
-     */
-    public Integer getDocente() {
+    public Ciclo getCiclo() {
+        return ciclo;
+    }
+
+    public void setCiclo(Ciclo ciclo) {
+        this.ciclo = ciclo;
+    }
+
+    public Docente getDocente() {
         return docente;
     }
 
-    /**
-     * @param docente the docente to set
-     */
-    public void setDocente(Integer docente) {
-        this.docente = docente;
+    public Integer getDocenteId() {
+        return docenteId;
     }
+
+    public void setDocenteId(Integer docenteId) {
+        this.docenteId = docenteId;
+    }
+
+    public Integer getAsignaturaId() {
+        return asignaturaId;
+    }
+
+    public void setAsignaturaId(Integer asignaturaId) {
+        this.asignaturaId = asignaturaId;
+    }
+
+    public Integer getCicloId() {
+        return cicloId;
+    }
+
+    public void setCicloId(Integer cicloId) {
+        this.cicloId = cicloId;
+    }
+
+   
+    
+    /**
+     * @return the docente
+     */
+    
 
 }

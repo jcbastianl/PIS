@@ -6,6 +6,10 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import modelo.Docente;
 
@@ -15,11 +19,11 @@ import modelo.Docente;
  */
 public class DocenteModeloTabla extends AbstractTableModel {
 
-    private DynamicList<Docente> docentes;
+    private ListaEnlazada<Docente> docentes;
 
     @Override
     public int getRowCount() {
-        return getDocentes().getLenght();
+        return docentes.size();
     }
 
     @Override
@@ -30,7 +34,7 @@ public class DocenteModeloTabla extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            Docente d = getDocentes().getInfo(rowIndex);
+            Docente d = docentes.obtenerElementoEnPosicion(rowIndex);
             switch (columnIndex) {
                 case 0:
                     return (d != null) ? d.getNombre() : " ";
@@ -45,9 +49,12 @@ public class DocenteModeloTabla extends AbstractTableModel {
                 default:
                     return null;
             }
-        } catch (EmptyException ex) {
+        } catch (IndexOutOfBoundsException ex) {
             return null;
+        } catch (PosicionException ex) {
+            Logger.getLogger(DocenteModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
@@ -71,14 +78,14 @@ public class DocenteModeloTabla extends AbstractTableModel {
     /**
      * @return the docentes
      */
-    public DynamicList<Docente> getDocentes() {
+    public ListaEnlazada<Docente> getDocentes() {
         return docentes;
     }
 
     /**
      * @param docentes the docentes to set
      */
-    public void setDocentes(DynamicList<Docente> docentes) {
+    public void setDocentes(ListaEnlazada<Docente> docentes) {
         this.docentes = docentes;
     }
 

@@ -6,39 +6,32 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import modelo.ClaseDictada;
 
 /**
  *
  * @author mrbingus
  */
-public class ClaseDictadaControl extends DaoImplement<ClaseDictada>{
-    
-    private DynamicList<ClaseDictada>listaClases;
+public class ClaseDictadaControl extends AdaptadorDao<ClaseDictada> {
+
+    private ListaEnlazada<ClaseDictada> listaClases;
     private ClaseDictada clase;
 
     public ClaseDictadaControl() {
         super(ClaseDictada.class);
     }
 
-    /**
-     * @return the listaClases
-     */
-    public DynamicList<ClaseDictada> getListaClases() {
-        listaClases = all();
+    public ListaEnlazada<ClaseDictada> getListaClases() {
+        listaClases = listar();
         return listaClases;
     }
 
-    /**
-     * @param listaClases the listaClases to set
-     */
-    public void setListaClases(DynamicList<ClaseDictada> listaClases) {
+    public void setListaClases(ListaEnlazada<ClaseDictada> listaClases) {
         this.listaClases = listaClases;
     }
 
-    /**
-     * @return the clase
-     */
     public ClaseDictada getClase() {
         if (clase == null) {
             clase = new ClaseDictada();
@@ -46,17 +39,17 @@ public class ClaseDictadaControl extends DaoImplement<ClaseDictada>{
         return clase;
     }
 
-    /**
-     * @param clase the clase to set
-     */
     public void setClase(ClaseDictada clase) {
         this.clase = clase;
     }
-    
+
     public Boolean persist() {
-        clase.setId(all().getLenght() + 1);
-        return persist(clase);
-    }    
-    
-    
+        try {
+            clase.setId(getListaClases().getLength() + 1);
+            return guardar(clase) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

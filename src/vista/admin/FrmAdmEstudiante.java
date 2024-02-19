@@ -4,10 +4,17 @@
  */
 package vista.admin;
 
+
+import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.CuentaControl;
 import controlador.clases.EstudianteControl;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Cuenta;
+import modelo.Estudiante;
+
 import vista.utiles.UtilVista;
 
 import vista.modeloTablas.EstudianteModeloTabla;
@@ -20,8 +27,8 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
     private EstudianteControl estudianteControl = new EstudianteControl();
     private EstudianteModeloTabla modelo = new EstudianteModeloTabla();
-
     private CuentaControl cuentaControl = new CuentaControl();
+    
 
     private Boolean verificar() {
         return (!(txtApellido.getText().trim().isEmpty())
@@ -38,11 +45,25 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
                 && !(txtClaveDos.getText().trim().isEmpty()));
     }
 
-    public void cargarTabla() {
-        modelo.setEstudiantes(estudianteControl.getListaEstudiantes());
+ private void cargarTabla() {
+    try {
+    
+        ListaEnlazada<Estudiante> listaEstudiantes = estudianteControl.getListaEstudiantes();
+
+       
+        modelo.setEstudiantes(listaEstudiantes);
+
+        
         tblEstudiante.setModel(modelo);
         tblEstudiante.updateUI();
+    } catch (Exception e) {
+        
+        JOptionPane.showMessageDialog(null, "Error al cargar los estudiantes: " + e.getMessage());
+        e.printStackTrace();
     }
+}
+
+
 
     private void limpiar() {
         txtApellido.setText("");
@@ -61,107 +82,139 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     }
 
     private void guardar() {
-        if (verificar()) {
-            estudianteControl.getEstudiante().setNombre(txtNombre.getText());
-            estudianteControl.getEstudiante().setApellido(txtApellido.getText());
-            estudianteControl.getEstudiante().setDni(txtDni.getText());
-            estudianteControl.getEstudiante().setRol(1);
-            estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
-            estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
-            estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
-            estudianteControl.getEstudiante().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
-            cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
-            if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
-                cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
-                cuentaControl.getCuenta().setPersona(estudianteControl.getEstudiante());
-                cuentaControl.getCuenta().setEstado(true);
-                if (verificarDatosCuenta()) {
-                    if (estudianteControl.persist()) {
+    if (verificar()) {
+        try {
+            
+            Estudiante estudiante = new Estudiante();
+            estudiante.setNombre(txtNombre.getText());
+            estudiante.setApellido(txtApellido.getText());
+            estudiante.setDni(txtDni.getText());
+            estudiante.setTelefono(txtTelefono.getText());
+            estudiante.setColegioProcedencia(txtColegio.getText());
+            estudiante.setProvinciaOrigen(txtProvincia.getText());
+            estudiante.setRol(1);
 
-                        if (cuentaControl.persist()) {
-                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error al registrarse");
-                        }
+            
+            AdaptadorDao<Estudiante> adaptadorDaoEstudiante = new AdaptadorDao<>(Estudiante.class);
 
-                        limpiar();
-                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
-                    }
+            
+            Integer idGeneradoEstudiante = adaptadorDaoEstudiante.guardar(estudiante);
+
+           
+            if (idGeneradoEstudiante != -1) {
+                JOptionPane.showMessageDialog(null, "Estudiante guardado exitosamente");
+
+             
+                Cuenta cuenta = new Cuenta();
+                cuenta.setCorreo(txtCorreo.getText());
+                cuenta.setContraseña(txtClaveUno.getText());
+                cuenta.setEstado(true);
+                cuenta.setId(idGeneradoEstudiante); 
+
+               
+                AdaptadorDao<Cuenta> adaptadorDaoCuenta = new AdaptadorDao<>(Cuenta.class);
+
+             
+                Integer idGeneradoCuenta = adaptadorDaoCuenta.guardar(cuenta);
+
+                
+                if (idGeneradoCuenta != -1) {
+                    JOptionPane.showMessageDialog(null, "Cuenta guardada exitosamente");
+                    limpiar();
+                    cargarTabla();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
+                    JOptionPane.showMessageDialog(null, "Error al guardar la cuenta");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Las claves no coinciden");
+                JOptionPane.showMessageDialog(null, "Error al guardar el estudiante");
             }
-
-            estudianteControl.setEstudiante(null);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Rellena todos los campos");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Completa los campos requeridos para el estudiante y la cuenta");
     }
+}
 
-    private void modificar() {
-        if (verificar()) {
-            estudianteControl.getEstudiante().setNombre(txtNombre.getText());
-            estudianteControl.getEstudiante().setApellido(txtApellido.getText());
-            estudianteControl.getEstudiante().setDni(txtDni.getText());
-            estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
-            estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
-            estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
-            try {
-                Integer indiceEstudiante = Utiles.encontrarPosicion("docente", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
 
-                if (estudianteControl.merge(estudianteControl.getEstudiante(), indiceEstudiante)) {
-                    JOptionPane.showMessageDialog(null, "Modificacion Exitosa");
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo modificar");
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+   private void modificar() {
+    if (verificar()) {
+        try {
+           
+            Integer indiceEstudiante = tblEstudiante.getSelectedRow();
+
+           
+            if (indiceEstudiante != -1) {
+         
+                estudianteControl.getEstudiante().setNombre(txtNombre.getText());
+                estudianteControl.getEstudiante().setApellido(txtApellido.getText());
+                estudianteControl.getEstudiante().setDni(txtDni.getText());
+                estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
+                estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
+                estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
+
+               
+                estudianteControl.modificar(estudianteControl.getEstudiante());
+
+               
+                cargarTabla();
+
+                JOptionPane.showMessageDialog(null, "Modificación Exitosa");
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecciona un estudiante para modificar");
             }
-
-            estudianteControl.setEstudiante(null);
-            limpiar();
-        } else {
-            JOptionPane.showMessageDialog(null, "Rellena todos los campos");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al modificar: " + e.getMessage());
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Rellena todos los campos");
     }
+}
+
+
 
     private void borrar() {
-        try {
-            Integer indiceEstudiante = Utiles.encontrarPosicion("estudiante", modelo.getEstudiantes().getInfo(tblEstudiante.getSelectedRow()).getId());
+    try {
+        if (tblEstudiante.getSelectedRow() > -1) {
+            Integer indiceEstudiante = tblEstudiante.getSelectedRow();
+            Estudiante estudianteSeleccionado = estudianteControl.getListaEstudiantes().getInfo(indiceEstudiante);
 
-            if (tblEstudiante.getSelectedRow() > -1) {
-                new CuentaControl().remove(estudianteControl.getListaEstudiantes().getInfo(indiceEstudiante).getCuenta());
-                if (estudianteControl.remove(indiceEstudiante)) {
-                    JOptionPane.showMessageDialog(null, "Se borro el elemento");
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
-                }
+            
+            if (estudianteControl.remove(indiceEstudiante)) {
+                JOptionPane.showMessageDialog(null, "Se borró el estudiante");
             } else {
-                JOptionPane.showMessageDialog(null, "Seleccione un elemento para eliminar");
+                JOptionPane.showMessageDialog(null, "No se pudo borrar el estudiante");
             }
-        } catch (Exception e) {
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un estudiante para eliminar");
         }
-        limpiar();
+    } catch (Exception e) {
+      
+        e.printStackTrace();
     }
 
-    private void ordenar() {
-        int t = 0;
-        if (btnTipoOrden.isSelected()) {
-            t = 1;
-        }
-        try {
-            modelo.setEstudiantes(estudianteControl.shellsort(t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
-        } catch (Exception e) {
-            System.out.println("Error al ordenar " + e.getMessage() + "");
-        }
+ 
+    limpiar();
+}
+
+
+   private void ordenar() {
+    int tipo = btnTipoOrden.isSelected() ? 1 : 0; 
+    String criterioOrden = cbxCriterioOrden.getSelectedItem().toString().toLowerCase(); 
+
+    try {
+        
+        ListaEnlazada<Estudiante> listaOrdenada = estudianteControl.shellsort(tipo, criterioOrden, estudianteControl.getListaEstudiantes());
+
+        
+        modelo.setEstudiantes(listaOrdenada);
         tblEstudiante.setModel(modelo);
         tblEstudiante.updateUI();
+    } catch (Exception e) {
+        System.out.println("Error al ordenar: " + e.getMessage());
     }
+}
+
 
     private void buscar() {
         try {
@@ -179,6 +232,7 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
     public FrmAdmEstudiante() {
         initComponents();
         limpiar();
+        
     }
 
     /**

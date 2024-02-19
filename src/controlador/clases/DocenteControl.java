@@ -7,17 +7,22 @@ package controlador.clases;
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
+import controlador.ed.listas.NodoLista;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
+import modelo.Ciclo;
 import modelo.Docente;
 
 /**
  *
  * @author mrbingus
  */
-public class DocenteControl extends DaoImplement<Docente> {
+public class DocenteControl extends AdaptadorDao<Docente> {
 
-    private DynamicList<Docente> listaDocentes;
+    private ListaEnlazada<Docente> listaDocentes;
+   
     private Docente docente;
 
     public DocenteControl() {
@@ -27,15 +32,18 @@ public class DocenteControl extends DaoImplement<Docente> {
     /**
      * @return the listaDocentes
      */
-    public DynamicList<Docente> getListaDocentes() {
-        listaDocentes = all();
+    public ListaEnlazada<Docente> getListaDocentes() {
+        listaDocentes = listar();
         return listaDocentes;
     }
+
+    
+
 
     /**
      * @param listaDocentes the listaDocentes to set
      */
-    public void setListaDocentes(DynamicList<Docente> listaDocentes) {
+    public void setListaDocentes(ListaEnlazada<Docente> listaDocentes) {
         this.listaDocentes = listaDocentes;
     }
 
@@ -57,59 +65,36 @@ public class DocenteControl extends DaoImplement<Docente> {
     }
 
     public Boolean persist() {
-        docente.setId(all().getLenght() + 1);
-        return persist(docente);
-    }
-
-    public DynamicList<Docente> shellsort(Integer tipo, String field) throws EmptyException, Exception {
-
-        if (tipo == 0) {
-            tipo = 1;
-        } else {
-            tipo = 0;
-        }
-
-        int longitudLista = getListaDocentes().getLenght();
-        Docente[] arrCensadores = getListaDocentes().toArray();
-
-        int tamanoPedazo = longitudLista / 2;
-
-        while (tamanoPedazo > 0) {
-            for (int i = tamanoPedazo; i < longitudLista; i++) {
-                Docente temp = arrCensadores[i];
-                int j = i;
-
-                while (j >= tamanoPedazo && arrCensadores[j - tamanoPedazo].compare(temp, field, tipo)) {
-                    arrCensadores[j] = arrCensadores[j - tamanoPedazo];
-                    j -= tamanoPedazo;
-                }
-
-                arrCensadores[j] = temp;
-            }
-
-            tamanoPedazo = tamanoPedazo / 2;
-        }
-        return getListaDocentes().toList(arrCensadores);
-    }
-
-    public DynamicList<Docente> busquedaLineal(String texto, String criterio) {
-        //System.out.println("Estas usando busqueda lineal");
-        DynamicList<Docente> lista = new DynamicList<>();
         try {
-            Docente[] aux = shellsort(0, criterio).toArray();
-            lista.removerAll();
+            docente.setId(getListaDocentes().getLength() + 1);
+            return guardar(docente) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-            for (Docente p : aux) {
-                Field nombreAtributo = Utiles.getField(Docente.class, criterio);
+    public ListaEnlazada<Docente> shellsort(Integer tipo, String field, ListaEnlazada<Docente> listaDocentes1) {
+        try {
+            return shellsort(tipo, field, getListaDocentes());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-                if (nombreAtributo != null) {
-                    nombreAtributo.setAccessible(true);
-                    Object getter = nombreAtributo.get(p);
+    public ListaEnlazada<Docente> busquedaLineal(String texto, String criterio) {
+        ListaEnlazada<Docente> lista = new ListaEnlazada<>();
+        try {
+            ListaEnlazada<Docente> aux = shellsort(0, criterio, getListaDocentes());
+            NodoLista<Docente> nodo = aux.getCabecera();
+            listaDocentes.deleteAll();
 
-                    if (getter.toString().toLowerCase().contains(texto.toLowerCase())) {
-                        lista.add(p);
-                    }
+            while (nodo != null) {
+                if (nodo.getInfo().toString().toLowerCase().contains(texto.toLowerCase())) {
+                    lista.insertar(nodo.getInfo());
                 }
+                nodo = nodo.getSig();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -117,30 +102,36 @@ public class DocenteControl extends DaoImplement<Docente> {
         return lista;
     }
 
-    public DynamicList<Docente> busquedaBinaria(String texto, String criterio) {
-        DynamicList<Docente> lista = new DynamicList<>();
-        int fin = getListaDocentes().getLenght() - 1;
+    public ListaEnlazada<Docente> busquedaBinaria(String texto, String criterio) {
+        ListaEnlazada<Docente> lista = new ListaEnlazada<>();
+        int fin = getListaDocentes().size() - 1;
         int mitad = fin / 2;
         Field nombreAtributo = Utiles.getField(Docente.class, criterio);
         nombreAtributo.setAccessible(true);
+
         try {
-            Docente[] aux = shellsort(0, criterio).toArray();
-            Object getterAtributo = nombreAtributo.get(aux[mitad]);
-            lista.removerAll();
-            if (getterAtributo != null) {
-                if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
-                    for (int i = 0; i <= mitad; i++) {
-                        if (nombreAtributo.get(aux[i]).toString().toLowerCase().contains(texto.toLowerCase())) {
-                            lista.add(aux[i]);
+            ListaEnlazada<Docente> aux = shellsort(0, criterio, getListaDocentes());
+            NodoLista<Docente> nodo = aux.getCabecera();
+            lista.deleteAll();
+
+            while (nodo != null) {
+                Object getterAtributo = nombreAtributo.get(nodo.getInfo());
+                if (getterAtributo != null) {
+                    if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
+                        for (int i = 0; i <= mitad; i++) {
+                            if (nombreAtributo.get(nodo.getInfo()).toString().toLowerCase().contains(texto.toLowerCase())) {
+                                lista.insertar(nodo.getInfo());
+                            }
                         }
-                    }
-                } else {
-                    for (int j = mitad + 1; j <= fin; j++) {
-                        if (nombreAtributo.get(aux[j]).toString().toLowerCase().contains(texto.toLowerCase())) {
-                            lista.add(aux[j]);
+                    } else {
+                        for (int j = mitad + 1; j <= fin; j++) {
+                            if (nombreAtributo.get(nodo.getInfo()).toString().toLowerCase().contains(texto.toLowerCase())) {
+                                lista.insertar(nodo.getInfo());
+                            }
                         }
                     }
                 }
+                nodo = nodo.getSig();
             }
             return lista;
         } catch (Exception e) {
@@ -148,4 +139,9 @@ public class DocenteControl extends DaoImplement<Docente> {
             return null;
         }
     }
+
+    public ListaEnlazada<Docente> all() {
+    return getListaDocentes();
+}
+
 }

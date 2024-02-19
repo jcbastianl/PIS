@@ -7,6 +7,9 @@ package controlador.clases;
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
+import controlador.ed.listas.NodoLista;
 import modelo.Asignatura;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
@@ -14,21 +17,21 @@ import java.lang.reflect.Field;
  *
  * @author jsbal
  */
-public class AsignaturaControl extends DaoImplement<Asignatura> {
+public class AsignaturaControl extends AdaptadorDao<Asignatura> {
 
-    private DynamicList<Asignatura> listaAsignaturas;
+    private ListaEnlazada<Asignatura> listaAsignaturas;
     private Asignatura asignatura;
 
     public AsignaturaControl() {
         super(Asignatura.class);
     }
 
-    public DynamicList<Asignatura> getListaAsignaturas() {
-        listaAsignaturas = all();
+    public ListaEnlazada<Asignatura> getListaAsignaturas() {
+        listaAsignaturas = listar();
         return listaAsignaturas;
     }
 
-    public void setListaAsignaturas(DynamicList<Asignatura> listaAsignaturas) {
+    public void setListaAsignaturas(ListaEnlazada<Asignatura> listaAsignaturas) {
         this.listaAsignaturas = listaAsignaturas;
     }
 
@@ -44,70 +47,82 @@ public class AsignaturaControl extends DaoImplement<Asignatura> {
     }
 
     public Boolean persist() {
-        asignatura.setId(all().getLenght() + 1);
-        return persist(asignatura);
-    }
-
-    // Aquí puedes agregar métodos adicionales relacionados con el control de Asignaturas, 
-    // como el método shellsort, busquedaLineal o cualquier otro método específico para operar con Asignaturas.
-
-    // Por ejemplo, si deseas implementar shellsort o busquedaLineal específicamente para Asignaturas,
-    // puedes adaptar los métodos proporcionados para manejar datos de tipo Asignatura.
-
-    // ...
- public DynamicList<Asignatura> shellsortAsignatura(Integer tipo, String field) throws EmptyException, Exception {
-
-    if (tipo == 0) {
-        tipo = 1;
-    } else {
-        tipo = 0;
-    }
-
-    int longitudLista = getListaAsignaturas().getLenght();
-    Asignatura[] arrAsignaturas = getListaAsignaturas().toArray();
-
-    int tamanoPedazo = longitudLista / 2;
-
-    while (tamanoPedazo > 0) {
-        for (int i = tamanoPedazo; i < longitudLista; i++) {
-            Asignatura temp = arrAsignaturas[i];
-            int j = i;
-
-            while (j >= tamanoPedazo && arrAsignaturas[j - tamanoPedazo].compare(temp, field, tipo)) {
-                arrAsignaturas[j] = arrAsignaturas[j - tamanoPedazo];
-                j -= tamanoPedazo;
-            }
-
-            arrAsignaturas[j] = temp;
+        try {
+            asignatura.setId(getListaAsignaturas().getLength() + 1);
+            return guardar(asignatura) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-
-        tamanoPedazo = tamanoPedazo / 2;
     }
-    return getListaAsignaturas().toList(arrAsignaturas);
-}
-public DynamicList<Asignatura> busquedaLineal(String texto, String criterio) {
-    DynamicList<Asignatura> lista = new DynamicList<>();
-    try {
-        Asignatura[] aux = shellsortAsignatura( 0, criterio).toArray();
-        lista.removerAll();
 
-        for (Asignatura a : aux) {
-            Field atributo = Utiles.getField(Asignatura.class, criterio);
+    public ListaEnlazada<Asignatura> shellsortAsignatura(Integer tipo, String field) {
+        try {
+            return shellsort(tipo, field, getListaAsignaturas());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-            if (atributo != null) {
-                atributo.setAccessible(true);
-                Object valor = atributo.get(a);
+    public ListaEnlazada<Asignatura> busquedaLineal(String texto, String criterio) {
+        ListaEnlazada<Asignatura> lista = new ListaEnlazada<>();
+        try {
+            ListaEnlazada<Asignatura> aux = shellsortAsignatura(0, criterio);
+            NodoLista<Asignatura> nodo = aux.getCabecera();
+            lista.deleteAll();
 
-                if (valor.toString().toLowerCase().contains(texto.toLowerCase())) {
-                    lista.add(a);
+            while (nodo != null) {
+                if (nodo.getInfo().toString().toLowerCase().contains(texto.toLowerCase())) {
+                    lista.insertar(nodo.getInfo());
                 }
+                nodo = nodo.getSig();
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
+        return lista;
     }
-    return lista;
-}
 
+    public ListaEnlazada<Asignatura> busquedaBinaria(String texto, String criterio) {
+        ListaEnlazada<Asignatura> lista = new ListaEnlazada<>();
+        int fin = getListaAsignaturas().size() - 1;
+        int mitad = fin / 2;
+        Field nombreAtributo = Utiles.getField(Asignatura.class, criterio);
+        nombreAtributo.setAccessible(true);
 
+        try {
+            ListaEnlazada<Asignatura> aux = shellsortAsignatura(0, criterio);
+            NodoLista<Asignatura> nodo = aux.getCabecera();
+            lista.deleteAll();
+
+            while (nodo != null) {
+                Object getterAtributo = nombreAtributo.get(nodo.getInfo());
+                if (getterAtributo != null) {
+                    if (getterAtributo.toString().compareToIgnoreCase(texto) > 0) {
+                        for (int i = 0; i <= mitad; i++) {
+                            if (nombreAtributo.get(nodo.getInfo()).toString().toLowerCase().contains(texto.toLowerCase())) {
+                                lista.insertar(nodo.getInfo());
+                            }
+                        }
+                    } else {
+                        for (int j = mitad + 1; j <= fin; j++) {
+                            if (nombreAtributo.get(nodo.getInfo()).toString().toLowerCase().contains(texto.toLowerCase())) {
+                                lista.insertar(nodo.getInfo());
+                            }
+                        }
+                    }
+                }
+                nodo = nodo.getSig();
+            }
+            return lista;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private ListaEnlazada<Asignatura> shellsort(Integer tipo, String field, ListaEnlazada<Asignatura> listaAsignaturas) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

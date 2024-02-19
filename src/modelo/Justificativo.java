@@ -5,6 +5,10 @@
 package modelo;
 
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
@@ -12,7 +16,10 @@ import java.util.Date;
  */
 public class Justificativo {
 
-    private Integer id;
+     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id_justificativo;
+     @Basic
     private String motivo;
     private String descripcion;
     private Integer id_asistencia;
@@ -52,14 +59,14 @@ public class Justificativo {
      * @return the id
      */
     public Integer getId() {
-        return id;
+        return id_justificativo;
     }
 
     /**
      * @param id the id to set
      */
     public void setId(Integer id) {
-        this.id = id;
+        this.id_justificativo = id;
     }
 
     /**

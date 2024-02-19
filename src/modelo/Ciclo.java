@@ -5,12 +5,17 @@
 package modelo;
 
 import controlador.TDA.listas.DynamicList;
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author mrbingus
  */
 public class Ciclo {
+   
     private Integer id;
     private Integer ciclo;
     private String paralelo;

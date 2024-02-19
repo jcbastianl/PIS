@@ -4,12 +4,20 @@
  */
 package modelo;
 
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  *
  * @author mrbingus
  */
 public class PeriodoAcademico {
+
     private Integer id;
+    
+
     private String mesInicio;
     private String mesFin;
     private String yearInicio;

@@ -4,13 +4,21 @@
  */
 package modelo;
 
+
 /**
  *
  * @author jsbal
  */
-public class Docente extends Persona {
+public class Docente  {
+   
     private String titulo;
     private String preparacion;
+    private String nombre;
+    private String apellido;
+    private String dni;
+    private String telefono;
+    private Integer rol;
+    private Cuenta cuenta;
     private Integer id;
 
     public Docente() {
@@ -23,6 +31,72 @@ public class Docente extends Persona {
         return titulo;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+   
+
+    
+    public Integer getRol() {
+        return rol;
+    }
+
+  
+    public void setRol(Integer rol) {
+        this.rol = rol;
+    }
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
+
+    
+   
+ 
+   
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    
     /**
      * @param titulo the titulo to set
      */
@@ -33,49 +107,32 @@ public class Docente extends Persona {
     /**
      * @return the id
      */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
     
-    public Boolean compare(Docente p, String field, Integer type){
-        switch (type) {
-            case 0:
-        if(field.equalsIgnoreCase("apellido")){
-            return getApellido().compareTo(p.getApellido()) < 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getNombre().compareTo(p.getNombre()) < 0;
-        }else if(field.equalsIgnoreCase("titulo")){
-            return getTitulo().compareTo(p.getTitulo()) < 0;
-        }else if(field.equalsIgnoreCase("dni")){
-            return getDni().compareTo(p.getDni()) < 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (getId().intValue() < p.getId().intValue());
-        }
-            case 1:
-        if(field.equalsIgnoreCase("apellido")){
-            return getApellido().compareTo(p.getApellido()) > 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getNombre().compareTo(p.getNombre()) > 0;
-        }else if(field.equalsIgnoreCase("titulo")){
-            return getTitulo().compareTo(p.getTitulo()) > 0;
-        }else if(field.equalsIgnoreCase("dni")){
-            return getDni().compareTo(p.getDni()) > 0;
-        }else if(field.equalsIgnoreCase("id")){
-            return (getId().intValue() > p.getId().intValue());
-        }   
-        
-        default:
-        return null;
+    
+    public Boolean compare(Docente e, String field, Integer type) {
+    switch (type) {
+        case 0: // Ascendente
+            if (field.equalsIgnoreCase("nombre")) {
+                return this.nombre.compareToIgnoreCase(e.getNombre()) < 0;
+            } else if (field.equalsIgnoreCase("apellido")) {
+                return this.apellido.compareToIgnoreCase(e.getApellido()) < 0;
+            } else if (field.equalsIgnoreCase("dni")) {
+                return this.dni.compareToIgnoreCase(e.getDni()) < 0;
+            }
+            break;
+        case 1: // Descendente
+            if (field.equalsIgnoreCase("nombre")) {
+                return this.nombre.compareToIgnoreCase(e.getNombre()) > 0;
+            } else if (field.equalsIgnoreCase("apellido")) {
+                return this.apellido.compareToIgnoreCase(e.getApellido()) > 0;
+            } else if (field.equalsIgnoreCase("dni")) {
+                return this.dni.compareToIgnoreCase(e.getDni()) > 0;
+            }
+            break;
+    }
+    return null;
+}
 
-        }
-    } 
 
     /**
      * @return the preparacion

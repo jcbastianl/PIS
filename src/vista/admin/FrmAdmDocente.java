@@ -4,10 +4,15 @@
  */
 package vista.admin;
 
+
 import controlador.clases.CuentaControl;
 import controlador.clases.DocenteControl;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Cuenta;
+import modelo.Docente;
 import vista.modeloTablas.DocenteModeloTabla;
 
 /**
@@ -36,10 +41,22 @@ public class FrmAdmDocente extends javax.swing.JFrame {
                 && !(txtClaveDos.getText().trim().isEmpty()));
     }
 
-    public void cargarTabla() {
-        modelo.setDocentes(docenteControl.getListaDocentes());
-        tblDocente.setModel(modelo);
-        tblDocente.updateUI();
+    private void cargarTabla() {
+        try {
+          
+            ListaEnlazada<Docente> listaDocentes = docenteControl.listar();
+
+           
+            modelo.setDocentes(listaDocentes);
+
+     
+            tblDocente.setModel(modelo);
+            tblDocente.updateUI();
+        } catch (Exception e) {
+            
+            JOptionPane.showMessageDialog(null, "Error al cargar los docentes: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void limpiar() {
@@ -59,107 +76,144 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     }
 
     private void guardar() {
-        if (verificar()) {
-            docenteControl.getDocente().setNombre(txtNombre.getText());
-            docenteControl.getDocente().setApellido(txtApellido.getText());
-            docenteControl.getDocente().setDni(txtDni.getText());
-            docenteControl.getDocente().setTitulo(txtTitulo.getText());
-            docenteControl.getDocente().setRol(0);
-            docenteControl.getDocente().setTelefono(txtTelefono.getText());
-            docenteControl.getDocente().setPreparacion(txtPreparacion.getText());
-            docenteControl.getDocente().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
-            cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
-            if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
-                cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
-                cuentaControl.getCuenta().setPersona(docenteControl.getDocente());
-                cuentaControl.getCuenta().setEstado(true);
-                if (verificarDatosCuenta()) {
-                    if (docenteControl.persist()) {
-                        if (cuentaControl.persist()) {
-                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error al registrarse");
-                        }
+        if (verificar() && verificarDatosCuenta()) {
+            try {
+               
+                Docente docente = new Docente();
+                docente.setNombre(txtNombre.getText());
+                docente.setApellido(txtApellido.getText());
+                docente.setDni(txtDni.getText());
+                docente.setTitulo(txtTitulo.getText());
+                docente.setRol(0);
+                docente.setTelefono(txtTelefono.getText());
+                docente.setPreparacion(txtPreparacion.getText());
 
+                
+                AdaptadorDao<Docente> adaptadorDaoDocente = new AdaptadorDao<>(Docente.class);
+
+               
+                Integer idGeneradoDocente = adaptadorDaoDocente.guardar(docente);
+
+                
+                if (idGeneradoDocente != -1) {
+                    JOptionPane.showMessageDialog(null, "Docente guardado exitosamente");
+
+                   
+                    Cuenta cuenta = new Cuenta();
+                    cuenta.setCorreo(txtCorreo.getText());
+                    cuenta.setContraseña(txtClaveUno.getText());
+                    cuenta.setEstado(true);
+                    cuenta.setId(idGeneradoDocente); 
+
+                    
+                    AdaptadorDao<Cuenta> adaptadorDaoCuenta = new AdaptadorDao<>(Cuenta.class);
+
+                    
+                    Integer idGeneradoCuenta = adaptadorDaoCuenta.guardar(cuenta);
+
+                  
+                    if (idGeneradoCuenta != -1) {
+                        JOptionPane.showMessageDialog(null, "Cuenta guardada exitosamente");
                         limpiar();
-                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                        cargarTabla();
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                        JOptionPane.showMessageDialog(null, "Error al guardar la cuenta");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
+                    JOptionPane.showMessageDialog(null, "Error al guardar el docente");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Las claves no coinciden");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
             }
-
-            docenteControl.setDocente(null);
-
         } else {
-            JOptionPane.showMessageDialog(null, "No dejes campos vacios");
+            JOptionPane.showMessageDialog(null, "Completa los campos requeridos para el docente y la cuenta");
         }
     }
 
     private void modificar() {
         if (verificar()) {
-            docenteControl.getDocente().setNombre(txtNombre.getText());
-            docenteControl.getDocente().setApellido(txtApellido.getText());
-            docenteControl.getDocente().setDni(txtDni.getText());
-            docenteControl.getDocente().setTitulo(txtTitulo.getText());
-            docenteControl.getDocente().setTelefono(txtTelefono.getText());
-            docenteControl.getDocente().setPreparacion(txtPreparacion.getText());
             try {
-                Integer indiceDocente = Utiles.encontrarPosicion("docente", modelo.getDocentes().getInfo(tblDocente.getSelectedRow()).getId());
+                
+                Integer indiceDocente = tblDocente.getSelectedRow();
 
-                if (docenteControl.merge(docenteControl.getDocente(), indiceDocente)) {
-                    JOptionPane.showMessageDialog(null, "Modificacion Exitosa");
+                
+                if (indiceDocente != -1) {
+                   
+                    docenteControl.getDocente().setNombre(txtNombre.getText());
+                    docenteControl.getDocente().setApellido(txtApellido.getText());
+                    docenteControl.getDocente().setDni(txtDni.getText());
+                    docenteControl.getDocente().setTitulo(txtTitulo.getText());
+                    docenteControl.getDocente().setTelefono(txtTelefono.getText());
+                    docenteControl.getDocente().setPreparacion(txtPreparacion.getText());
+
+                
+                    AdaptadorDao<Docente> adaptadorDaoDocente = new AdaptadorDao<>(Docente.class);
+
+                    
+                    adaptadorDaoDocente.modificar(docenteControl.getDocente());
+
+                  
+                    cargarTabla();
+
+                    JOptionPane.showMessageDialog(null, "Modificación Exitosa");
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo modificar");
+                    JOptionPane.showMessageDialog(null, "Selecciona un docente para modificar");
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al modificar: " + e.getMessage());
             }
-
-            docenteControl.setDocente(null);
-            limpiar();
         } else {
-            JOptionPane.showMessageDialog(null, "No dejes campos vacios");
-
+            JOptionPane.showMessageDialog(null, "No dejes campos vacíos");
         }
     }
 
     private void borrar() {
         try {
-            Integer indiceDocente = Utiles.encontrarPosicion("docente", modelo.getDocentes().getInfo(tblDocente.getSelectedRow()).getId());
-
             if (tblDocente.getSelectedRow() > -1) {
-                new CuentaControl().remove(docenteControl.getListaDocentes().getInfo(indiceDocente).getCuenta());
-                if (docenteControl.remove(indiceDocente)) {
-                    JOptionPane.showMessageDialog(null, "Se borro el elemento");
+                Integer indiceDocente = tblDocente.getSelectedRow();
 
+                Docente docenteSeleccionado = docenteControl.getListaDocentes().getInfo(indiceDocente);
+                Cuenta cuentaSeleccionada = docenteSeleccionado.getCuenta();
+                Integer idCuenta = cuentaSeleccionada.getId();
+
+               
+                AdaptadorDao<Cuenta> adaptadorDaoCuenta = new AdaptadorDao<>(Cuenta.class);
+                if (adaptadorDaoCuenta.remove(idCuenta)) {
+                    
+                    if (docenteControl.remove(indiceDocente)) {
+                        JOptionPane.showMessageDialog(null, "Se borró el elemento");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
+                    JOptionPane.showMessageDialog(null, "Error al borrar la cuenta asociada al docente");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione un elemento para eliminar");
             }
         } catch (Exception e) {
+           
+            e.printStackTrace();
         }
+        
         limpiar();
     }
 
     private void ordenar() {
-        int t = 0;
-        if (btnTipoOrden.isSelected()) {
-            t = 1;
-        }
+        int tipo = btnTipoOrden.isSelected() ? 1 : 0; 
+        String criterioOrden = cbxCriterioOrden.getSelectedItem().toString().toLowerCase(); 
+
         try {
-            modelo.setDocentes(docenteControl.shellsort(t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
+            
+            ListaEnlazada<Docente> listaOrdenada = docenteControl.shellsort(tipo, criterioOrden, docenteControl.getListaDocentes());
+
+            
+            modelo.setDocentes(listaOrdenada);
+            tblDocente.setModel(modelo);
+            tblDocente.updateUI();
         } catch (Exception e) {
-            System.out.println("Error al ordenar " + e.getMessage() + "");
+            System.out.println("Error al ordenar: " + e.getMessage());
         }
-        tblDocente.setModel(modelo);
-        tblDocente.updateUI();
     }
 
     private void buscar() {
@@ -504,18 +558,23 @@ public class FrmAdmDocente extends javax.swing.JFrame {
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
     private void tblDocenteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDocenteMouseClicked
-        // TODO add your handling code here:
         try {
-            Integer indiceDocente = Utiles.encontrarPosicion("docente", modelo.getDocentes().getInfo(tblDocente.getSelectedRow()).getId());
-            docenteControl.setDocente(docenteControl.getListaDocentes().getInfo(indiceDocente));
+
+            if (tblDocente.getSelectedRow() > -1) {
+
+                Integer indiceDocente = tblDocente.getSelectedRow();
+
+                docenteControl.setDocente(docenteControl.getListaDocentes().getInfo(indiceDocente));
+
+                txtApellido.setText(docenteControl.getDocente().getApellido());
+                txtNombre.setText(docenteControl.getDocente().getNombre());
+                txtDni.setText(docenteControl.getDocente().getDni());
+                txtTitulo.setText(docenteControl.getDocente().getTitulo());
+                txtPreparacion.setText(docenteControl.getDocente().getPreparacion());
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        txtApellido.setText(docenteControl.getDocente().getApellido());
-        txtNombre.setText(docenteControl.getDocente().getNombre());
-        txtDni.setText(docenteControl.getDocente().getDni());
-        txtTitulo.setText(docenteControl.getDocente().getTitulo());
-        txtPreparacion.setText(docenteControl.getDocente().getPreparacion());
 
     }//GEN-LAST:event_tblDocenteMouseClicked
 

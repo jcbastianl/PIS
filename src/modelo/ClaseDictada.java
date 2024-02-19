@@ -5,17 +5,28 @@
 package modelo;
 
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author jsbal
  */
 public class ClaseDictada {
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id_clasedictada;
+    
+    @Basic
     private String tema;
-    private Date fecha;
     private Integer id_cursa;
    
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
 
     public ClaseDictada() {
     }
@@ -24,14 +35,14 @@ public class ClaseDictada {
      * @return the id
      */
     public Integer getId() {
-        return id;
+        return id_clasedictada;
     }
 
     /**
      * @param id the id to set
      */
     public void setId(Integer id) {
-        this.id = id;
+        this.id_clasedictada = id;
     }
 
     /**

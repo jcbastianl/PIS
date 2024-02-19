@@ -7,6 +7,7 @@ package vista.docente;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.AsistenciaControl;
 import controlador.clases.EstudianteControl;
+import controlador.ed.ecepciones.PosicionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -59,7 +60,7 @@ public class frmAsistencia extends javax.swing.JFrame {
                 tblLista.updateUI();
         }
         
-        private void guardar() throws EmptyException {
+        private void guardar() throws EmptyException, PosicionException {
                 for (int i = 0; i < tblLista.getSelectedRowCount(); i++) {
                         Estudiante aux = controlE.getListaEstudiantes().getInfo(i);
 //                        controlAsis.getAsistencia().setEstudiante(aux);
@@ -293,7 +294,9 @@ public class frmAsistencia extends javax.swing.JFrame {
                 } catch (EmptyException ex) {
                         Logger.getLogger(frmAsistencia.class
                                 .getName()).log(Level.SEVERE, null, ex);
-                }
+                } catch (PosicionException ex) {
+                Logger.getLogger(frmAsistencia.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }//GEN-LAST:event_btnGuardarActionPerformed
 
         private void tblListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblListaMouseClicked

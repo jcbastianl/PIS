@@ -9,20 +9,18 @@ import modelo.Estudiante;
 import controlador.clases.EstudianteControl;
 import controlador.utiles.Utiles;
 
+import javax.swing.table.AbstractTableModel;
+import java.util.List;
+
 public class AsistenciaModeloTabla extends AbstractTableModel {
 
-    private DynamicList<Asistencia> asistencias;
+    private List<Asistencia> asistencias;
     private final String[] columnNames = {"ESTUDIANTE", "ESTADO"};
     private final Class[] columnClasses = {String.class, Boolean.class};
 
-    public void setAsistencias(List<Asistencia> asistencias) {
-        this.setAsistencias(asistencias);
-        fireTableDataChanged();
-    }
-
     @Override
     public int getRowCount() {
-        return getAsistencias().getLenght();
+        return asistencias.size();
     }
 
     @Override
@@ -42,23 +40,23 @@ public class AsistenciaModeloTabla extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        Asistencia asistencia = asistencias.get(rowIndex);
+        Estudiante estudiante = null;
 
-        Asistencia asistencia = new Asistencia();
         try {
-        asistencia = getAsistencias().getInfo(rowIndex);            
-        } catch (Exception e) {
-        }
-
-        EstudianteControl estudianteControl = new EstudianteControl();
-        Estudiante estudiante = new Estudiante();
-        try {
-            estudiante = estudianteControl.getListaEstudiantes().getInfo(
+            estudiante = new EstudianteControl().getListaEstudiantes().getInfo(
                     Utiles.encontrarPosicion("estudiante", asistencia.getId_estudiante()));
         } catch (Exception e) {
+            e.printStackTrace();
         }
+
         switch (columnIndex) {
             case 0:
-                return estudiante.getNombre() + " " + estudiante.getApellido();
+                if (estudiante != null) {
+                    return estudiante.getNombre() + " " + estudiante.getApellido();
+                } else {
+                    return "";
+                }
             case 1:
                 return asistencia.getEstadoAsistencia();
             default:
@@ -74,11 +72,8 @@ public class AsistenciaModeloTabla extends AbstractTableModel {
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         if (columnIndex == 1 && value instanceof Boolean) {
-            try {
-                getAsistencias().getInfo(rowIndex).setEstadoAsistencia((boolean) value);
-  
-            } catch (Exception e) {
-            }
+            Asistencia asistencia = asistencias.get(rowIndex);
+            asistencia.setEstadoAsistencia((boolean) value);
             fireTableCellUpdated(rowIndex, columnIndex);
         }
     }
@@ -86,14 +81,15 @@ public class AsistenciaModeloTabla extends AbstractTableModel {
     /**
      * @return the asistencias
      */
-    public DynamicList<Asistencia> getAsistencias() {
+    public List<Asistencia> getAsistencias() {
         return asistencias;
     }
 
     /**
      * @param asistencias the asistencias to set
      */
-    public void setAsistencias(DynamicList<Asistencia> asistencias) {
+    public void setAsistencias(List<Asistencia> asistencias) {
         this.asistencias = asistencias;
+        fireTableDataChanged();
     }
 }

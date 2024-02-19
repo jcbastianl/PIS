@@ -4,15 +4,25 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author jsbal
  */
-public class Asignatura {
+
+public class Asignatura  {
+   
     private String nombre;
     private String codigo;
+    
+    
     private Integer id;
 
     public Asignatura() {

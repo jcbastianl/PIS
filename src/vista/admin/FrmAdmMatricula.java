@@ -9,8 +9,12 @@ import controlador.clases.CursaControl;
 import controlador.clases.EstudianteControl;
 import controlador.clases.MatriculaControl;
 import controlador.clases.PeriodoAcademicoControl;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Matricula;
+import modelo.PeriodoAcademico;
 import vista.modeloTablas.CursaModeloTabla;
 import vista.modeloTablas.MatriculaModeloTabla;
 import vista.modeloTablas.PeriodoAcademicoModeloTabla;
@@ -41,14 +45,22 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     }
 
     private void cargarTabla() {
-        modelo.setMatriculas(matriculaControl.getListaMatriculas());
+    try {
+        // Obtener la lista de matrículas
+        ListaEnlazada<Matricula> listaMatriculas = matriculaControl.getListaMatriculas();
+
+        // Establecer la lista de matrículas en el modelo de la tabla
+        modelo.setMatriculas(listaMatriculas);
+
+        // Establecer el modelo de la tabla y actualizar la interfaz de usuario
         tblMatricula.setModel(modelo);
         tblMatricula.updateUI();
-
-        modeloPeriodo.setPeriodos(periodoControl.getListaPeriodos());
-        tblPeriodos.setModel(modeloPeriodo);
-        tblPeriodos.updateUI();
+    } catch (Exception e) {
+        // Manejar cualquier excepción que pueda ocurrir al cargar los datos
+        JOptionPane.showMessageDialog(null, "Error al cargar las matrículas: " + e.getMessage());
+        e.printStackTrace();
     }
+}
 
     private void cargarCombos() {
         try {
@@ -65,7 +77,6 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
 
             cicloControl.setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
             modeloCursa.setListaCursos(Utiles.identificarCursas(cicloControl.getCiclo().getId()));
-            modeloCursa.setVariableColumnas(1);
             tblCursasCiclo.setModel(modeloCursa);
             tblCursasCiclo.updateUI();
             
@@ -89,28 +100,43 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         
     }
 
-    private void guardar(Integer indexCursa, Integer indexEstudiante) throws Exception {
-        if (verificar()) {
-            try {
-                matriculaControl.getMatricula().setCursa(indexCursa);
-                matriculaControl.getMatricula().setEstadoMatricula(Utiles.identificarEstado(cbxEstado.getSelectedIndex()));
-                matriculaControl.getMatricula().setEstudiante(indexEstudiante);
-                matriculaControl.getMatricula().setIdPeriodoAcademico(cbxPeriodos.getSelectedIndex());
+   
+   private void guardar(Integer indexCursa, Integer indexEstudiante) {
+    if (verificar()) {
+        try {
+            Matricula matricula = new Matricula();
 
-            } catch (Exception e) {
-            }
-            matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
-            matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
-            if (matriculaControl.persist()) {
-                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+            
+            matricula.setId_cursa(indexCursa);
+            matricula.setId_estudiante(indexEstudiante);
+            matricula.setEstadoMatricula(Utiles.identificarEstado(cbxEstado.getSelectedIndex()));
+            matricula.setId_PeriodoAcademico(cbxPeriodos.getSelectedIndex());
+            matricula.setFechaRegistro(txtFecha.getDate());
+            matricula.setCodigo(Integer.valueOf(txtCodigo.getText()));
+
+            
+            AdaptadorDao<Matricula> adaptadorDao = new AdaptadorDao<>(Matricula.class);
+            Integer idGenerado = adaptadorDao.guardar(matricula);
+
+            
+            if (idGenerado != -1) {
+                JOptionPane.showMessageDialog(null, "Matrícula guardada exitosamente");
+                limpiar(); 
+                cargarTabla(); 
             } else {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                JOptionPane.showMessageDialog(null, "Error al guardar la matrícula");
             }
-            matriculaControl.setMatricula(null);
-        } else {
-            JOptionPane.showMessageDialog(null, "Llena todos los campos");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar la matrícula: " + e.getMessage());
+            e.printStackTrace();
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "Completa todos los campos requeridos para la matrícula");
     }
+}
+
+
+
 
     private void modificar() throws Exception {
 
@@ -123,7 +149,7 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             try {
                 Integer indexMatricula = Utiles.encontrarPosicion("matricula", modelo.getMatriculas().getInfo(tblMatricula.getSelectedRow()).getId());
 
-                if (matriculaControl.merge(matriculaControl.getMatricula(), indexMatricula)) {
+                if (matriculaControl.modificar(matriculaControl.getMatricula())) {
                     JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo guardar");
@@ -187,31 +213,45 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     }
 
     private void guardarPeriodoAcademico() {
-        if (!txtyearFin.getText().trim().isEmpty()
-                && !txtyearInicio.getText().trim().isEmpty()) {
-            periodoControl.getPeriodo().setMesFin(cbxMesFin.getSelectedItem().toString());
-            periodoControl.getPeriodo().setMesInicio(cbxMesInicio.getSelectedItem().toString());
-            periodoControl.getPeriodo().setYearInicio(txtyearInicio.getText());
-            periodoControl.getPeriodo().setYearFin(txtyearFin.getText());
+    if (!txtyearFin.getText().trim().isEmpty()
+            && !txtyearInicio.getText().trim().isEmpty()) {
+        try {
+            // Crear un nuevo objeto PeriodoAcademico
+            PeriodoAcademico periodoAcademico = new PeriodoAcademico();
+
+            // Establecer las propiedades del periodo académico
+            periodoAcademico.setMesFin(cbxMesFin.getSelectedItem().toString());
+            periodoAcademico.setMesInicio(cbxMesInicio.getSelectedItem().toString());
+            periodoAcademico.setYearInicio(txtyearInicio.getText());
+            periodoAcademico.setYearFin(txtyearFin.getText());
+
+            // Establecer la modalidad del periodo académico
             if (btnIsVirtual.isSelected()) {
-                periodoControl.getPeriodo().setModalidad("VIRTUAL");
+                periodoAcademico.setModalidad("VIRTUAL");
             } else {
-                periodoControl.getPeriodo().setModalidad("PRESENCIAL");
+                periodoAcademico.setModalidad("PRESENCIAL");
             }
-            if (periodoControl.persist()) {
-                JOptionPane.showMessageDialog(null, "Se guardo el periodo academico");
+
+            // Guardar el periodo académico utilizando el AdaptadorDao
+            AdaptadorDao<PeriodoAcademico> adaptadorDao = new AdaptadorDao<>(PeriodoAcademico.class);
+            Integer idGenerado = adaptadorDao.guardar(periodoAcademico);
+
+            // Verificar si se guardó correctamente
+            if (idGenerado != -1) {
+                JOptionPane.showMessageDialog(null, "Se guardó el periodo académico correctamente");
                 limpiar();
-
             } else {
-                JOptionPane.showMessageDialog(null, "No se guardo el periodo academico");
-
+                JOptionPane.showMessageDialog(null, "No se pudo guardar el periodo académico");
             }
-
-        } else {
-            JOptionPane.showMessageDialog(null, "No hay suficiente informacion para crear el periodo academico");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar el periodo académico: " + e.getMessage());
+            e.printStackTrace();
         }
-
+    } else {
+        JOptionPane.showMessageDialog(null, "No hay suficiente información para crear el periodo académico");
     }
+}
+
 
     /**
      * Creates new form FrmAdmMatricula
@@ -625,15 +665,15 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-
-        try {
-            for (int i = 0; i < modeloCursa.getListaCursos().getLenght(); i++) {
-                guardar(Utiles.encontraridCursa(i), Utiles.encontraridEstudiante(cbxEstudiantes.getSelectedIndex()));
-            }
-        } catch (Exception e) {
+       // TODO add your handling code here:
+    try {
+        for (int i = 0; i < modeloCursa.getListaCursos().getLength(); i++) {
+            guardar(Utiles.encontraridCursa(i), Utiles.encontraridEstudiante(cbxEstudiantes.getSelectedIndex()));
         }
-        limpiar();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    limpiar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed

@@ -6,6 +6,10 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import modelo.Estudiante;
 
@@ -15,11 +19,11 @@ import modelo.Estudiante;
  */
 public class EstudianteModeloTabla extends AbstractTableModel {
 
-    private DynamicList<Estudiante> estudiantes;
+    private ListaEnlazada<Estudiante> estudiantes;
 
     @Override
     public int getRowCount() {
-        return getEstudiantes().getLenght();
+        return estudiantes.size();
     }
 
     @Override
@@ -30,7 +34,7 @@ public class EstudianteModeloTabla extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            Estudiante e = getEstudiantes().getInfo(rowIndex);
+            Estudiante e = estudiantes.obtenerElementoEnPosicion(rowIndex);
             switch (columnIndex) {
                 case 0:
                     return (e != null) ? e.getNombre() : " ";
@@ -43,9 +47,12 @@ public class EstudianteModeloTabla extends AbstractTableModel {
                 default:
                     return null;
             }
-        } catch (EmptyException ex) {
+        } catch (IndexOutOfBoundsException ex) {
             return null;
+        } catch (PosicionException ex) {
+            Logger.getLogger(EstudianteModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
@@ -67,14 +74,15 @@ public class EstudianteModeloTabla extends AbstractTableModel {
     /**
      * @return the estudiantes
      */
-    public DynamicList<Estudiante> getEstudiantes() {
+    public ListaEnlazada<Estudiante> getEstudiantes() {
         return estudiantes;
     }
 
     /**
      * @param estudiantes the estudiantes to set
      */
-    public void setEstudiantes(DynamicList<Estudiante> estudiantes) {
+    public void setEstudiantes(ListaEnlazada<Estudiante> estudiantes) {
         this.estudiantes = estudiantes;
     }
 }
+

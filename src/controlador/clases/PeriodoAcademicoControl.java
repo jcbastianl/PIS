@@ -6,39 +6,32 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import modelo.PeriodoAcademico;
 
 /**
  *
  * @author mrbingus
  */
-public class PeriodoAcademicoControl extends DaoImplement<PeriodoAcademico> {
+public class PeriodoAcademicoControl extends AdaptadorDao<PeriodoAcademico> {
 
-    private DynamicList<PeriodoAcademico> listaPeriodos;
+    private ListaEnlazada<PeriodoAcademico> listaPeriodos;
     private PeriodoAcademico periodo;
 
     public PeriodoAcademicoControl() {
         super(PeriodoAcademico.class);
     }
 
-    /**
-     * @return the listaPeriodos
-     */
-    public DynamicList<PeriodoAcademico> getListaPeriodos() {
-        listaPeriodos = all();
+    public ListaEnlazada<PeriodoAcademico> getListaPeriodos() {
+        listaPeriodos = listar();
         return listaPeriodos;
     }
 
-    /**
-     * @param listaPeriodos the listaPeriodos to set
-     */
-    public void setListaPeriodos(DynamicList<PeriodoAcademico> listaPeriodos) {
+    public void setListaPeriodos(ListaEnlazada<PeriodoAcademico> listaPeriodos) {
         this.listaPeriodos = listaPeriodos;
     }
 
-    /**
-     * @return the periodo
-     */
     public PeriodoAcademico getPeriodo() {
         if (periodo == null) {
             periodo = new PeriodoAcademico();
@@ -46,16 +39,17 @@ public class PeriodoAcademicoControl extends DaoImplement<PeriodoAcademico> {
         return periodo;
     }
 
-    /**
-     * @param periodo the periodo to set
-     */
     public void setPeriodo(PeriodoAcademico periodo) {
         this.periodo = periodo;
     }
 
     public Boolean persist() {
-        periodo.setId(all().getLenght() + 1);
-        return persist(periodo);
+        try {
+            periodo.setId(getListaPeriodos().getLength() + 1);
+            return guardar(periodo) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-
 }

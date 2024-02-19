@@ -6,6 +6,11 @@ package controlador.clases;
 
 import controlador.DAO.DaoImplement;
 import controlador.TDA.listas.DynamicList;
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
+import controlador.ed.listas.NodoLista;
+import controlador.utiles.Utiles;
+import java.lang.reflect.Field;
 import modelo.Ciclo;
 import modelo.Cursa;
 
@@ -13,33 +18,25 @@ import modelo.Cursa;
  *
  * @author mrbingus
  */
-public class CicloControl extends DaoImplement<Ciclo> {
+public class CicloControl extends AdaptadorDao<Ciclo> {
 
-    private DynamicList<Ciclo> ciclos;
+    private ListaEnlazada<Ciclo> ciclos;
     private Ciclo ciclo;
 
     public CicloControl() {
         super(Ciclo.class);
     }
 
-    /**
-     * @return the ciclos
-     */
-    public DynamicList<Ciclo> getCiclos() {
-        ciclos = all();
+    public ListaEnlazada<Ciclo> getCiclos() {
+        ciclos = listar();
         return ciclos;
     }
 
-    /**
-     * @param ciclos the ciclos to set
-     */
-    public void setCiclos(DynamicList<Ciclo> ciclos) {
+    
+    public void setCiclos(ListaEnlazada<Ciclo> ciclos) {
         this.ciclos = ciclos;
     }
 
-    /**
-     * @return the ciclo
-     */
     public Ciclo getCiclo() {
         if (ciclo == null) {
             ciclo = new Ciclo();
@@ -47,16 +44,50 @@ public class CicloControl extends DaoImplement<Ciclo> {
         return ciclo;
     }
 
-    /**
-     * @param ciclo the ciclo to set
-     */
     public void setCiclo(Ciclo ciclo) {
         this.ciclo = ciclo;
     }
 
     public Boolean persist() {
-        ciclo.setId(all().getLenght() + 1);
-        return persist(ciclo);
+        try {
+            ciclo.setId(getCiclos().size() + 1);
+            return guardar(ciclo) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-    
+
+    public ListaEnlazada<Ciclo> shellsort(Integer tipo, String field, ListaEnlazada<Ciclo> ciclos1) {
+        try {
+            return shellsort(tipo, field, getCiclos());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ListaEnlazada<Ciclo> busquedaLineal(String texto, String criterio) {
+        ListaEnlazada<Ciclo> lista = new ListaEnlazada<>();
+        try {
+            ListaEnlazada<Ciclo> aux = shellsort(0, criterio, getCiclos());
+            NodoLista<Ciclo> nodo = aux.getCabecera();
+
+            while (nodo != null) {
+                Field nombreAtributo = Utiles.getField(Ciclo.class, criterio);
+                if (nombreAtributo != null) {
+                    nombreAtributo.setAccessible(true);
+                    Object getter = nombreAtributo.get(nodo.getInfo());
+
+                    if (getter != null && getter.toString().toLowerCase().contains(texto.toLowerCase())) {
+                        lista.insertar(nodo.getInfo());
+                    }
+                }
+                nodo = nodo.getSig();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return lista;
+    }
 }

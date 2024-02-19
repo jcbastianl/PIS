@@ -8,7 +8,11 @@ import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.CursaControl;
 import controlador.clases.EstudianteControl;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import modelo.Cursa;
 import modelo.Estudiante;
@@ -18,13 +22,13 @@ import modelo.Matricula;
  *
  * @author mrbingus
  */
-public class MatriculaModeloTabla extends AbstractTableModel{
+public class MatriculaModeloTabla extends AbstractTableModel {
 
-    private DynamicList<Matricula>matriculas;
-    
+    private ListaEnlazada<Matricula> matriculas;
+
     @Override
     public int getRowCount() {
-        return getMatriculas().getLenght();
+        return matriculas.size();
     }
 
     @Override
@@ -35,29 +39,32 @@ public class MatriculaModeloTabla extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            Matricula d = getMatriculas().getInfo(rowIndex);
-            Estudiante e = new EstudianteControl().getListaEstudiantes().getInfo(Utiles.encontrarPosicion("estudiante", d.getEstudiante()));
-            Cursa c = new CursaControl().getListaCursas().getInfo(Utiles.encontrarPosicion("cursa", d.getCursa()));
-            
+            Matricula m = matriculas.obtenerElementoEnPosicion(rowIndex);
+            Estudiante e = m.getEstudiante();
+            Cursa c = m.getCursa();
+
             switch (columnIndex) {
                 case 0:
-                    return (d != null) ? e.getNombre() +" "+e.getApellido() : " ";
+                    return (e != null) ? e.getNombre() + " " + e.getApellido() : " ";
                 case 1:
-                    return (d != null) ? c.toString() : " ";
+                    return (c != null) ? c.toString() : " ";
                 case 2:
-                    return (d != null) ? d.getCodigo(): " ";
+                    return (m != null) ? m.getCodigo() : " ";
                 case 3:
-                    return (d != null) ? Utiles.traducirEstadoString(d.getEstadoMatricula()) : " ";
+                    return (m != null) ? Utiles.traducirEstadoString(m.getEstadoMatricula()) : " ";
                 case 4:
-                    return (d != null) ? Utiles.formaterarFecha(d.getFechaRegistro()) : " ";
+                    return (m != null) ? Utiles.formaterarFecha(m.getFechaRegistro()) : " ";
                 default:
                     return null;
             }
-        } catch (EmptyException ex) {
+        } catch (IndexOutOfBoundsException ex) {
             return null;
-        }    
+        } catch (PosicionException ex) {
+            Logger.getLogger(MatriculaModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-    
+
     @Override
     public String getColumnName(int column) {
         switch (column) {
@@ -66,23 +73,21 @@ public class MatriculaModeloTabla extends AbstractTableModel{
             case 1:
                 return "CURSO";
             case 2:
-                return "CODIGO";     
+                return "CODIGO";
             case 3:
-                return "ESTADO";   
+                return "ESTADO";
             case 4:
-                return "FECHA"; 
+                return "FECHA";
             default:
                 return null;
         }
     }
 
-    public DynamicList<Matricula> getMatriculas() {
+    public ListaEnlazada<Matricula> getMatriculas() {
         return matriculas;
     }
 
-    public void setMatriculas(DynamicList<Matricula> matriculas) {
+    public void setMatriculas(ListaEnlazada<Matricula> matriculas) {
         this.matriculas = matriculas;
     }
-    
-    
 }

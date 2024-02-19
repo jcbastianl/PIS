@@ -4,10 +4,13 @@
  */
 package vista.admin;
 
+import controlador.TDA.listas.DynamicList;
 import controlador.clases.AsignaturaControl;
-
+import controlador.dao.AdaptadorDao;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Asignatura;
 import vista.modeloTablas.AsignaturaModeloTabla;
 
 
@@ -16,7 +19,8 @@ import vista.modeloTablas.AsignaturaModeloTabla;
  * @author mrbingus
  */
 public class FrmAdmAsignatura extends javax.swing.JFrame {
-
+    
+    private AdaptadorDao<Asignatura> adaptadorDao = new AdaptadorDao<>(Asignatura.class);
     private AsignaturaControl asignaturaControl = new AsignaturaControl();
     private AsignaturaModeloTabla modelo = new AsignaturaModeloTabla();
 
@@ -27,11 +31,25 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
 }
 
 
-    public void cargarTabla() {
-        modelo.setAsignaturas(asignaturaControl.getListaAsignaturas());
+    private void cargarTabla() {
+    try {
+        // Obtener la lista de asignaturas
+        ListaEnlazada<Asignatura> listaAsignaturas = asignaturaControl.listar();
+
+        // Establecer la lista de asignaturas en el modelo de la tabla
+        modelo.setAsignaturas(listaAsignaturas);
+
+        // Establecer el modelo de la tabla y actualizar la interfaz de usuario
         tblAsignatura.setModel(modelo);
         tblAsignatura.updateUI();
+    } catch (Exception e) {
+        // Manejar cualquier excepción que pueda ocurrir al cargar los datos
+        JOptionPane.showMessageDialog(null, "Error al cargar las asignaturas: " + e.getMessage());
+        e.printStackTrace();
     }
+}
+
+
 
     private void limpiar() {
         
@@ -43,40 +61,62 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         cargarTabla();
     }
 
-    private void guardar() {
-        if (verificar()) {
-            asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
-            asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
-            if (asignaturaControl.persist()) {
-                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar");
-            }
-            asignaturaControl.setAsignatura(null);
-            limpiar();
+   private void guardar() {
+    if (verificar()) {
+        Asignatura asignatura = new Asignatura();
+        asignatura.setNombre(txtNombre.getText());
+        asignatura.setCodigo(txtCodigo.getText());
+
+        try {
+            // Guardar en la base de datos utilizando AdaptadorDao
+            AdaptadorDao<Asignatura> adaptadorDao = new AdaptadorDao<>(Asignatura.class);
+            Integer idGenerado = adaptadorDao.guardar(asignatura);
+            
+            
+            JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+            
+           cargarTabla();
+        } catch (Exception e) {
+            
+            JOptionPane.showMessageDialog(null, "No se pudo guardar");
+            e.printStackTrace();
         }
     }
+}
 
-    private void modificar() {
-        if (verificar()) {
-            asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
-            asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
-            try {
-                Integer indiceAsignatura = Utiles.encontrarPosicion("asignatura", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
 
-                if (asignaturaControl.merge(asignaturaControl.getAsignatura(), indiceAsignatura)) {
-                    JOptionPane.showMessageDialog(null, "Modificacion Exitosa");
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo modificar");
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+   private void modificar() {
+    if (verificar()) {
+        Asignatura asignatura = new Asignatura();
+        asignatura.setNombre(txtNombre.getText());
+        asignatura.setCodigo(txtCodigo.getText());
+        
+        try {
+            
+            Integer indiceAsignatura = modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId();
+            
+           
+            asignatura.setId(indiceAsignatura);
 
-            asignaturaControl.setAsignatura(null);
-            limpiar();
+           
+            adaptadorDao.modificar(asignatura);
+
+          
+            JOptionPane.showMessageDialog(null, "Modificación Exitosa");
+        } catch (Exception e) {
+            
+            JOptionPane.showMessageDialog(null, "No se pudo modificar");
+            e.printStackTrace();
         }
+
+      
+        limpiar();
+        cargarTabla();
     }
+}
+
+
+
 
     private void borrar() {
         try {
@@ -96,29 +136,36 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         limpiar();
     }
 
-    private void ordenar() {
-        int t = 0;
-        if (btnTipoOrden.isSelected()) {
-            t = 1;
-        }
-        try {
-            modelo.setAsignaturas(asignaturaControl.shellsortAsignatura( t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
-        } catch (Exception e) {
-            System.out.println("Error al ordenar " + e.getMessage() + "");
-        }
-        tblAsignatura.setModel(modelo);
-        tblAsignatura.updateUI();
-    }
+   private void ordenar() {
+    int tipo = btnTipoOrden.isSelected() ? 1 : 0; // Determinar el tipo de orden
+    String criterioOrden = cbxCriterioOrden.getSelectedItem().toString().toLowerCase(); // Obtener el criterio de orden
 
-    private void buscar() {
-        try {
-            modelo.setAsignaturas(asignaturaControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
-        } catch (Exception e) {
-            System.out.println("Error al buscar " + e.getMessage() + "");
-        }
+    try {
+        // Obtener la lista de asignaturas ordenada utilizando el método shellsort de AsignaturaControl
+        ListaEnlazada<Asignatura> listaOrdenada = asignaturaControl.shellsortAsignatura(tipo, criterioOrden);
+
+        // Actualizar el modelo de la tabla con la lista ordenada
+        modelo.setAsignaturas(listaOrdenada);
         tblAsignatura.setModel(modelo);
         tblAsignatura.updateUI();
+    } catch (Exception e) {
+        System.out.println("Error al ordenar: " + e.getMessage());
     }
+}
+
+private void buscar() {
+    try {
+        // Realizar búsqueda lineal en la lista de asignaturas
+        ListaEnlazada<Asignatura> listaResultante = asignaturaControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase());
+
+        // Actualizar el modelo de la tabla con el resultado de la búsqueda
+        modelo.setAsignaturas(listaResultante);
+        tblAsignatura.setModel(modelo);
+        tblAsignatura.updateUI();
+    } catch (Exception e) {
+        System.out.println("Error al buscar: " + e.getMessage());
+    }
+}
 
     /**
      * Creates new form frmDocente
@@ -440,7 +487,7 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         if (!txtNombre.getText().trim().isEmpty()) {
        txtCodigo.setText(Utiles.generarCodigoAsignatura(
                txtNombre.getText(), 
-               asignaturaControl.getListaAsignaturas().getLenght()+1));            
+               asignaturaControl.getListaAsignaturas().getLength()+1));            
         } else {
             JOptionPane.showMessageDialog(null, "Debe proporcionar el nombre de la asignatura");
         }

@@ -5,13 +5,20 @@
 package modelo;
 
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author jsbal
  */
 public class Horario {
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Integer id_horario;
+    @Basic
     private String horaInicio;
     private String horaFin;
     private String dia;
@@ -23,14 +30,14 @@ public class Horario {
      * @return the id
      */
     public Integer getId() {
-        return id;
+        return id_horario;
     }
 
     /**
      * @param id the id to set
      */
     public void setId(Integer id) {
-        this.id = id;
+        this.id_horario = id;
     }
 
     /**

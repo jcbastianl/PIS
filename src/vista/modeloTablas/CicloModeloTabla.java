@@ -6,6 +6,10 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import modelo.Ciclo;
 
@@ -13,13 +17,13 @@ import modelo.Ciclo;
  *
  * @author mrbingus
  */
-public class CicloModeloTabla extends AbstractTableModel{
-    
-    private DynamicList<Ciclo>listaCiclos;
-    
+public class CicloModeloTabla extends AbstractTableModel {
+
+    private ListaEnlazada<Ciclo> listaCiclos;
+
     @Override
     public int getRowCount() {
-        return getListaCiclos().getLenght();
+        return listaCiclos.size();
     }
 
     @Override
@@ -30,39 +34,42 @@ public class CicloModeloTabla extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            Ciclo d = getListaCiclos().getInfo(rowIndex);
+            Ciclo c = listaCiclos.obtenerElementoEnPosicion(rowIndex);
             switch (columnIndex) {
                 case 0:
-                    return (d != null) ? d.getCiclo() +" "+ d.getParalelo(): " ";               
+                    return (c != null) ? c.getCiclo() + " " + c.getParalelo() : " ";
                 default:
                     return null;
             }
-        } catch (EmptyException ex) {
+        } catch (IndexOutOfBoundsException ex) {
             return null;
+        } catch (PosicionException ex) {
+            Logger.getLogger(CicloModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
     public String getColumnName(int column) {
         switch (column) {
             case 0:
-                return "CICLO";                
+                return "CICLO";
             default:
                 return null;
         }
-    }    
+    }
 
     /**
      * @return the listaCiclos
      */
-    public DynamicList<Ciclo> getListaCiclos() {
+    public ListaEnlazada<Ciclo> getListaCiclos() {
         return listaCiclos;
     }
 
     /**
      * @param listaCiclos the listaCiclos to set
      */
-    public void setListaCiclos(DynamicList<Ciclo> listaCiclos) {
+    public void setListaCiclos(ListaEnlazada<Ciclo> listaCiclos) {
         this.listaCiclos = listaCiclos;
     }
 }

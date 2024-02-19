@@ -4,61 +4,70 @@
  */
 package vista.modeloTablas;
 
-import controlador.TDA.listas.DynamicList;
-import controlador.TDA.listas.Exception.EmptyException;
-import controlador.clases.CicloControl;
-import controlador.clases.DocenteControl;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
+import modelo.Asignatura;
 import modelo.Ciclo;
 import modelo.Cursa;
 import modelo.Docente;
+
+
+
 
 /**
  *
  * @author mrbingus
  */
-public class CursaModeloTabla extends AbstractTableModel{
-    
-    private DynamicList<Cursa>listaCursos;
-    private int variableColumnas = 5;
+
+
+public class CursaModeloTabla extends AbstractTableModel {
+
+    private ListaEnlazada<Cursa> listaCursos;
 
     @Override
     public int getRowCount() {
-        return getListaCursos().getLenght();
+        return listaCursos.size();
     }
 
     @Override
     public int getColumnCount() {
-        return getVariableColumnas();
+        return 5;
     }
 
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        try {
-            Cursa d = getListaCursos().getInfo(rowIndex);
-            Docente o = new DocenteControl().all().getInfo(Utiles.encontrarPosicion("docente", d.getDocente()));
-            Ciclo cc = new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("ciclo", d.getCiclo()));
-            
-            switch (columnIndex) {
-                case 0:
-                    return (d != null) ? d.getAsignatura().getNombre() : " ";
-                case 1:
-                    return (d != null) ? cc.getCiclo()+""+cc.getParalelo()  : " ";
-                case 2:
-                    return (d != null) ? o.getNombre() +" "+o.getApellido() : " ";
-                case 3:
-                    return (d != null) ? Utiles.formaterarFecha(d.getFechaInicio()) : " ";
-                case 4:
-                    return (d != null) ? Utiles.formaterarFecha(d.getFechaFin()) : " ";                    
-                default:
-                    return null;
-            }
-        } catch (EmptyException ex) {
-            return null;
-        }    
+ @Override
+public Object getValueAt(int rowIndex, int columnIndex) {
+    try {
+        Cursa c = listaCursos.obtenerElementoEnPosicion(rowIndex);
+        Asignatura a = c.getAsignatura();
+        Docente d = c.getDocente();
+        Ciclo ci = c.getCiclo(); 
+
+        switch (columnIndex) {
+            case 0:
+                return (a != null) ? a.getNombre() : " ";
+            case 1:
+                return (ci != null) ? ci.getCiclo() + " " + ci.getParalelo() : " ";
+            case 2:
+                return (d != null) ? d.getNombre() + " " + d.getApellido() : " ";
+            case 3:
+                return (c != null) ? Utiles.formaterarFecha(c.getFechaInicio()) : " ";
+            case 4:
+                return (c != null) ? Utiles.formaterarFecha(c.getFechaFin()) : " ";
+            default:
+                return null;
+        }
+    } catch (IndexOutOfBoundsException ex) {
+        return null;
+    } catch (PosicionException ex) {
+        Logger.getLogger(CursaModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
+        return null;
     }
-    
+}
+
     @Override
     public String getColumnName(int column) {
         switch (column) {
@@ -67,37 +76,23 @@ public class CursaModeloTabla extends AbstractTableModel{
             case 1:
                 return "CICLO";
             case 2:
-                return "DOCENTE"; 
+                return "DOCENTE";
             case 3:
-                return "INICIO"; 
+                return "INICIO";
             case 4:
-                return "FIN";             
+                return "FIN";
             default:
                 return null;
         }
-    }    
-    public DynamicList<Cursa> getListaCursos() {
+    }
+
+    public ListaEnlazada<Cursa> getListaCursos() {
         return listaCursos;
     }
 
-    public void setListaCursos(DynamicList<Cursa> listaCursos) {
+    public void setListaCursos(ListaEnlazada<Cursa> listaCursos) {
         this.listaCursos = listaCursos;
     }
 
-    /**
-     * @return the variableColumnas
-     */
-    public int getVariableColumnas() {
-        return variableColumnas;
-    }
-
-    /**
-     * @param variableColumnas the variableColumnas to set
-     */
-    public void setVariableColumnas(int variableColumnas) {
-        this.variableColumnas = variableColumnas;
-    }
-
-    
     
 }
