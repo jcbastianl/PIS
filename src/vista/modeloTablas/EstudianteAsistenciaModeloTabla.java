@@ -18,25 +18,12 @@ public class EstudianteAsistenciaModeloTabla extends AbstractTableModel {
         //private DynamicList<ClaseDictada> clases;
         private ClaseDictadaControl claseDicControl = new ClaseDictadaControl();
         private DynamicList<Asistencia> asistencias;
-        private Integer estu;
         private final String[] columnNames = {"TEMA CLASE", "ESTADO", "FECHA"};
         private final Class[] columnClasses = {String.class, String.class, Date.class};
 
         @Override
         public int getRowCount() {
-                // Filtra la lista 'asistencias' para contar solo las entradas que coincidan con 'estu'.
-                int count = 0;
-                for (int i = 0; i < getAsistencias().getLenght(); i++) {
-                        try {
-                                Asistencia asistencia = getAsistencias().getInfo(i);
-                                if (asistencia.getId_estudiante().equals(estu)) {
-                                        count++;
-                                }
-                        } catch (EmptyException ex) {
-                                Logger.getLogger(EstudianteAsistenciaModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                }
-                return count;
+            return asistencias.getLenght();
         }
 
         @Override
@@ -91,11 +78,4 @@ public class EstudianteAsistenciaModeloTabla extends AbstractTableModel {
                 this.asistencias = asistencias;
         }
 
-        public Integer getEstu() {
-                return estu;
-        }
-
-        public void setEstu(Integer estu) {
-                this.estu = estu;
-        }
 }

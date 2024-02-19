@@ -154,7 +154,8 @@ public class FrmDocentePrincipal extends javax.swing.JFrame {
     private void btnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccederActionPerformed
         // TODO add your handling code here:
         try {
-            new FrmDocenteAsignaciones(cursaControl.getListaCursas().getInfo(tblCursos.getSelectedRow())).setVisible(true);
+            new FrmDocenteAsignaciones(Utiles.recuperarCursasDocente(docente.getId()).
+                    getInfo(tblCursos.getSelectedRow())).setVisible(true);
             dispose();
         } catch (Exception e) {
             System.out.println(e.getMessage());

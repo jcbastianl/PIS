@@ -27,6 +27,10 @@ import modelo.ClaseDictada;
 import modelo.Cursa;
 import modelo.Docente;
 import modelo.Estudiante;
+<<<<<<< HEAD
+=======
+import modelo.Justificativo;
+>>>>>>> 517e96d62935892e8b0eeef7e473cfc3b998e9bb
 import modelo.Matricula;
 
 public class Utiles {
@@ -182,9 +186,9 @@ public class Utiles {
                 case "clasedictada":
                     return encontrarPosicion(ClaseDictadaControl.class, id);
                 case "justificativo":
-                    return encontrarPosicion(JustificativoControl.class, id);   
+                    return encontrarPosicion(JustificativoControl.class, id);
                 case "asistencia":
-                    return encontrarPosicion(AsistenciaControl.class, id);                       
+                    return encontrarPosicion(AsistenciaControl.class, id);
                 default:
                     throw new IllegalArgumentException("Tipo de objeto desconocido: " + tipoObj);
             }
@@ -289,7 +293,7 @@ public class Utiles {
             return "CANCELADO";
         }
     }
-    
+
     public static String traducirEstadoAsistenciaString(Boolean i) {
         if (i) {
             return "PRESENTE";
@@ -488,13 +492,20 @@ public static int encontraridDocente(int indice) throws Exception {
 }
 
     public static Integer encontraridCursa(Integer u) throws Exception {
+<<<<<<< HEAD
     return new CursaControl().getListaCursas().obtenerElementoEnPosicion(u).getId();
 }
     
+=======
+        return new CursaControl().getListaCursas().getInfo(u).getId();
+    }
+
+>>>>>>> 517e96d62935892e8b0eeef7e473cfc3b998e9bb
     public static Integer encontraridClase(Integer u) throws Exception {
         return new ClaseDictadaControl().getListaClases().getInfo(u).getId();
-    }    
+    }
 
+<<<<<<< HEAD
     private ListaEnlazada<Docente> listar() {
        
         return null;
@@ -502,4 +513,139 @@ public static int encontraridDocente(int indice) throws Exception {
     }
 
    
+=======
+    public static DynamicList<Cursa> recuperarCursasDocente(Integer id) throws Exception {
+        CursaControl cc = new CursaControl();
+        DynamicList<Cursa> aux = new DynamicList<>();
+        for (int i = 0; i < cc.all().getLenght(); i++) {
+            if (cc.all().getInfo(i).getDocente().equals(id)) {
+                aux.add(cc.all().getInfo(i));
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<ClaseDictada> recuperarClasesCursa(Integer id) throws Exception {
+        ClaseDictadaControl cd = new ClaseDictadaControl();
+        DynamicList<ClaseDictada> aux = new DynamicList<>();
+        for (int i = 0; i < cd.all().getLenght(); i++) {
+            if (cd.all().getInfo(i).getId_cursa().equals(id)) {
+                aux.add(cd.all().getInfo(i));
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<Estudiante> recuperarEstudiantesCursa(Integer id) throws Exception {
+        MatriculaControl mc = new MatriculaControl();
+        DynamicList<Estudiante> aux = new DynamicList<>();
+        DynamicList<Matricula> listaMatriculas = mc.all();
+
+        EstudianteControl estudianteControl = new EstudianteControl();
+        DynamicList<Estudiante> listaEstudiantes = estudianteControl.getListaEstudiantes();
+
+        for (int i = 0; i < listaMatriculas.getLenght(); i++) {
+            Matricula matricula = listaMatriculas.getInfo(i);
+            if (matricula.getCursa().equals(id)) {
+                Estudiante estudiante = listaEstudiantes.getInfo(encontrarPosicion("estudiante", matricula.getEstudiante()));
+                aux.add(estudiante);
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<Asistencia> generarAsistenciasporClase(ClaseDictada clase) throws Exception {
+
+        DynamicList<Asistencia> asistencias = new DynamicList<>();
+        DynamicList<Estudiante> estudiantes = recuperarEstudiantesCursa(clase.getId_cursa());
+        Integer ultimoId = new AsistenciaControl().all().getLenght();
+
+        for (int i = 0; i < estudiantes.getLenght(); i++) {
+            Asistencia asistencia = new Asistencia();
+            asistencia.setEstadoAsistencia(true);
+            asistencia.setId_estudiante(estudiantes.getInfo(i).getId());
+            asistencia.setId_claseDictada(clase.getId());
+            asistencia.setId(ultimoId + i + 1);
+            asistencias.add(asistencia);
+            asistencia = null;
+        }
+        estudiantes = null;
+        return asistencias;
+    }
+
+    public static DynamicList<Asistencia> recuperarAsistenciasClase(Integer idClase) throws Exception {
+        AsistenciaControl ac = new AsistenciaControl();
+        DynamicList<Asistencia> asistencias = new DynamicList<>();
+        DynamicList<Asistencia> aux = ac.all();
+
+        for (int i = 0; i < aux.getLenght(); i++) {
+            Asistencia asistencia = aux.getInfo(i);
+            if (asistencia.getId_claseDictada().equals(idClase)) {
+                asistencias.add(asistencia);
+            }
+        }
+        return asistencias;
+    }
+
+    public static Justificativo recuperarJustificativodeAsistencia(Integer k) {
+        JustificativoControl jc = new JustificativoControl();
+        for (int i = 0; i < jc.getListaJustificativos().getLenght(); i++) {
+            try {
+                if (jc.getListaJustificativos().getInfo(i).getId_asistencia().equals(k)) {
+                    return jc.getListaJustificativos().getInfo(i);
+                }
+            } catch (Exception e) {
+            }
+        }
+        return null;
+
+    }
+
+    public static DynamicList<Matricula> recuperarMatriculasEstudiante(Integer es) {
+        MatriculaControl mc = new MatriculaControl();
+        DynamicList<Matricula> aux = new DynamicList<>();
+        for (int i = 0; i < mc.getListaMatriculas().getLenght(); i++) {
+            try {
+                if (mc.getListaMatriculas().getInfo(i).getEstudiante().equals(es)) {
+                    aux.add(mc.getListaMatriculas().getInfo(i));
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return aux;
+    }
+
+    public static DynamicList<Cursa> recuperarCursasEstudiante(Integer id) throws Exception {
+        DynamicList<Matricula> matri = recuperarMatriculasEstudiante(id);
+        CursaControl cc = new CursaControl();
+        DynamicList<Cursa>aux = new DynamicList<>();
+        for (int i = 0; i < matri.getLenght(); i++) {
+            for (int j = 0; j < cc.getListaCursas().getLenght(); j++) {
+                if (cc.getListaCursas().getInfo(id).getId().equals(matri.getInfo(i).getCursa())) {
+                    aux.add(cc.getListaCursas().getInfo(j));
+                }
+            }
+        }
+        return aux;
+    }
+    
+    public static DynamicList<Asistencia> recuperarAsistenciasEstudiante(Integer id, Integer cursa) throws Exception {
+        AsistenciaControl ac = new AsistenciaControl();
+        DynamicList<Asistencia> aux = new DynamicList<>();
+
+        for (int i = 0; i < ac.getListaEstadoAsistencia().getLenght(); i++) {
+            Asistencia a = ac.getListaEstadoAsistencia().getInfo(i);
+            ClaseDictadaControl cdc = new ClaseDictadaControl();
+            ClaseDictada c = cdc.getListaClases().getInfo(Utiles.encontrarPosicion("clasedictada", a.getId_claseDictada()));
+            if (a.getId_estudiante().equals(id) && c.getId_cursa().equals(cursa)){
+                aux.add(a);
+            }
+        }
+        return aux;
+    }
+
+
+
+>>>>>>> 517e96d62935892e8b0eeef7e473cfc3b998e9bb
 }
