@@ -5,18 +5,21 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.EstudianteImplementacion;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
 import modelo.Estudiante;
 import java.lang.reflect.Field;
 import modelo.Matricula;
+
 /**
  *
  * @author jsbal
  */
 public class EstudianteControl extends DaoImplement<Estudiante> {
-    
+
+    private EstudianteImplementacion aux = new EstudianteImplementacion();
     private DynamicList<Estudiante> listaEstudiantes;
     private Estudiante estudiante;
 
@@ -25,7 +28,7 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
     }
 
     public DynamicList<Estudiante> getListaEstudiantes() {
-        listaEstudiantes = all();
+        listaEstudiantes = aux.all();
         return listaEstudiantes;
     }
 
@@ -46,10 +49,18 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
 
     public Boolean persist() {
         estudiante.setId(all().getLenght() + 1);
-        return persist(estudiante);
+        return aux.persist(estudiante);
     }
 
-    public DynamicList<Estudiante> shellsort( Integer tipo, String field) throws EmptyException, Exception {
+    public Boolean merge(Estudiante a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }
+
+    public DynamicList<Estudiante> shellsort(Integer tipo, String field) throws EmptyException, Exception {
 
         if (tipo == 0) {
             tipo = 1;
@@ -103,7 +114,7 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
         }
         return lista;
     }
-    
+
     public DynamicList<Estudiante> busquedaBinaria(String texto, String criterio) {
         DynamicList<Estudiante> lista = new DynamicList<>();
         int fin = getListaEstudiantes().getLenght() - 1;
@@ -134,7 +145,6 @@ public class EstudianteControl extends DaoImplement<Estudiante> {
             System.out.println(e.getMessage());
             return null;
         }
-    }    
-    
-}
+    }
 
+}

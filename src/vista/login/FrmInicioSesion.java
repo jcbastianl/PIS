@@ -6,7 +6,11 @@ package vista.login;
 
 
 import controlador.clases.CuentaControl;
+import controlador.clases.DocenteControl;
+import controlador.clases.EstudianteControl;
+import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Cuenta;
 import modelo.Docente;
 import modelo.Estudiante;
 import modelo.Persona;
@@ -29,18 +33,18 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     
     }
     
-    public Persona iniciarSesion(){
+    public Integer iniciarSesion()throws Exception{
         if(verificar()){
             cuentaControl.setCuenta(cuentaControl.busquedaLineal(txtCorreo.getText()));
    
             if(txtClave.getText().equals(cuentaControl.getCuenta().getContraseña())){
                 //JOptionPane.showMessageDialog(null, "Sesion Iniciada");
-                JOptionPane.showMessageDialog(null, cuentaControl.getCuenta().getPersona().getNombre() +" "+cuentaControl.getCuenta().getPersona().getApellido());
-                if (cuentaControl.getCuenta().getPersona().getRol() == 2) {
+                //JOptionPane.showMessageDialog(null, cuentaControl.getCuenta().getPersona().getNombre() +" "+cuentaControl.getCuenta().getPersona().getApellido());
+                if (cuentaControl.getCuenta().getTipoCuenta() == 2) {
                     new FrmAdmPrincipal().setVisible(true);
                     dispose();
                 }else{
-                    continuarSesion(cuentaControl.getCuenta().getPersona());
+                    continuarSesion(cuentaControl.getCuenta());
                 }
             }else{
             JOptionPane.showMessageDialog(null, "El correo o la contraseña son incorrectos");                
@@ -51,16 +55,15 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Rellena los campos");
         }
         return cuentaControl.getCuenta().getPersona();
-    
     }
     
     
-    public void continuarSesion(Persona persona){
-        if (persona.getRol() == 0) {
-            new FrmDocentePrincipal((Docente)persona).setVisible(true);
+    public void continuarSesion(Cuenta c) throws Exception{
+        if (c.getTipoCuenta() == 0) {
+            new FrmDocentePrincipal(new DocenteControl().getListaDocentes().getInfo(Utiles.encontrarPosicion("docente", c.getPersona()))).setVisible(true);
             dispose();
         } else {
-            new FrmEstudiantePrincipal((Estudiante)persona).setVisible(true);
+            new FrmEstudiantePrincipal(new EstudianteControl().getListaEstudiantes().getInfo(Utiles.encontrarPosicion("estudiante", c.getPersona()))).setVisible(true);
             dispose();
         }
     

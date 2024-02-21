@@ -15,6 +15,7 @@ public class ClaseDictada {
     private String tema;
     private Date fecha;
     private Integer id_cursa;
+    private Integer id_horario;
    
 
     public ClaseDictada() {
@@ -74,6 +75,20 @@ public class ClaseDictada {
      */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * @return the id_horario
+     */
+    public Integer getId_horario() {
+        return id_horario;
+    }
+
+    /**
+     * @param id_horario the id_horario to set
+     */
+    public void setId_horario(Integer id_horario) {
+        this.id_horario = id_horario;
     }
 
 

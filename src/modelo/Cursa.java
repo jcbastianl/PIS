@@ -18,7 +18,7 @@ public class Cursa {
     private Integer id;
     private Integer ciclo;
     private Integer docente;
-    private Asignatura asignatura;
+    private Integer asignatura;
     private Date fechaInicio;
     private Date fechaFin;
 
@@ -41,33 +41,33 @@ public class Cursa {
 
 
     public Boolean compare(Cursa p, String field, Integer type) {
-        switch (type) {
-            case 0:
-                if (field.equalsIgnoreCase("asignatura")) {
-                    return getAsignatura().toString().compareTo(p.getAsignatura().toString()) < 0;
-                } else if (field.equalsIgnoreCase("id")) {
-                    return (getId().intValue() < p.getId().intValue());
-                }
-            case 1:
-                if (field.equalsIgnoreCase("asignatura")) {
-                    return getAsignatura().toString().compareTo(p.getAsignatura().toString()) > 0;
-                } else if (field.equalsIgnoreCase("id")) {
-                    return (getId().intValue() > p.getId().intValue());
-                }
-            default:
+//        switch (type) {
+//            case 0:
+//                if (field.equalsIgnoreCase("asignatura")) {
+//                    return getAsignatura().toString().compareTo(p.getAsignatura().toString()) < 0;
+//                } else if (field.equalsIgnoreCase("id")) {
+//                    return (getId().intValue() < p.getId().intValue());
+//                }
+//            case 1:
+//                if (field.equalsIgnoreCase("asignatura")) {
+//                    return getAsignatura().toString().compareTo(p.getAsignatura().toString()) > 0;
+//                } else if (field.equalsIgnoreCase("id")) {
+//                    return (getId().intValue() > p.getId().intValue());
+//                }
+//            default:
                 return null;
-        }
+//        }
     }
 
     @Override
     public String toString() {
-        try {
-            return getAsignatura() + " " + new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("cursa", getCiclo())).toString();
-
-        } catch (Exception e) {
-            System.out.println("error desde modelo cursa " + e.getMessage());
+//        try {
+//            return getAsignatura() + " " + new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("cursa", getCiclo())).toString();
+//
+//        } catch (Exception e) {
+//            System.out.println("error desde modelo cursa " + e.getMessage());
             return "algo malo paso";
-        }
+//        }
 
     }
 
@@ -113,19 +113,7 @@ public class Cursa {
         this.ciclo = ciclo;
     }
 
-    /**
-     * @return the asignatura
-     */
-    public Asignatura getAsignatura() {
-        return asignatura;
-    }
-
-    /**
-     * @param asignatura the asignatura to set
-     */
-    public void setAsignatura(Asignatura asignatura) {
-        this.asignatura = asignatura;
-    }
+ 
 
     /**
      * @return the docente
@@ -139,6 +127,20 @@ public class Cursa {
      */
     public void setDocente(Integer docente) {
         this.docente = docente;
+    }
+
+    /**
+     * @return the asignatura
+     */
+    public Integer getAsignatura() {
+        return asignatura;
+    }
+
+    /**
+     * @param asignatura the asignatura to set
+     */
+    public void setAsignatura(Integer asignatura) {
+        this.asignatura = asignatura;
     }
 
 }

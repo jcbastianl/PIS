@@ -5,6 +5,7 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.PeriodoAcademicoImplementacion;
 import controlador.TDA.listas.DynamicList;
 import modelo.PeriodoAcademico;
 
@@ -14,6 +15,7 @@ import modelo.PeriodoAcademico;
  */
 public class PeriodoAcademicoControl extends DaoImplement<PeriodoAcademico> {
 
+    private PeriodoAcademicoImplementacion aux = new PeriodoAcademicoImplementacion();
     private DynamicList<PeriodoAcademico> listaPeriodos;
     private PeriodoAcademico periodo;
 
@@ -25,7 +27,7 @@ public class PeriodoAcademicoControl extends DaoImplement<PeriodoAcademico> {
      * @return the listaPeriodos
      */
     public DynamicList<PeriodoAcademico> getListaPeriodos() {
-        listaPeriodos = all();
+        listaPeriodos = aux.all();
         return listaPeriodos;
     }
 
@@ -55,7 +57,15 @@ public class PeriodoAcademicoControl extends DaoImplement<PeriodoAcademico> {
 
     public Boolean persist() {
         periodo.setId(all().getLenght() + 1);
-        return persist(periodo);
+        return aux.persist(periodo);
+    }
+
+    public Boolean merge(PeriodoAcademico a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
     }
 
 }

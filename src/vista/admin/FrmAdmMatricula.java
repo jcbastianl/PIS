@@ -68,13 +68,13 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
             modeloCursa.setVariableColumnas(1);
             tblCursasCiclo.setModel(modeloCursa);
             tblCursasCiclo.updateUI();
-            
+
         } catch (Exception e) {
         }
     }
 
     private void limpiar() {
-        
+
         txtFecha.setDate(null);
         txtCodigo.setText("");
         cbxCiclo.setSelectedIndex(-1);
@@ -86,27 +86,29 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
         cargarTabla();
         cargarCombos();
         tblMatricula.clearSelection();
-        
+
     }
 
     private void guardar(Integer indexCursa, Integer indexEstudiante) throws Exception {
         if (verificar()) {
-            try {
-                matriculaControl.getMatricula().setCursa(indexCursa);
-                matriculaControl.getMatricula().setEstadoMatricula(Utiles.identificarEstado(cbxEstado.getSelectedIndex()));
-                matriculaControl.getMatricula().setEstudiante(indexEstudiante);
-                matriculaControl.getMatricula().setIdPeriodoAcademico(cbxPeriodos.getSelectedIndex());
+            if (Utiles.validarCodigoAsig(txtCodigo.getText())) {
+                try {
+                    matriculaControl.getMatricula().setCursa(indexCursa);
+                    matriculaControl.getMatricula().setEstadoMatricula(Utiles.identificarEstado(cbxEstado.getSelectedIndex()));
+                    matriculaControl.getMatricula().setEstudiante(indexEstudiante);
+                    matriculaControl.getMatricula().setIdPeriodoAcademico(cbxPeriodos.getSelectedIndex());
 
-            } catch (Exception e) {
+                } catch (Exception e) {
+                }
+                matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
+                matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
+                if (matriculaControl.persist()) {
+                    JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                }
+                matriculaControl.setMatricula(null);
             }
-            matriculaControl.getMatricula().setFechaRegistro(txtFecha.getDate());
-            matriculaControl.getMatricula().setCodigo(Integer.parseInt(txtCodigo.getText()));
-            if (matriculaControl.persist()) {
-                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar");
-            }
-            matriculaControl.setMatricula(null);
         } else {
             JOptionPane.showMessageDialog(null, "Llena todos los campos");
         }

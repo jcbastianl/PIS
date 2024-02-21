@@ -5,6 +5,7 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.CuentaImplementacion;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
@@ -16,7 +17,7 @@ import modelo.Cuenta;
  * @author mrbingus
  */
 public class CuentaControl extends DaoImplement<Cuenta>{
-    
+    private CuentaImplementacion aux = new CuentaImplementacion();
     private  Cuenta cuenta;
     private DynamicList<Cuenta> listaCuentas;
     
@@ -36,7 +37,7 @@ public class CuentaControl extends DaoImplement<Cuenta>{
     }
 
     public DynamicList<Cuenta> getListaCuentas() {
-        listaCuentas = all();
+        listaCuentas = aux.all();
         return listaCuentas;
     }
 
@@ -46,8 +47,16 @@ public class CuentaControl extends DaoImplement<Cuenta>{
     
     public Boolean persist() {
         cuenta.setId(all().getLenght() + 1);
-        return persist(cuenta);
-    }        
+        return aux.persist(cuenta);
+    }      
+    
+    public Boolean merge(Cuenta a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }    
     
     public DynamicList<Cuenta> shellsort(Integer tipo, String field) throws EmptyException, Exception {
         if (tipo == 0) {
@@ -80,10 +89,10 @@ public class CuentaControl extends DaoImplement<Cuenta>{
     }
 
     public Cuenta busquedaLineal(String texto) {
-        //System.out.println("Estas usando busqueda lineal");
+        System.out.println("Estas usando busqueda lineal");
 
         try {
-            Cuenta[] aux = getListaCuentas().toArray();
+            Cuenta[] aux = new CuentaImplementacion().all().toArray();
 
             for (Cuenta p : aux) {
                 Field nombreAtributo = Utiles.getField(Cuenta.class, "correo");
@@ -93,7 +102,6 @@ public class CuentaControl extends DaoImplement<Cuenta>{
                     Object getter = nombreAtributo.get(p);
 
                     if (getter.equals(texto)) {
-                        System.out.println(p.getPersona().getNombre());
                         return p;
                     }
                 }

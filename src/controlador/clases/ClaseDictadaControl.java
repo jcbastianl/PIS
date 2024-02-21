@@ -5,6 +5,7 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.ClaseDictadaImplementacion;
 import controlador.TDA.listas.DynamicList;
 import modelo.ClaseDictada;
 
@@ -13,7 +14,7 @@ import modelo.ClaseDictada;
  * @author mrbingus
  */
 public class ClaseDictadaControl extends DaoImplement<ClaseDictada>{
-    
+    private ClaseDictadaImplementacion aux  = new ClaseDictadaImplementacion();
     private DynamicList<ClaseDictada>listaClases;
     private ClaseDictada clase;
 
@@ -25,7 +26,7 @@ public class ClaseDictadaControl extends DaoImplement<ClaseDictada>{
      * @return the listaClases
      */
     public DynamicList<ClaseDictada> getListaClases() {
-        listaClases = all();
+        listaClases = aux.all();
         return listaClases;
     }
 
@@ -55,8 +56,15 @@ public class ClaseDictadaControl extends DaoImplement<ClaseDictada>{
     
     public Boolean persist() {
         clase.setId(all().getLenght() + 1);
-        return persist(clase);
+        return aux.persist(clase);
     }    
-    
+    public Boolean merge(ClaseDictada a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }
+        
     
 }

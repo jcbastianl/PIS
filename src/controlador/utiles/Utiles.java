@@ -94,6 +94,28 @@ public class Utiles {
         }
         return field;
     }
+    
+    public static boolean validarNumeroCelularEcuador(String numero) {
+        // Verificar si el número tiene 10 caracteres
+        if (numero.length() != 10) {
+            return false;
+        }
+        
+        // Verificar si el número comienza con "09"
+        if (!numero.startsWith("09")) {
+            return false;
+        }
+        
+        // Verificar si todos los caracteres son dígitos numéricos
+        for (int i = 2; i < numero.length(); i++) {
+            if (!Character.isDigit(numero.charAt(i))) {
+                return false;
+            }
+        }
+        
+        // Si pasa todas las validaciones, el número es válido
+        return true;
+    }
 
 //    public static Integer encontrarPosicion(String tipoObj, Integer id) {
 //
@@ -440,7 +462,7 @@ public class Utiles {
     public static DynamicList<Cursa> recuperarCursasEstudiante(Integer id) throws Exception {
         DynamicList<Matricula> matri = recuperarMatriculasEstudiante(id);
         CursaControl cc = new CursaControl();
-        DynamicList<Cursa>aux = new DynamicList<>();
+        DynamicList<Cursa> aux = new DynamicList<>();
         for (int i = 0; i < matri.getLenght(); i++) {
             for (int j = 0; j < cc.getListaCursas().getLenght(); j++) {
                 if (cc.getListaCursas().getInfo(id).getId().equals(matri.getInfo(i).getCursa())) {
@@ -450,7 +472,7 @@ public class Utiles {
         }
         return aux;
     }
-    
+
     public static DynamicList<Asistencia> recuperarAsistenciasEstudiante(Integer id, Integer cursa) throws Exception {
         AsistenciaControl ac = new AsistenciaControl();
         DynamicList<Asistencia> aux = new DynamicList<>();
@@ -459,13 +481,24 @@ public class Utiles {
             Asistencia a = ac.getListaEstadoAsistencia().getInfo(i);
             ClaseDictadaControl cdc = new ClaseDictadaControl();
             ClaseDictada c = cdc.getListaClases().getInfo(Utiles.encontrarPosicion("clasedictada", a.getId_claseDictada()));
-            if (a.getId_estudiante().equals(id) && c.getId_cursa().equals(cursa)){
+            if (a.getId_estudiante().equals(id) && c.getId_cursa().equals(cursa)) {
                 aux.add(a);
             }
         }
         return aux;
     }
 
+    public static Boolean validarCodigoAsig(String a) {
 
+        if (a.length() != 6) {
+            return false;
+        }
+        for (char c : a.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

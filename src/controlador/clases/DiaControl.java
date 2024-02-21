@@ -13,7 +13,6 @@ import modelo.Dia;
  * @author Usuario iTC
  */
 public class DiaControl extends DaoImplement<Dia> {
-
         private DynamicList<Dia> listD = new DynamicList<>();
         private Dia dia;
 

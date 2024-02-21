@@ -5,7 +5,10 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.AsistenciaImplementacion;
+import controlador.DAO.implementaciones.CicloImplementacion;
 import controlador.TDA.listas.DynamicList;
+import modelo.Asistencia;
 import modelo.Ciclo;
 import modelo.Cursa;
 
@@ -14,6 +17,8 @@ import modelo.Cursa;
  * @author mrbingus
  */
 public class CicloControl extends DaoImplement<Ciclo> {
+    
+    private CicloImplementacion aux = new CicloImplementacion();
 
     private DynamicList<Ciclo> ciclos;
     private Ciclo ciclo;
@@ -26,7 +31,7 @@ public class CicloControl extends DaoImplement<Ciclo> {
      * @return the ciclos
      */
     public DynamicList<Ciclo> getCiclos() {
-        ciclos = all();
+        ciclos = aux.all();
         return ciclos;
     }
 
@@ -56,7 +61,15 @@ public class CicloControl extends DaoImplement<Ciclo> {
 
     public Boolean persist() {
         ciclo.setId(all().getLenght() + 1);
-        return persist(ciclo);
+        return aux.persist(ciclo);
+    }
+    
+    public Boolean merge(Ciclo a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
     }
     
 }

@@ -5,6 +5,7 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.AsignaturaImplementacion;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import modelo.Asignatura;
@@ -18,13 +19,14 @@ public class AsignaturaControl extends DaoImplement<Asignatura> {
 
     private DynamicList<Asignatura> listaAsignaturas;
     private Asignatura asignatura;
+    AsignaturaImplementacion imple = new AsignaturaImplementacion();
 
     public AsignaturaControl() {
         super(Asignatura.class);
     }
 
     public DynamicList<Asignatura> getListaAsignaturas() {
-        listaAsignaturas = all();
+        listaAsignaturas = imple.all();
         return listaAsignaturas;
     }
 
@@ -45,7 +47,16 @@ public class AsignaturaControl extends DaoImplement<Asignatura> {
 
     public Boolean persist() {
         asignatura.setId(all().getLenght() + 1);
-        return persist(asignatura);
+        return imple.persist(asignatura);
+         
+    }
+    
+    public Boolean merge(Asignatura a, Integer index){
+    return imple.merge(a, index + 1);
+    }
+    
+    public Boolean remove(Integer s){
+    return imple.remove(s+1);
     }
 
     // Aquí puedes agregar métodos adicionales relacionados con el control de Asignaturas, 

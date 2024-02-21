@@ -16,17 +16,18 @@ import modelo.Matricula;
  *
  * @author mrbingus
  */
-public class CursaControl extends DaoImplement<Cursa>{
-    
-    private DynamicList<Cursa>listaCursas;
+public class CursaControl extends DaoImplement<Cursa> {
+
+    private CursaControl aux = new CursaControl();
+    private DynamicList<Cursa> listaCursas;
     private Cursa cursa;
-    
+
     public CursaControl() {
         super(Cursa.class);
     }
 
     public DynamicList<Cursa> getListaCursas() {
-        listaCursas = all();
+        listaCursas = aux.all();
         return listaCursas;
     }
 
@@ -44,12 +45,20 @@ public class CursaControl extends DaoImplement<Cursa>{
     public void setCursa(Cursa cursa) {
         this.cursa = cursa;
     }
-    
+
     public Boolean persist() {
         cursa.setId(all().getLenght() + 1);
-        return persist(cursa);
-    }    
-    
+        return aux.persist(cursa);
+    }
+
+    public Boolean merge(Cursa a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }
+
     public DynamicList<Cursa> shellsort(Integer tipo, String field) throws EmptyException, Exception {
         if (tipo == 0) {
             tipo = 1;
@@ -85,7 +94,7 @@ public class CursaControl extends DaoImplement<Cursa>{
         DynamicList<Cursa> lista = new DynamicList<>();
         try {
             Cursa[] aux = shellsort(0, criterio).toArray();
-                        lista.removerAll();
+            lista.removerAll();
 
             for (Cursa p : aux) {
                 Field nombreAtributo = Utiles.getField(Cursa.class, criterio);
@@ -103,7 +112,7 @@ public class CursaControl extends DaoImplement<Cursa>{
             System.out.println(e.getMessage());
         }
         return lista;
-    }       
+    }
 
 //    
 //    public DynamicList<Cursa> busquedaBinaria(String texto, String criterio) {
@@ -137,5 +146,4 @@ public class CursaControl extends DaoImplement<Cursa>{
 //            return null;
 //        }
 //    }  
-       
 }

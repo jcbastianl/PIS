@@ -13,8 +13,9 @@ public class Cuenta {
     private String correo;
     private String contraseña;
 //    private Integer id_persona ;
-    private Persona persona;
+    private Integer persona;
     private Boolean estado;
+    private Integer tipoCuenta;
 
     public Cuenta() {
     }
@@ -65,19 +66,11 @@ public class Cuenta {
     public Boolean compare(Cuenta p, String field, Integer type){
         switch (type) {
             case 0:
-        if(field.equalsIgnoreCase("apellido")){
-            return getPersona().getApellido().compareTo(p.getPersona().getApellido()) < 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getPersona().getNombre().compareTo(p.getPersona().getNombre()) < 0;
-        }else if(field.equalsIgnoreCase("id")){
+        if(field.equalsIgnoreCase("id")){
             return (getId().intValue() < p.getId().intValue());
         }
             case 1:
-        if(field.equalsIgnoreCase("apellido")){
-            return getPersona().getApellido().compareTo(p.getPersona().getApellido()) > 0;
-        }else if(field.equalsIgnoreCase("nombre")){
-            return getPersona().getNombre().compareTo(p.getPersona().getNombre()) > 0;
-        }else if(field.equalsIgnoreCase("id")){
+        if(field.equalsIgnoreCase("id")){
             return (getId().intValue() < p.getId().intValue());
         }  
         
@@ -101,12 +94,39 @@ public class Cuenta {
         this.estado = estado;
     }
 
-    public Persona getPersona() {
+    
+
+    /**
+     * @return the tipoCuenta
+     */
+    public Integer getTipoCuenta() {
+        return tipoCuenta;
+    }
+
+    /**
+     * @param tipoCuenta the tipoCuenta to set
+     */
+    public void setTipoCuenta(Integer tipoCuenta) {
+        this.tipoCuenta = tipoCuenta;
+    }
+
+    /**
+     * @return the persona
+     */
+    public Integer getPersona() {
         return persona;
     }
 
-    public void setPersona(Persona persona) {
+    /**
+     * @param persona the persona to set
+     */
+    public void setPersona(Integer persona) {
         this.persona = persona;
+    }
+
+    @Override
+    public String toString() {
+        return "Cuenta{" + "correo=" + correo + ", contrase\u00f1a=" + contraseña + '}';
     }
 
 

@@ -75,4 +75,11 @@ public class Horario {
         this.dia = dia;
     }
 
+    @Override
+    public String toString() {
+        return getHoraInicio() +" --> "+getHoraFin()+" "+getDia();
+    }
+    
+    
+
 }

@@ -62,42 +62,47 @@ public class FrmAdmEstudiante extends javax.swing.JFrame {
 
     private void guardar() {
         if (verificar()) {
-            estudianteControl.getEstudiante().setNombre(txtNombre.getText());
-            estudianteControl.getEstudiante().setApellido(txtApellido.getText());
-            estudianteControl.getEstudiante().setDni(txtDni.getText());
-            estudianteControl.getEstudiante().setRol(1);
-            estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
-            estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
-            estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
-            estudianteControl.getEstudiante().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
-            cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
-            if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
-                cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
-                cuentaControl.getCuenta().setPersona(estudianteControl.getEstudiante());
-                cuentaControl.getCuenta().setEstado(true);
-                if (verificarDatosCuenta()) {
-                    if (estudianteControl.persist()) {
-
-                        if (cuentaControl.persist()) {
-                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+            if (Utiles.validadorDeCedula(txtDni.getText())) {
+                if (Utiles.validarNumeroCelularEcuador(txtTelefono.getText())) {
+                    estudianteControl.getEstudiante().setNombre(txtNombre.getText());
+                    estudianteControl.getEstudiante().setApellido(txtApellido.getText());
+                    estudianteControl.getEstudiante().setDni(txtDni.getText());
+                    estudianteControl.getEstudiante().setRol(1);
+                    estudianteControl.getEstudiante().setColegioProcedencia(txtColegio.getText());
+                    estudianteControl.getEstudiante().setProvinciaOrigen(txtProvincia.getText());
+                    estudianteControl.getEstudiante().setTelefono(txtTelefono.getText());
+                    estudianteControl.getEstudiante().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
+                    cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
+                    if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
+                        cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
+                        cuentaControl.getCuenta().setPersona(estudianteControl.all().getLenght() + 1);
+                        cuentaControl.getCuenta().setTipoCuenta(1);
+                        cuentaControl.getCuenta().setEstado(true);
+                        if (verificarDatosCuenta()) {
+                            if (estudianteControl.persist()) {
+                                if (cuentaControl.persist()) {
+                                    JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Error al registrarse");
+                                }
+                                limpiar();
+                                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "Error al registrarse");
+                            JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
                         }
-
-                        limpiar();
-                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                        JOptionPane.showMessageDialog(null, "Las claves no coinciden");
                     }
+                    estudianteControl.setEstudiante(null);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
+                    JOptionPane.showMessageDialog(null, "El numero celular ingresado es incorrecto");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Las claves no coinciden");
+                JOptionPane.showMessageDialog(null, "La cedula ingresada es incorrecta");
             }
-
-            estudianteControl.setEstudiante(null);
-
         } else {
             JOptionPane.showMessageDialog(null, "Rellena todos los campos");
         }

@@ -4,12 +4,14 @@
  */
 package vista.modeloTablas;
 
+import controlador.DAO.implementaciones.AsignaturaImplementacion;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.clases.CicloControl;
 import controlador.clases.DocenteControl;
 import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
+import modelo.Asignatura;
 import modelo.Ciclo;
 import modelo.Cursa;
 import modelo.Docente;
@@ -39,10 +41,10 @@ public class CursaModeloTabla extends AbstractTableModel{
             Cursa d = getListaCursos().getInfo(rowIndex);
             Docente o = new DocenteControl().all().getInfo(Utiles.encontrarPosicion("docente", d.getDocente()));
             Ciclo cc = new CicloControl().getCiclos().getInfo(Utiles.encontrarPosicion("ciclo", d.getCiclo()));
-            
+            Asignatura aa = new AsignaturaImplementacion().all().getInfo(Utiles.encontrarPosicion("asignatura", d.getAsignatura()));
             switch (columnIndex) {
                 case 0:
-                    return (d != null) ? d.getAsignatura().getNombre() : " ";
+                    return (d != null) ? aa.getNombre() : " ";
                 case 1:
                     return (d != null) ? cc.getCiclo()+""+cc.getParalelo()  : " ";
                 case 2:

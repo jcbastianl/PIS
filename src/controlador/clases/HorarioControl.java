@@ -5,6 +5,7 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.HorarioImplementacion;
 import controlador.TDA.listas.DynamicList;
 import modelo.Horario;
 
@@ -13,45 +14,54 @@ import modelo.Horario;
  * @author Usuario iTC
  */
 public class HorarioControl extends DaoImplement<Horario> {
-        private DynamicList<Horario> listH = new DynamicList<>();
-        private Horario horario = new Horario();
 
-        public HorarioControl() {
-                super(Horario.class);
-        }
+    private HorarioImplementacion aux = new HorarioImplementacion();
+    private DynamicList<Horario> listH = new DynamicList<>();
+    private Horario horario = new Horario();
 
-        
-        public HorarioControl(Horario horario, Class<Horario> clazz) {
-                super(clazz);
-                this.horario = horario;
-        }
+    public HorarioControl() {
+        super(Horario.class);
+    }
 
-        public DynamicList<Horario> getListH() {
-                listH = all();
-                return listH;
-        }
+    public HorarioControl(Horario horario, Class<Horario> clazz) {
+        super(clazz);
+        this.horario = horario;
+    }
 
-        public void setListH(DynamicList<Horario> listH) {
-                this.listH = listH;
-        }
+    public DynamicList<Horario> getListH() {
+        listH = aux.all();
+        return listH;
+    }
 
-        public Horario getHorario() {
-                if(horario == null){
-                        horario = new Horario();
-                }
-                return horario;
-        }
+    public void setListH(DynamicList<Horario> listH) {
+        this.listH = listH;
+    }
 
-        public void setHorario(Horario horario) {
-                this.horario = horario;
+    public Horario getHorario() {
+        if (horario == null) {
+            horario = new Horario();
         }
+        return horario;
+    }
 
-        public Boolean persist() {
-                horario.setId(all().getLenght() + 1);
-                return persist(horario);
-        }
-        
-        /*public static void main(String[] args) {
+    public void setHorario(Horario horario) {
+        this.horario = horario;
+    }
+
+    public Boolean persist() {
+        horario.setId(all().getLenght() + 1);
+        return aux.persist(horario);
+    }
+
+    public Boolean merge(Horario a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }
+
+    /*public static void main(String[] args) {
                 HorarioControl hc = new HorarioControl();
                 System.out.println(hc.all().toString());
                 hc.getHorario().setHora("7:30-9:30");
@@ -64,6 +74,4 @@ public class HorarioControl extends DaoImplement<Horario> {
                 hc.persist();
                 hc.setHorario(null);
         }*/
-        
-        
 }

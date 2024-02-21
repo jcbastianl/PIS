@@ -60,41 +60,47 @@ public class FrmAdmDocente extends javax.swing.JFrame {
 
     private void guardar() {
         if (verificar()) {
-            docenteControl.getDocente().setNombre(txtNombre.getText());
-            docenteControl.getDocente().setApellido(txtApellido.getText());
-            docenteControl.getDocente().setDni(txtDni.getText());
-            docenteControl.getDocente().setTitulo(txtTitulo.getText());
-            docenteControl.getDocente().setRol(0);
-            docenteControl.getDocente().setTelefono(txtTelefono.getText());
-            docenteControl.getDocente().setPreparacion(txtPreparacion.getText());
-            docenteControl.getDocente().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
-            cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
-            if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
-                cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
-                cuentaControl.getCuenta().setPersona(docenteControl.getDocente());
-                cuentaControl.getCuenta().setEstado(true);
-                if (verificarDatosCuenta()) {
-                    if (docenteControl.persist()) {
-                        if (cuentaControl.persist()) {
-                            JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+            if (Utiles.validadorDeCedula(txtDni.getText())) {
+                if (Utiles.validarNumeroCelularEcuador(txtTelefono.getText())) {
+                    docenteControl.getDocente().setNombre(txtNombre.getText());
+                    docenteControl.getDocente().setApellido(txtApellido.getText());
+                    docenteControl.getDocente().setDni(txtDni.getText());
+                    docenteControl.getDocente().setTitulo(txtTitulo.getText());
+                    docenteControl.getDocente().setRol(0);
+                    docenteControl.getDocente().setTelefono(txtTelefono.getText());
+                    docenteControl.getDocente().setPreparacion(txtPreparacion.getText());
+                    docenteControl.getDocente().setCuenta(cuentaControl.getListaCuentas().getLenght() + 1);
+                    cuentaControl.getCuenta().setCorreo(txtCorreo.getText());
+                    if (Utiles.compararTextoss(txtClaveUno.getText(), txtClaveDos.getText())) {
+                        cuentaControl.getCuenta().setContraseña(txtClaveUno.getText());
+                        cuentaControl.getCuenta().setPersona(docenteControl.all().getLenght() + 1);
+                        cuentaControl.getCuenta().setTipoCuenta(0);
+                        cuentaControl.getCuenta().setEstado(true);
+                        if (verificarDatosCuenta()) {
+                            if (docenteControl.persist()) {
+                                if (cuentaControl.persist()) {
+                                    JOptionPane.showMessageDialog(null, "Cuenta registrada con exito");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Error al registrarse");
+                                }
+                                limpiar();
+                                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "Error al registrarse");
+                            JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
                         }
-
-                        limpiar();
-                        JOptionPane.showMessageDialog(null, "Guardado Exitoso");
                     } else {
-                        JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                        JOptionPane.showMessageDialog(null, "Las claves no coinciden");
                     }
+                    docenteControl.setDocente(null);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Rellena los datos de la cuenta");
+                    JOptionPane.showMessageDialog(null, "El numero celular ingresado es incorrecto");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Las claves no coinciden");
+                JOptionPane.showMessageDialog(null, "La cedula ingresada es incorrecta");
             }
-
-            docenteControl.setDocente(null);
-
         } else {
             JOptionPane.showMessageDialog(null, "No dejes campos vacios");
         }

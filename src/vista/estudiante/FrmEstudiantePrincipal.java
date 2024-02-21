@@ -4,6 +4,7 @@
  */
 package vista.estudiante;
 
+import controlador.DAO.implementaciones.AsignaturaImplementacion;
 import controlador.clases.AsignaturaControl;
 import vista.docente.*;
 import controlador.clases.CursaControl;
@@ -166,7 +167,7 @@ public class FrmEstudiantePrincipal extends javax.swing.JFrame {
 
         try {
             c = Utiles.recuperarCursasEstudiante(estudiante.getId()).getInfo(tblCursos.getSelectedRow());
-            new FrmEstudianteAsistencias(estudiante.getId(), c.getId(), c.getAsignatura().getNombre()).setVisible(true);
+            new FrmEstudianteAsistencias(estudiante.getId(), c.getId(), new AsignaturaImplementacion().all().getInfo(Utiles.encontrarPosicion("asignatura", c.getAsignatura())).getNombre()).setVisible(true);
             dispose();
         } catch (Exception e) {
             System.out.println(e.getMessage());

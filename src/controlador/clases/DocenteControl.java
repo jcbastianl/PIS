@@ -5,6 +5,7 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.DocenteImplementacion;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
@@ -16,7 +17,7 @@ import modelo.Docente;
  * @author mrbingus
  */
 public class DocenteControl extends DaoImplement<Docente> {
-
+    private DocenteImplementacion aux = new DocenteImplementacion();
     private DynamicList<Docente> listaDocentes;
     private Docente docente;
 
@@ -28,7 +29,7 @@ public class DocenteControl extends DaoImplement<Docente> {
      * @return the listaDocentes
      */
     public DynamicList<Docente> getListaDocentes() {
-        listaDocentes = all();
+        listaDocentes = aux.all();
         return listaDocentes;
     }
 
@@ -58,8 +59,16 @@ public class DocenteControl extends DaoImplement<Docente> {
 
     public Boolean persist() {
         docente.setId(all().getLenght() + 1);
-        return persist(docente);
+        return aux.persist(docente);
     }
+    public Boolean merge(Docente a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }    
+    
 
     public DynamicList<Docente> shellsort(Integer tipo, String field) throws EmptyException, Exception {
 

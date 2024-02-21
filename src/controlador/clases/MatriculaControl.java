@@ -5,11 +5,13 @@
 package controlador.clases;
 
 import controlador.DAO.DaoImplement;
+import controlador.DAO.implementaciones.MatriculaImplementacion;
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
 import controlador.utiles.Utiles;
 import java.lang.reflect.Field;
 import java.util.Date;
+import modelo.ClaseDictada;
 import modelo.Matricula;
 
 /**
@@ -17,7 +19,7 @@ import modelo.Matricula;
  * @author mrbingus
  */
 public class MatriculaControl extends DaoImplement<Matricula> {
-
+    private MatriculaImplementacion aux = new MatriculaImplementacion();
     private DynamicList<Matricula> listaMatriculas;
     private Matricula matricula;
 
@@ -26,7 +28,7 @@ public class MatriculaControl extends DaoImplement<Matricula> {
     }
 
     public DynamicList<Matricula> getListaMatriculas() {
-        listaMatriculas = all();
+        listaMatriculas = aux.all();
         return listaMatriculas;
     }
 
@@ -47,8 +49,16 @@ public class MatriculaControl extends DaoImplement<Matricula> {
 
     public Boolean persist() {
         matricula.setId(all().getLenght() + 1);
-        return persist(matricula);
+        return aux.persist(matricula);
     }
+    
+    public Boolean merge(Matricula a, Integer index) {
+        return aux.merge(a, index + 1);
+    }
+
+    public Boolean remove(Integer s) {
+        return aux.remove(s + 1);
+    }    
 
     public DynamicList<Matricula> shellsort(Integer tipo, String field) throws EmptyException, Exception {
         if (tipo == 0) {

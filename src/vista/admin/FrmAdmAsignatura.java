@@ -10,29 +10,27 @@ import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
 import vista.modeloTablas.AsignaturaModeloTabla;
 
-
 /**
  *
  * @author mrbingus
  */
 public class FrmAdmAsignatura extends javax.swing.JFrame {
-
+    
     private AsignaturaControl asignaturaControl = new AsignaturaControl();
     private AsignaturaModeloTabla modelo = new AsignaturaModeloTabla();
-
-  private Boolean verificar() {
     
-    return (!txtCodigo.getText().trim().isEmpty()
-            && txtNombre != null && !txtNombre.getText().trim().isEmpty());
-}
-
-
+    private Boolean verificar() {
+        
+        return (!txtCodigo.getText().trim().isEmpty()
+                && txtNombre != null && !txtNombre.getText().trim().isEmpty());
+    }
+    
     public void cargarTabla() {
         modelo.setAsignaturas(asignaturaControl.getListaAsignaturas());
         tblAsignatura.setModel(modelo);
         tblAsignatura.updateUI();
     }
-
+    
     private void limpiar() {
         
         txtBusqueda.setText("");
@@ -42,28 +40,35 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         tblAsignatura.clearSelection();
         cargarTabla();
     }
-
+    
     private void guardar() {
         if (verificar()) {
-            asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
-            asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
-            if (asignaturaControl.persist()) {
-                JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+            if (Utiles.validarCodigoAsig(txtCodigo.getText())) {
+                
+                asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
+                asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
+                if (asignaturaControl.persist()) {
+                    JOptionPane.showMessageDialog(null, "Guardado Exitoso");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                }
+                asignaturaControl.setAsignatura(null);
+                limpiar();
             } else {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar");
+                JOptionPane.showMessageDialog(null, "El codigo esta mal");
+                
             }
-            asignaturaControl.setAsignatura(null);
-            limpiar();
         }
     }
-
+    
     private void modificar() {
         if (verificar()) {
+             if (Utiles.validarCodigoAsig(txtCodigo.getText())) {
             asignaturaControl.getAsignatura().setNombre(txtNombre.getText());
             asignaturaControl.getAsignatura().setCodigo(txtCodigo.getText());
             try {
                 Integer indiceAsignatura = Utiles.encontrarPosicion("asignatura", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
-
+                
                 if (asignaturaControl.merge(asignaturaControl.getAsignatura(), indiceAsignatura)) {
                     JOptionPane.showMessageDialog(null, "Modificacion Exitosa");
                 } else {
@@ -72,18 +77,25 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
+            
             asignaturaControl.setAsignatura(null);
             limpiar();
+        
+              } else {
+                JOptionPane.showMessageDialog(null, "El codigo esta mal");
+            }    
+        } else {
+                            JOptionPane.showMessageDialog(null, "Esta vacio");
+
         }
     }
-
+    
     private void borrar() {
         try {
             Integer indiceAsignatura = Utiles.encontrarPosicion("docente", modelo.getAsignaturas().getInfo(tblAsignatura.getSelectedRow()).getId());
-
+            
             if (tblAsignatura.getSelectedRow() > -1) {
-                if (asignaturaControl.remove(indiceAsignatura)) {
+                if (asignaturaControl.remove(tblAsignatura.getSelectedRow())) {
                     JOptionPane.showMessageDialog(null, "Se borro el elemento");
                 } else {
                     JOptionPane.showMessageDialog(null, "No se pudo borrar el elemento");
@@ -95,21 +107,21 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
         }
         limpiar();
     }
-
+    
     private void ordenar() {
         int t = 0;
         if (btnTipoOrden.isSelected()) {
             t = 1;
         }
         try {
-            modelo.setAsignaturas(asignaturaControl.shellsortAsignatura( t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
+            modelo.setAsignaturas(asignaturaControl.shellsortAsignatura(t, cbxCriterioOrden.getSelectedItem().toString().toLowerCase()));
         } catch (Exception e) {
             System.out.println("Error al ordenar " + e.getMessage() + "");
         }
         tblAsignatura.setModel(modelo);
         tblAsignatura.updateUI();
     }
-
+    
     private void buscar() {
         try {
             modelo.setAsignaturas(asignaturaControl.busquedaLineal(txtBusqueda.getText(), cbxCriterioBusqueda.getSelectedItem().toString().toLowerCase()));
@@ -438,9 +450,9 @@ public class FrmAdmAsignatura extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if (!txtNombre.getText().trim().isEmpty()) {
-       txtCodigo.setText(Utiles.generarCodigoAsignatura(
-               txtNombre.getText(), 
-               asignaturaControl.getListaAsignaturas().getLenght()+1));            
+            txtCodigo.setText(Utiles.generarCodigoAsignatura(
+                    txtNombre.getText(),
+                    asignaturaControl.getListaAsignaturas().getLenght() + 1));            
         } else {
             JOptionPane.showMessageDialog(null, "Debe proporcionar el nombre de la asignatura");
         }

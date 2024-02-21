@@ -74,7 +74,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
                 cicloControl.setCiclo(cicloControl.getCiclos().getInfo(cbxCiclo.getSelectedIndex()));
                 cursaControl.getCursa().setFechaFin(txtFechaFin.getDate());
                 cursaControl.getCursa().setFechaInicio(txtFechaInicio.getDate());
-                cursaControl.getCursa().setAsignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()));
+                cursaControl.getCursa().setAsignatura(cbxAsignatura.getSelectedIndex());
                 cursaControl.getCursa().setDocente(Utiles.encontraridDocente(cbxDocente.getSelectedIndex()));
                 cursaControl.getCursa().setCiclo(Utiles.encontraridCiclo(cbxCiclo.getSelectedIndex()));
             } catch (Exception e) {
@@ -102,7 +102,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
             try {
                 cursaControl.getCursa().setFechaFin(txtFechaFin.getDate());
                 cursaControl.getCursa().setFechaInicio(txtFechaInicio.getDate());
-                cursaControl.getCursa().setAsignatura(new AsignaturaControl().getListaAsignaturas().getInfo(cbxAsignatura.getSelectedIndex()));
+                cursaControl.getCursa().setAsignatura(cbxAsignatura.getSelectedIndex());
                 cursaControl.getCursa().setDocente(Utiles.encontraridDocente(cbxDocente.getSelectedIndex()));
                 cursaControl.getCursa().setCiclo(Utiles.encontraridCiclo(cbxCiclo.getSelectedIndex()));
             } catch (Exception e) {
@@ -534,7 +534,7 @@ public class FrmAdmCursa extends javax.swing.JFrame {
             txtFechaFin.setDate(cursaControl.getCursa().getFechaFin());
             txtFechaInicio.setDate(cursaControl.getCursa().getFechaInicio());
             cbxCiclo.setSelectedIndex(cursaControl.getCursa().getCiclo());
-            cbxAsignatura.setSelectedIndex(cursaControl.getCursa().getAsignatura().getId() - 1);
+            cbxAsignatura.setSelectedIndex(cursaControl.getCursa().getAsignatura()-1);
             cbxDocente.setSelectedIndex(Utiles.encontrarPosicion("docente", cursaControl.getCursa().getDocente()));
             cbxCiclo.setEnabled(false);
             //System.out.println(Utiles.encontrarPosicion("cursa", modelo.getListaCursos().getInfo(tblCursa.getSelectedRow()).getId()));
