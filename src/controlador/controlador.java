@@ -12,7 +12,6 @@ import controlador.clases.JustificativoControl;
 import controlador.utiles.Utiles;
 import modelo.Cuenta;
 import modelo.Docente;
-import modelo.Persona;
 import vista.docente.FrmDocenteAsignaciones;
 import vista.docente.FrmDocentePrincipal;
 
