@@ -36,7 +36,7 @@ public class FrmDocenteAsignaciones extends javax.swing.JFrame {
     }
     
     private void cargartabla(Cursa c) throws Exception {
-        modelo.setListaClases(Utiles.recuperarClasesCursa(c.getId()));
+        modelo.setListaClases(claseControl.getListaClases());
         tblClases.setModel(modelo);
         tblClases.updateUI();
     }

@@ -11,7 +11,7 @@ import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
 import modelo.Asistencia;
 import vista.modeloTablas.AsistenciaModeloTabla;
-
+import controlador.ed.listas.ListaEnlazada;
 /**
  *
  * @author mrbingus
@@ -23,7 +23,7 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
     ClaseDictadaControl claseControl = new ClaseDictadaControl();
 
     Integer idClase;
-    DynamicList<Asistencia> aux;
+    ListaEnlazada<Asistencia> aux;
 
     public FrmDocenteRevisionAsistencia(Integer claseDic) {
 
@@ -34,9 +34,13 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
 
     private void cargarInformacion() {
         try {
+                System.out.println("algo1");
             claseControl.setClase(claseControl.getListaClases().getInfo(Utiles.encontrarPosicion("clasedictada", idClase)));
+            System.out.println("algo1");
             txtFecha.setDate(claseControl.getClase().getFecha());
+            System.out.println("algo2");
             txtTema.setText(claseControl.getClase().getTema());
+            System.out.println("algo3");
             aux = Utiles.recuperarAsistenciasClase(idClase);
         } catch (Exception e) {
             System.out.println("mal cargado" + e.getMessage());
@@ -47,7 +51,7 @@ public class FrmDocenteRevisionAsistencia extends javax.swing.JFrame {
     }
 
     private void guardarAsistencias() throws Exception {
-        for (int i = 0; i < modelo.getAsistencias().getLenght(); i++) {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
             asistenciaControl.setAsistencia(modelo.getAsistencias().getInfo(i));
             try {
                 asistenciaControl.merge(asistenciaControl.getAsistencia(), i);

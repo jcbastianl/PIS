@@ -27,10 +27,7 @@ import modelo.ClaseDictada;
 import modelo.Cursa;
 import modelo.Docente;
 import modelo.Estudiante;
-<<<<<<< HEAD
-=======
 import modelo.Justificativo;
->>>>>>> 517e96d62935892e8b0eeef7e473cfc3b998e9bb
 import modelo.Matricula;
 
 public class Utiles {
@@ -363,9 +360,9 @@ public class Utiles {
     ClaseDictadaControl cd = new ClaseDictadaControl();
     ListaEnlazada<ClaseDictada> aux = new ListaEnlazada<>();
 
-    for (int i = 0; i < cd.all().getLenght(); i++) {
-        if (cd.all().getInfo(i).getId_cursa().equals(id)) {
-            aux.insertar(cd.all().getInfo(i));
+    for (int i = 0; i < cd.listar().getLength(); i++) {
+        if (cd.listar().getInfo(i).getId_cursa().equals(id)) {
+            aux.insertar(cd.listar().getInfo(i));
         }
     }
     return aux;
@@ -443,7 +440,7 @@ public class Utiles {
     
     NodoLista<Matricula> nodo = matriculasCursa.getCabecera();
     while (nodo != null) {
-        Estudiante estudiante = estudianteControl.obtenerEstudiantePorId(nodo.getInfo().getEstudiante());
+        Estudiante estudiante = estudianteControl.getListaEstudiantes().getInfo(nodo.getInfo().getId_estudiante());
         estudiantesCursa.insertar(estudiante);
         nodo = nodo.getSig();
     }
@@ -492,29 +489,21 @@ public static int encontraridDocente(int indice) throws Exception {
 }
 
     public static Integer encontraridCursa(Integer u) throws Exception {
-<<<<<<< HEAD
     return new CursaControl().getListaCursas().obtenerElementoEnPosicion(u).getId();
 }
     
-=======
-        return new CursaControl().getListaCursas().getInfo(u).getId();
-    }
 
->>>>>>> 517e96d62935892e8b0eeef7e473cfc3b998e9bb
     public static Integer encontraridClase(Integer u) throws Exception {
         return new ClaseDictadaControl().getListaClases().getInfo(u).getId();
     }
 
-<<<<<<< HEAD
     private ListaEnlazada<Docente> listar() {
        
         return null;
        
     }
 
-   
-=======
-    public static DynamicList<Cursa> recuperarCursasDocente(Integer id) throws Exception {
+    /*public static DynamicList<Cursa> recuperarCursasDocente(Integer id) throws Exception {
         CursaControl cc = new CursaControl();
         DynamicList<Cursa> aux = new DynamicList<>();
         for (int i = 0; i < cc.all().getLenght(); i++) {
@@ -585,7 +574,7 @@ public static int encontraridDocente(int indice) throws Exception {
             }
         }
         return asistencias;
-    }
+    }*/
 
     public static Justificativo recuperarJustificativodeAsistencia(Integer k) {
         JustificativoControl jc = new JustificativoControl();
@@ -621,8 +610,8 @@ public static int encontraridDocente(int indice) throws Exception {
         CursaControl cc = new CursaControl();
         DynamicList<Cursa>aux = new DynamicList<>();
         for (int i = 0; i < matri.getLenght(); i++) {
-            for (int j = 0; j < cc.getListaCursas().getLenght(); j++) {
-                if (cc.getListaCursas().getInfo(id).getId().equals(matri.getInfo(i).getCursa())) {
+            for (int j = 0; j < cc.getListaCursas().getLength(); j++) {
+                if (cc.getListaCursas().getInfo(id).getId().equals(matri.getInfo(i).getId_cursa())) {
                     aux.add(cc.getListaCursas().getInfo(j));
                 }
             }
@@ -630,12 +619,12 @@ public static int encontraridDocente(int indice) throws Exception {
         return aux;
     }
     
-    public static DynamicList<Asistencia> recuperarAsistenciasEstudiante(Integer id, Integer cursa) throws Exception {
+    public static ListaEnlazada<Asistencia> recuperarAsistenciasEstudiante(Integer id, Integer cursa) throws Exception {
         AsistenciaControl ac = new AsistenciaControl();
         DynamicList<Asistencia> aux = new DynamicList<>();
 
-        for (int i = 0; i < ac.getListaEstadoAsistencia().getLenght(); i++) {
-            Asistencia a = ac.getListaEstadoAsistencia().getInfo(i);
+        for (int i = 0; i < ac.getListaAsistencias().getLength(); i++) {
+            Asistencia a = ac.getListaAsistencias().getInfo(i);
             ClaseDictadaControl cdc = new ClaseDictadaControl();
             ClaseDictada c = cdc.getListaClases().getInfo(Utiles.encontrarPosicion("clasedictada", a.getId_claseDictada()));
             if (a.getId_estudiante().equals(id) && c.getId_cursa().equals(cursa)){
@@ -644,8 +633,4 @@ public static int encontraridDocente(int indice) throws Exception {
         }
         return aux;
     }
-
-
-
->>>>>>> 517e96d62935892e8b0eeef7e473cfc3b998e9bb
 }

@@ -5,6 +5,7 @@
 package vista.modeloTablas;
 
 import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.ecepciones.VacioException;
 import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import java.util.logging.Level;
@@ -15,18 +16,18 @@ import modelo.Ciclo;
 import modelo.Cursa;
 import modelo.Docente;
 
-
-
-
 /**
  *
  * @author mrbingus
  */
 
-
 public class CursaModeloTabla extends AbstractTableModel {
 
     private ListaEnlazada<Cursa> listaCursos;
+    private ListaEnlazada<Asignatura> listaAsignaturas;
+    private ListaEnlazada<Docente> listaDocentes;
+    private ListaEnlazada<Ciclo> listaCiclos;
+    
 
     @Override
     public int getRowCount() {
@@ -42,9 +43,9 @@ public class CursaModeloTabla extends AbstractTableModel {
 public Object getValueAt(int rowIndex, int columnIndex) {
     try {
         Cursa c = listaCursos.obtenerElementoEnPosicion(rowIndex);
-        Asignatura a = c.getAsignatura();
-        Docente d = c.getDocente();
-        Ciclo ci = c.getCiclo(); 
+        Asignatura a = listaAsignaturas.obtenerElementoEnPosicion(c.getAsignaturaId());
+        Docente d = listaDocentes.obtenerElementoEnPosicion(c.getDocenteId());
+        Ciclo ci = listaCiclos.obtenerElementoEnPosicion(c.getCicloId() - 1); 
 
         switch (columnIndex) {
             case 0:
@@ -94,5 +95,27 @@ public Object getValueAt(int rowIndex, int columnIndex) {
         this.listaCursos = listaCursos;
     }
 
-    
+        public ListaEnlazada<Asignatura> getListaAsignaturas() {
+                return listaAsignaturas;
+        }
+
+        public void setListaAsignaturas(ListaEnlazada<Asignatura> listaAsignaturas) {
+                this.listaAsignaturas = listaAsignaturas;
+        }
+
+        public ListaEnlazada<Docente> getListaDocentes() {
+                return listaDocentes;
+        }
+
+        public void setListaDocentes(ListaEnlazada<Docente> listaDocentes) {
+                this.listaDocentes = listaDocentes;
+        }
+
+        public ListaEnlazada<Ciclo> getListaCiclos() {
+                return listaCiclos;
+        }
+
+        public void setListaCiclos(ListaEnlazada<Ciclo> listaCiclos) {
+                this.listaCiclos = listaCiclos;
+        }
 }

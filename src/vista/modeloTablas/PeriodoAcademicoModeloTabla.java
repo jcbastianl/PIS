@@ -6,6 +6,10 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.ed.ecepciones.PosicionException;
+import controlador.ed.listas.ListaEnlazada;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 import modelo.PeriodoAcademico;
 
@@ -15,11 +19,11 @@ import modelo.PeriodoAcademico;
  */
 public class PeriodoAcademicoModeloTabla extends AbstractTableModel{
     
-    private DynamicList<PeriodoAcademico>periodos;
+    private ListaEnlazada<PeriodoAcademico>periodos;
     
         @Override
         public int getRowCount() {
-                return getPeriodos().getLenght();
+                return getPeriodos().getLength();
         }
 
         @Override
@@ -29,16 +33,17 @@ public class PeriodoAcademicoModeloTabla extends AbstractTableModel{
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-                try {
-                        PeriodoAcademico e = getPeriodos().getInfo(rowIndex);
-                        switch (columnIndex) {
-                                case 0:
-                                        return (e != null) ? e.getMesInicio()+ " " + e.getYearInicio() + " - " +e.getMesFin() + " " + e.getYearFin(): " "+e.getModalidad();
-                                default:
-                                        return null;
-                        }
-                } catch (EmptyException ex) {
-                        return null;
+                PeriodoAcademico e = new PeriodoAcademico();
+            try {
+                    e = getPeriodos().getInfo(rowIndex);
+            } catch (PosicionException ex) {
+                    Logger.getLogger(PeriodoAcademicoModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                switch (columnIndex) {
+                        case 0:
+                                return (e != null) ? e.getMesInicio()+ " " + e.getYearInicio() + " - " +e.getMesFin() + " " + e.getYearFin(): " "+e.getModalidad();
+                        default:
+                                return null;
                 }
         }
 
@@ -55,14 +60,14 @@ public class PeriodoAcademicoModeloTabla extends AbstractTableModel{
     /**
      * @return the periodos
      */
-    public DynamicList<PeriodoAcademico> getPeriodos() {
+    public ListaEnlazada<PeriodoAcademico> getPeriodos() {
         return periodos;
     }
 
     /**
      * @param periodos the periodos to set
      */
-    public void setPeriodos(DynamicList<PeriodoAcademico> periodos) {
+    public void setPeriodos(ListaEnlazada<PeriodoAcademico> periodos) {
         this.periodos = periodos;
     }
             

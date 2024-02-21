@@ -27,8 +27,10 @@ import vista.utiles.UtilVista;
 public class FrmAdmCursa extends javax.swing.JFrame {
 
     private CursaControl cursaControl = new CursaControl();
-    private CursaModeloTabla modelo = new CursaModeloTabla();
+    private AsignaturaControl asignaturaControl = new AsignaturaControl();
+    private DocenteControl docenteControl = new DocenteControl();
     private CicloControl cicloControl = new CicloControl();
+    private CursaModeloTabla modelo = new CursaModeloTabla();
     private CicloModeloTabla modeloCiclo = new CicloModeloTabla();
     Integer posicion;
 
@@ -44,10 +46,15 @@ public class FrmAdmCursa extends javax.swing.JFrame {
     try {
         // Obtener la lista de cursas
         ListaEnlazada<Cursa> listaCursas = cursaControl.getListaCursas();
+        ListaEnlazada<Asignatura> listaAsignatura = asignaturaControl.getListaAsignaturas();
+        ListaEnlazada<Docente> listaDocente = docenteControl.getListaDocentes();
+        ListaEnlazada<Ciclo> listaCiclos = cicloControl.getCiclos();
 
         // Establecer la lista de cursas en el modelo de la tabla
         modelo.setListaCursos(listaCursas);
-
+        modelo.setListaAsignaturas(listaAsignatura);
+        modelo.setListaDocentes(listaDocente);
+        modelo.setListaCiclos(listaCiclos);
         // Establecer el modelo de la tabla y actualizar la interfaz de usuario
         tblCursa.setModel(modelo);
         tblCursa.updateUI();

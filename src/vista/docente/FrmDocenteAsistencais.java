@@ -14,6 +14,7 @@ import modelo.Asistencia;
 import modelo.ClaseDictada;
 import modelo.Cursa;
 import vista.modeloTablas.AsistenciaModeloTabla;
+import controlador.ed.listas.ListaEnlazada;
 
 /**
  *
@@ -24,12 +25,12 @@ public class FrmDocenteAsistencais extends javax.swing.JFrame {
     AsistenciaModeloTabla modelo = new AsistenciaModeloTabla();
     AsistenciaControl asistenciaControl = new AsistenciaControl();
     ClaseDictadaControl claseControl = new ClaseDictadaControl();
-    DynamicList<Asistencia> aux = asistenciaControl.all();
+    ListaEnlazada<Asistencia> aux = asistenciaControl.all();
     Integer idcursa;
 
     public FrmDocenteAsistencais(Integer cursa) {
         initComponents();
-        aux.reset();
+        //aux.reset();
         cargarTabla();
         this.idcursa = cursa;
     }
@@ -37,7 +38,7 @@ public class FrmDocenteAsistencais extends javax.swing.JFrame {
     private void generarLista() throws Exception {
 
         claseControl.getClase().setId_cursa(idcursa);
-        claseControl.getClase().setId(claseControl.all().getLenght() + 1);
+        claseControl.getClase().setId(claseControl.listar().getLength()+ 1);
         try {
             cargarAsisntenciasgeneradas(claseControl.getClase());
 
@@ -64,8 +65,8 @@ public class FrmDocenteAsistencais extends javax.swing.JFrame {
     }
 
     private void guardarAsistencias() throws Exception {
-        for (int i = 0; i < modelo.getAsistencias().getLenght(); i++) {
-            asistenciaControl.setAsistencia(modelo.getAsistencias().getInfo(i));
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            asistenciaControl.setAsistencia(modelo.getAsistencias().get(i));
             try {
                 asistenciaControl.persist();
             } catch (Exception e) {

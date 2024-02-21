@@ -29,7 +29,7 @@ public class FrmDocenteRevisionJustificante extends javax.swing.JFrame {
 
     private void cargarInfo(Integer id) {
         try {
-            asistenciaControl.setAsistencia(asistenciaControl.getListaEstadoAsistencia().getInfo(Utiles.encontrarPosicion("asistencia", id)));
+            asistenciaControl.setAsistencia(asistenciaControl.getListaAsistencias().getInfo(Utiles.encontrarPosicion("asistencia", id)));
         } catch (Exception e) {
             System.out.println("1" + e.getMessage());
         }

@@ -13,6 +13,8 @@ import controlador.dao.AdaptadorDao;
 import controlador.ed.listas.ListaEnlazada;
 import controlador.utiles.Utiles;
 import javax.swing.JOptionPane;
+import modelo.Cursa;
+import modelo.Estudiante;
 import modelo.Matricula;
 import modelo.PeriodoAcademico;
 import vista.modeloTablas.CursaModeloTabla;
@@ -48,13 +50,20 @@ public class FrmAdmMatricula extends javax.swing.JFrame {
     try {
         // Obtener la lista de matrículas
         ListaEnlazada<Matricula> listaMatriculas = matriculaControl.getListaMatriculas();
-
+        ListaEnlazada<Estudiante> listaEstudiantes = estudianteControl.getListaEstudiantes();
+        ListaEnlazada<Cursa> listaCursas = cursaControl.getListaCursas();
+        ListaEnlazada<PeriodoAcademico> listaPeriodos = periodoControl.getListaPeriodos();
+        
         // Establecer la lista de matrículas en el modelo de la tabla
         modelo.setMatriculas(listaMatriculas);
-
+        modelo.setEstudiantes(listaEstudiantes);
+        modelo.setCursas(listaCursas);
+        modeloPeriodo.setPeriodos(listaPeriodos);
         // Establecer el modelo de la tabla y actualizar la interfaz de usuario
         tblMatricula.setModel(modelo);
         tblMatricula.updateUI();
+        tblPeriodos.setModel(modeloPeriodo);
+        tblPeriodos.updateUI();
     } catch (Exception e) {
         // Manejar cualquier excepción que pueda ocurrir al cargar los datos
         JOptionPane.showMessageDialog(null, "Error al cargar las matrículas: " + e.getMessage());

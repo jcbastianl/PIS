@@ -12,18 +12,20 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.ClaseDictada;
+import controlador.ed.listas.ListaEnlazada;
+
 
 public class EstudianteAsistenciaModeloTabla extends AbstractTableModel {
 
         //private DynamicList<ClaseDictada> clases;
         private ClaseDictadaControl claseDicControl = new ClaseDictadaControl();
-        private DynamicList<Asistencia> asistencias;
+        private ListaEnlazada<Asistencia> asistencias;
         private final String[] columnNames = {"TEMA CLASE", "ESTADO", "FECHA"};
         private final Class[] columnClasses = {String.class, String.class, Date.class};
 
         @Override
         public int getRowCount() {
-            return asistencias.getLenght();
+            return asistencias.getLength();
         }
 
         @Override
@@ -67,14 +69,14 @@ public class EstudianteAsistenciaModeloTabla extends AbstractTableModel {
         /**
          * @return the asistencias
          */
-        public DynamicList<Asistencia> getAsistencias() {
+        public ListaEnlazada<Asistencia> getAsistencias() {
                 return asistencias;
         }
 
         /**
          * @param asistencias the asistencias to set
          */
-        public void setAsistencias(DynamicList<Asistencia> asistencias) {
+        public void setAsistencias(ListaEnlazada<Asistencia> asistencias) {
                 this.asistencias = asistencias;
         }
 

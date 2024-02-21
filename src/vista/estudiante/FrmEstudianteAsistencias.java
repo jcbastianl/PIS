@@ -11,6 +11,8 @@ import controlador.utiles.Utiles;
 import modelo.Asistencia;
 import modelo.ClaseDictada;
 import vista.modeloTablas.EstudianteAsistenciaModeloTabla;
+import controlador.ed.listas.ListaEnlazada;
+
 
 /**
  *
@@ -20,15 +22,15 @@ public class FrmEstudianteAsistencias extends javax.swing.JFrame {
 
     EstudianteAsistenciaModeloTabla modelo = new EstudianteAsistenciaModeloTabla();
     AsistenciaControl asistenciaControl = new AsistenciaControl();
-    DynamicList<Asistencia> listaAsistencias = new DynamicList<>();
+    ListaEnlazada<Asistencia> listaAsistencias;
     ClaseDictadaControl claseControl = new ClaseDictadaControl();
-    DynamicList<ClaseDictada> aux = claseControl.all();
+    ListaEnlazada<ClaseDictada> aux = claseControl.listar();
     Integer cursaid;
     Integer estudiante;
 
     public FrmEstudianteAsistencias(Integer estud, Integer cursa, String asignatura) {
         initComponents();
-        aux.reset();
+        //aux.reset();
         this.cursaid = cursa;
         this.estudiante = estud;
         cargarTabla();
@@ -37,9 +39,13 @@ public class FrmEstudianteAsistencias extends javax.swing.JFrame {
 
     private void cargarTabla() {
         try {
+                System.out.println("oasodsa");
             listaAsistencias = Utiles.recuperarAsistenciasEstudiante(estudiante, cursaid);
+            System.out.println("oasodsa");
+            listaAsistencias = asistenciaControl.listar();
+            System.out.println("oasodsa");
             modelo.setAsistencias(listaAsistencias);
-
+            System.out.println("oasodsa");
         } catch (Exception e) {
         }
         tblAsistencias.setModel(modelo);

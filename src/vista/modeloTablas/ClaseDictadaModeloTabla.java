@@ -6,9 +6,13 @@ package vista.modeloTablas;
 
 import controlador.TDA.listas.DynamicList;
 import controlador.TDA.listas.Exception.EmptyException;
+import controlador.ed.ecepciones.PosicionException;
 import controlador.utiles.Utiles;
 import javax.swing.table.AbstractTableModel;
 import modelo.ClaseDictada;
+import controlador.ed.listas.ListaEnlazada;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,12 +20,12 @@ import modelo.ClaseDictada;
  */
 public class ClaseDictadaModeloTabla extends AbstractTableModel{
     
-    private DynamicList<ClaseDictada>listaClases;
+    private ListaEnlazada<ClaseDictada>listaClases;
 
 
     @Override
     public int getRowCount() {
-        return getListaClases().getLenght();
+        return getListaClases().getLength();
     }
 
     @Override
@@ -31,8 +35,12 @@ public class ClaseDictadaModeloTabla extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        try {
-            ClaseDictada e = getListaClases().getInfo(rowIndex);
+            ClaseDictada e = new ClaseDictada();
+            try {
+                    e = getListaClases().getInfo(rowIndex);
+            } catch (PosicionException ex) {
+                    Logger.getLogger(ClaseDictadaModeloTabla.class.getName()).log(Level.SEVERE, null, ex);
+            }
             switch (columnIndex) {
                 case 0:
                     return (e != null) ? e.getTema() : " ";
@@ -41,9 +49,6 @@ public class ClaseDictadaModeloTabla extends AbstractTableModel{
                 default:
                     return null;
             }
-        } catch (EmptyException ex) {
-            return null;
-        }
     }
 
     @Override
@@ -62,14 +67,14 @@ public class ClaseDictadaModeloTabla extends AbstractTableModel{
     /**
      * @return the listaClases
      */
-    public DynamicList<ClaseDictada> getListaClases() {
+    public ListaEnlazada<ClaseDictada> getListaClases() {
         return listaClases;
     }
 
     /**
      * @param listaClases the listaClases to set
      */
-    public void setListaClases(DynamicList<ClaseDictada> listaClases) {
+    public void setListaClases(ListaEnlazada<ClaseDictada> listaClases) {
         this.listaClases = listaClases;
     }
     

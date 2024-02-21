@@ -25,6 +25,9 @@ import modelo.Matricula;
 public class MatriculaModeloTabla extends AbstractTableModel {
 
     private ListaEnlazada<Matricula> matriculas;
+    private ListaEnlazada<Estudiante> estudiantes;
+    private ListaEnlazada<Cursa> cursas;
+    
 
     @Override
     public int getRowCount() {
@@ -40,8 +43,8 @@ public class MatriculaModeloTabla extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
             Matricula m = matriculas.obtenerElementoEnPosicion(rowIndex);
-            Estudiante e = m.getEstudiante();
-            Cursa c = m.getCursa();
+            Estudiante e = estudiantes.obtenerElementoEnPosicion(m.getId_estudiante());
+            Cursa c = cursas.obtenerElementoEnPosicion(m.getId_cursa());
 
             switch (columnIndex) {
                 case 0:
@@ -90,4 +93,23 @@ public class MatriculaModeloTabla extends AbstractTableModel {
     public void setMatriculas(ListaEnlazada<Matricula> matriculas) {
         this.matriculas = matriculas;
     }
+
+        public ListaEnlazada<Estudiante> getEstudiantes() {
+                return estudiantes;
+        }
+
+        public void setEstudiantes(ListaEnlazada<Estudiante> estudiantes) {
+                this.estudiantes = estudiantes;
+        }
+
+        public ListaEnlazada<Cursa> getCursas() {
+                return cursas;
+        }
+
+        public void setCursas(ListaEnlazada<Cursa> cursas) {
+                this.cursas = cursas;
+        }
+    
+    
+    
 }
